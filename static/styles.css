@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  outline: none;
 }
 
 html,
@@ -10,9 +11,44 @@ body {
   width: 100%;
   overflow: hidden;
   user-select: none;
-  font-family: 'Raleway', sans-serif;
+  font-family: sans-serif;
   justify-content: center;
   align-items: center;
+}
+
+.home {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-name {
+  width: 400px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.project-name-text {
+  width: 80%;
+}
+
+.top {
+  width: 100%;
+}
+
+.board {
+  width: 320px;
+  min-height: 100vh;
+}
+
+.bg-skyblue {
+  background-color: rgb(48, 191, 191);
+}
+
+.h-top {
+  height: 60px;
 }
 
 .cursor-pointer {
@@ -24,9 +60,6 @@ body {
 }
 
 @media (max-resolution: 1dppx) and (max-width: 1024px) and (max-height: 1366px) {
-  /* .room-main {
-    height: 92%;
-  } */
 }
 
 @media (max-width: 1199.98px) {
