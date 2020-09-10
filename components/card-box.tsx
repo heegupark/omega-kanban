@@ -50,6 +50,8 @@ function CardBox(props: any) {
     if (cardTitle.length < 1) setIsAdding(false);
   };
 
+  const handleCardBoxTitleBlur = () => {};
+
   const handleCardTitleSubmit = () => {
     if (cardTitle.length > 0) {
       setCards([...cards, 1]);
@@ -59,7 +61,7 @@ function CardBox(props: any) {
   };
 
   const handleCardBoxTitleSubmit = () => {
-    if (cardBoxTitle.length > 0) {
+    if (cardBoxTitle.trim().length > 0) {
       // do something
     }
     setIsCardBoxTileChanging(false);
@@ -76,32 +78,33 @@ function CardBox(props: any) {
           >
             <i className="far fa-lightbulb"></i>
           </div>
-          {isCardBoxTileChanging ? (
-            <form
-              className="h-top flex-center mb-25px"
-              onSubmit={() => handleCardBoxTitleSubmit()}
-            >
-              <input
-                className="box-shadow-1 add-card-title"
-                value={cardBoxTitle}
-                autoFocus
-                onBlur={() => setIsCardBoxTileChanging(false)}
-                onChange={(e) => setCardBoxTitle(e.target.value)}
-              ></input>
-            </form>
-          ) : (
-            <div
-              onClick={() => setIsCardBoxTileChanging(true)}
-              className="project-subtitle cursor-text"
-            >
-              {cardBoxTitle}
-            </div>
-          )}
           <div
-            onClick={() => handleCardBoxTitleChange()}
-            className="project-subtitle cursor-text"
+            onClick={() => setIsCardBoxTileChanging(true)}
+            className="project-title w-65per h-top cursor-text"
           >
-            {cardBoxTitle}
+            {isCardBoxTileChanging ? (
+              <form
+                className="h-top flex-center w-90per"
+                onSubmit={() => handleCardBoxTitleSubmit()}
+                onBlur={() => handleCardBoxTitleBlur()}
+              >
+                <input
+                  className="w-100per change-project-title"
+                  value={cardBoxTitle}
+                  autoFocus
+                  onBlur={() => setIsCardBoxTileChanging(false)}
+                  onChange={(e) => {
+                    if (e.target.value.trim().length < 1) {
+                      setCardBoxTitle(e.target.value.trim());
+                    } else {
+                      setCardBoxTitle(e.target.value);
+                    }
+                  }}
+                ></input>
+              </form>
+            ) : (
+              <div className="p-10px">{cardBoxTitle}</div>
+            )}
           </div>
           <div className="cards-num flex-center">{cards.length}</div>
         </div>
@@ -142,7 +145,7 @@ function CardBox(props: any) {
                         onSubmit={() => handleCardTitleSubmit()}
                       >
                         <input
-                          className="box-shadow-1 add-card-title"
+                          className="box-shadow-1 w-100per add-card-title"
                           value={cardTitle}
                           autoFocus
                           onBlur={() => handleAddCardBlur()}

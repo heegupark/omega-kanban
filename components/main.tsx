@@ -14,7 +14,7 @@ export default function Main(props: any) {
       );
       break;
     case 'board':
-      element = <Board />;
+      element = <Board projectName={projectName} />;
       break;
   }
 
