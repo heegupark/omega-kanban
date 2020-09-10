@@ -16,6 +16,6 @@
     "rootDir": "./",
     "outDir": "./src/dist"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server/index.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
