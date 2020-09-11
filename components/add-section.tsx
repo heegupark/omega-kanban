@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import Zoom from '@material-ui/core/Zoom';
 
 function AddSection(props: any) {
   const [isAdding, setIsAdding] = useState(false);
   const [sectionTitle, setSectionTitle] = useState('');
 
-  const handleSectionTitleSubmit = () => {};
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      handleSectionTitleSubmit();
+    }
+  };
+
+  const handleSectionTitleSubmit = () => {
+    props.createCardBox({ title: sectionTitle });
+    setSectionTitle('');
+    setIsAdding(false);
+  };
 
   return (
     <>
@@ -27,24 +36,35 @@ function AddSection(props: any) {
           </div>
           {isAdding ? (
             <div className="add-section-title-box">
-              <form
-                className="h-top flex-center w-90per"
-                onSubmit={() => handleSectionTitleSubmit()}
-              >
+              <div className="h-top flex-center w-90per">
                 <input
                   className="w-100per change-project-title"
                   value={sectionTitle}
                   autoFocus
                   onBlur={() => setIsAdding(false)}
                   onChange={(e) => setSectionTitle(e.target.value)}
+                  onKeyDown={(event) => handleKeyDown(event)}
                 ></input>
-              </form>
+              </div>
             </div>
           ) : (
             <span>Add Section</span>
           )}
         </div>
-        <div className="card-body">1111</div>
+        <div className="card-body flex-center flex-column">
+          <div>
+            <img
+              className="add-section-img"
+              src="../../static/images/omegathrone_profile.jpg"
+              alt="omegathrone"
+            />
+          </div>
+          {isAdding ? (
+            <div>What is your checklist?</div>
+          ) : (
+            <div>What is your next step?</div>
+          )}
+        </div>
       </div>
     </>
   );

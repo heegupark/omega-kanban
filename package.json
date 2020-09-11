@@ -30,6 +30,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.33",
+    "@types/uuid": "^8.3.0",
     "dotenv": "^8.2.0",
     "mongoose": "^5.10.2",
     "next": "^9.5.2",
@@ -37,7 +38,8 @@
     "randomstring": "^1.1.5",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/node": "^14.6.3",

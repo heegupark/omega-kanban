@@ -9,7 +9,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  /* overflow-y: hidden; */
   user-select: none;
   font-family: sans-serif;
   justify-content: center;
@@ -40,7 +40,7 @@ body {
 .top-home {
   width: 100px;
   text-align: center;
-  font-size: 24px;
+  font-size: 20px;
   border-right: 1px solid rgb(220, 226, 230);
 }
 
@@ -59,6 +59,7 @@ body {
 
 .card-box {
   width: 320px;
+  min-width: 320px;
   min-height: 100vh;
   background-color: rgb(241, 244, 245);
 }
@@ -82,7 +83,11 @@ body {
 }
 
 .card {
-  min-height: 150px;
+  /* min-height: 150px; */
+}
+
+.card-content-title {
+  height: 30px;
 }
 
 .add-card-icon {
@@ -100,16 +105,23 @@ body {
   border: 2px solid rgb(0, 170, 255);
 }
 
+.add-section-img {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
 .change-project-title {
   height: 90%;
   border-radius: 10px;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   padding: 10px;
 }
 
 .subtitle-box {
-  font-size: 24px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px 0px,
@@ -150,6 +162,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
 }
 
 .bg-yellow {
