@@ -313,7 +313,7 @@ function Board(props: any) {
   const deleteChecklist = (columnId: any, cardId: any, checklistId: any) => {
     state.columns[columnId].cards.map((card: any) => {
       if (card.id === cardId) {
-        card.checklists.filter(
+        card.checklists = card.checklists.filter(
           (checklist: any) => checklist.id !== checklistId
         );
       }
