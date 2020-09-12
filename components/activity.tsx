@@ -5,6 +5,42 @@ function Activity(props: any) {
   const handleActivitySubmit = () => {
     props.addActivity(props.currentColumn.id, props.currentCard.id, activity);
   };
+  const getTimeMsg = (updatedAt: any) => {
+    const createdTime = new Date(updatedAt) as any;
+    const currentTime = new Date() as any;
+    const second = 60;
+    const minute = 60;
+    const hour = 24;
+    const day = 30;
+    const month = 12;
+    let divider = 1;
+    let timeMsg = '';
+    let diff = (currentTime - createdTime) / 1000;
+    if (diff <= second) {
+      timeMsg = 'second';
+    } else if (diff <= second * minute) {
+      divider = second;
+      timeMsg = 'minute';
+    } else if (diff <= second * minute * hour) {
+      divider = second * minute;
+      timeMsg = 'hour';
+    } else if (diff <= second * minute * hour * day) {
+      divider = second * minute * hour;
+      timeMsg = 'day';
+    } else if (diff <= second * minute * hour * day * month) {
+      divider = second * minute * hour * day;
+      timeMsg = 'month';
+    } else {
+      divider = second * minute * hour * day * month;
+      timeMsg = 'year';
+    }
+    diff /= divider;
+    const displayTime = Math.abs(Math.round(diff));
+    const plural = displayTime > 1 ? 's' : '';
+    const timeMessage = `${displayTime} ${timeMsg}${plural} ago`;
+    return timeMessage;
+  };
+
   return (
     <>
       <div className="card-deatil-title">Activity</div>
@@ -51,7 +87,9 @@ function Activity(props: any) {
             <div key={activity.id} className="activity-row display-flex">
               <div className="activity-icon">{iconElement}</div>
               <div className="text-grey activity-content">
-                <div className="my-5px">{activity.createdAt.toString()}</div>
+                <div className="my-5px text-bolder">
+                  {getTimeMsg(activity.createdAt)}
+                </div>
                 <div className="my-5px">{activity.activity}</div>
               </div>
             </div>
