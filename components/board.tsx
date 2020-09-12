@@ -119,7 +119,7 @@ function Board(props: any) {
       }
     });
     updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `Card note is changed to ${note}`);
+    addActivity(columnId, cardId, `Card note is changed to ||${note}`);
     setState({
       ...state,
     } as any);
@@ -232,7 +232,12 @@ function Board(props: any) {
   const addChecklist = (columnId: any, cardId: any, checklist: any) => {
     state.columns[columnId].cards.map((card: any) => {
       if (card.id === cardId) {
-        card.checklists.push({ id: uuidv4(), checklist, date: new Date() });
+        card.checklists.push({
+          id: uuidv4(),
+          checklist,
+          isChecked: false,
+          date: new Date(),
+        });
       }
     });
     addActivity(columnId, cardId, `${checklist} is added to the checklist`);
@@ -277,6 +282,44 @@ function Board(props: any) {
       cardId,
       `A checklist is updated to ${checklistContent}`
     );
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const completeChecklist = (
+    columnId: any,
+    cardId: any,
+    checklistId: any,
+    isChecked: any
+  ) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.checklists.map((checklist: any) => {
+          if (checklist.id === checklistId) {
+            checklist.isChecked = isChecked;
+          }
+        });
+      }
+    });
+    updateDate(columnId, cardId);
+    if (isChecked) addActivity(columnId, cardId, `A checklist is completed`);
+    else addActivity(columnId, cardId, `A checklist is changed to incomplete`);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const deleteChecklist = (columnId: any, cardId: any, checklistId: any) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.checklists.filter(
+          (checklist: any) => checklist.id !== checklistId
+        );
+      }
+    });
+    updateDate(columnId, cardId);
+    addActivity(columnId, cardId, `A checklist is deleted`);
     setState({
       ...state,
     } as any);
@@ -355,6 +398,8 @@ function Board(props: any) {
           addActivity={addActivity}
           updateCardTitle={updateCardTitle}
           updateCardNote={updateCardNote}
+          completeChecklist={completeChecklist}
+          deleteChecklist={deleteChecklist}
         />
       )}
     </>

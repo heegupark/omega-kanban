@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from './card';
 import Zoom from '@material-ui/core/Zoom';
 
 function CardBody(props: any) {
-  const [cards, setCards] = useState([]);
+  // const [cards, setCards] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [cardTitle, setCardTitle] = useState('');
-  const [cardBoxTitle, setCardBoxTitle] = useState('');
+  // const [cardBoxTitle, setCardBoxTitle] = useState('');
 
-  useEffect(() => {
-    if (props.cardBoxTitle) {
-      setCardBoxTitle(props.cardBoxTitle);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (props.cardBoxTitle) {
+  //     setCardBoxTitle(props.cardBoxTitle);
+  //   }
+  // }, []);
 
   // const onDragStart = (result: any) => {
   //   setIsDragging(true);

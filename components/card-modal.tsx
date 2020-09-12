@@ -87,6 +87,8 @@ function CardModal(props: any) {
                   addChecklist={props.addChecklist}
                   updateChecklist={props.updateChecklist}
                   addActivity={props.addActivity}
+                  completeChecklist={props.completeChecklist}
+                  deleteChecklist={props.deleteChecklist}
                 />
                 <Activity
                   currentCard={props.currentCard}

@@ -175,7 +175,7 @@ body {
 }
 
 .card-deatil-checklist {
-  font-size: 18px;
+  font-size: 16px;
   margin: 10px 0px;
   width: 100%;
   padding: 10px;
@@ -250,10 +250,20 @@ body {
   border-radius: 5px;
   color: white;
   font-weight: 500;
+  background-color: rgb(48, 191, 191);
 }
 
 .complete-btn:hover {
   background-color: rgb(70, 193, 254);
+}
+
+.complete-btn-disabled {
+  height: 36px;
+  padding: 0px 15px;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  background-color: rgb(147, 147, 147);
 }
 
 .add-card-icon {
@@ -315,7 +325,7 @@ body {
 .checklist-content {
   width: 100%;
   padding: 0px 10px;
-  font-size: 18px;
+  font-size: 16px;
   color: rgb(110, 117, 122);
   background-color: transparent;
 }
@@ -349,6 +359,10 @@ body {
 
 .text-right {
   text-align: right;
+}
+
+.pt-2px {
+  padding-top: 2px;
 }
 
 .w-60per {

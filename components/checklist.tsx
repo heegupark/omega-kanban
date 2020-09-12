@@ -33,6 +33,8 @@ function Checklist(props: any) {
                   updateChecklist={props.updateChecklist}
                   addActivity={props.addActivity}
                   columns={props.columns}
+                  completeChecklist={props.completeChecklist}
+                  deleteChecklist={props.deleteChecklist}
                 />
               </div>
             );

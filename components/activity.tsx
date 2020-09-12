@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 function Activity(props: any) {
   const [activity, setActivity] = useState('');
   const handleActivitySubmit = () => {
-    props.addActivity(props.currentColumn.id, props.currentCard.id, activity);
+    if (activity.trim().length > 0) {
+      props.addActivity(props.currentColumn.id, props.currentCard.id, activity);
+      setActivity('');
+    }
   };
   const getTimeMsg = (updatedAt: any) => {
     const createdTime = new Date(updatedAt) as any;
@@ -55,7 +58,11 @@ function Activity(props: any) {
       <div className="text-right">
         <button
           onClick={() => handleActivitySubmit()}
-          className="complete-btn cursor-pointer bg-head-1 border-none"
+          className={`${
+            activity.length < 1
+              ? 'complete-btn-disabled'
+              : 'complete-btn cursor-pointer'
+          } border-none`}
         >
           Say it
         </button>
@@ -90,7 +97,10 @@ function Activity(props: any) {
                 <div className="my-5px text-bolder">
                   {getTimeMsg(activity.createdAt)}
                 </div>
-                <div className="my-5px">{activity.activity}</div>
+                <div className="my-5px">
+                  {activity.activity.split('||')[0]}
+                  <b>{activity.activity.split('||')[1]}</b>
+                </div>
               </div>
             </div>
           );
