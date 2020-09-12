@@ -312,6 +312,7 @@ body {
 }
 
 .checklist-content {
+  width: 100%;
   padding: 0px 10px;
   font-size: 18px;
   color: rgb(110, 117, 122);

@@ -81,6 +81,18 @@ function Board(props: any) {
     } as any);
   };
 
+  const updateCardTitle = (columnId: any, cardId: any, cardTitle: any) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.cardTitle = cardTitle;
+      }
+    });
+    console.log(state.columns[columnId]);
+    setState({
+      ...state,
+    } as any);
+  };
+
   const deleteColumn = (id: any) => {
     delete state.columns[id];
     state.columnOrder.splice(state.columnOrder.indexOf(id), 1);
@@ -188,7 +200,38 @@ function Board(props: any) {
   const addChecklist = (columnId: any, cardId: any, checklist: any) => {
     state.columns[columnId].cards.map((card: any) => {
       if (card.id === cardId) {
-        card.checklists.push({ id: uuidv4(), checklist });
+        card.checklists.push({ id: uuidv4(), checklist, date: new Date() });
+      }
+    });
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const updateChecklist = (
+    columnId: any,
+    cardId: any,
+    checklistId: any,
+    checklistContent: any
+  ) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.checklists.map((checklist: any) => {
+          if (checklist.id === checklistId) {
+            checklist.checklist = checklistContent;
+          }
+        });
+      }
+    });
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const addActivity = (columnId: any, cardId: any, activity: any) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.activities.push({ id: uuidv4(), activity, date: new Date() });
       }
     });
     setState({
@@ -250,6 +293,9 @@ function Board(props: any) {
           handleModalClose={handleModalClose}
           currentCard={currentCard}
           addChecklist={addChecklist}
+          updateChecklist={updateChecklist}
+          addActivity={addActivity}
+          updateCardTitle={updateCardTitle}
         />
       )}
     </>

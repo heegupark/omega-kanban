@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ChecklistItem from './checklistitem';
 
 function Checklist(props: any) {
   const [checklist, setChecklist] = useState('');
@@ -24,19 +25,14 @@ function Checklist(props: any) {
         {props.currentCard &&
           props.currentCard.checklists.map((checklist: any) => {
             return (
-              <div
-                key={checklist.id}
-                id={checklist.id}
-                className="display-flex checklist-row"
-              >
-                <div className="checklist-circle">
-                  <i className="far fa-circle"></i>
-                </div>
-                <input
-                  value={checklist.checklist}
-                  className="checklist-content border-none"
-                ></input>
-              </div>
+              <ChecklistItem
+                currentCard={props.currentCard}
+                currentColumn={props.currentColumn}
+                checklist={checklist}
+                updateChecklist={props.updateChecklist}
+                addActivity={props.addActivity}
+                columns={props.columns}
+              />
             );
           })}
       </div>
@@ -49,6 +45,9 @@ function Checklist(props: any) {
             <input
               autoFocus
               value={checklist}
+              onBlur={(e: any) => {
+                if (e.target.value.trim().length === 0) setAddChecklist(false);
+              }}
               onChange={(e) => setChecklist(e.target.value)}
               onKeyDown={(e) => handleSubmitChecklist(e)}
               className="checklist-content border-none"
