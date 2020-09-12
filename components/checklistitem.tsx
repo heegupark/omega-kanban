@@ -10,19 +10,10 @@ function ChecklistItem(props: any) {
         props.checklist.id,
         checklist
       );
-      props.addActivity(
-        props.currentColumn.id,
-        props.currentCard.id,
-        checklist
-      );
     }
   };
   return (
-    <div
-      key={props.checklist.id}
-      id={props.checklist.id}
-      className="display-flex checklist-row"
-    >
+    <div id={props.checklist.id} className="display-flex checklist-row">
       <div className="checklist-circle">
         <i className="far fa-circle"></i>
       </div>

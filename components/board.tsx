@@ -12,10 +12,21 @@ function Board(props: any) {
       'column-0': {
         id: 'column-0',
         title: 'Plan',
-        cards: [],
+        cards: [
+          {
+            id: uuidv4(),
+            cardTitle: 'Create HTML skeleton',
+            note: '',
+            checklists: [],
+            activities: [],
+            dueDate: new Date(2020, 9, 11),
+            createdAt: new Date(2020, 8, 11),
+            updatedAt: new Date(2020, 8, 11),
+          },
+        ],
         colorIndex: 0,
         createdAt: new Date(2020, 8, 1),
-        updatedAt: null,
+        updatedAt: new Date(2020, 8, 11),
       },
       'column-1': {
         id: 'column-1',
@@ -23,7 +34,7 @@ function Board(props: any) {
         cards: [],
         colorIndex: 1,
         createdAt: new Date(2020, 8, 2),
-        updatedAt: null,
+        updatedAt: new Date(2020, 8, 2),
       },
       'column-2': {
         id: 'column-2',
@@ -31,7 +42,7 @@ function Board(props: any) {
         cards: [],
         colorIndex: 2,
         createdAt: new Date(2020, 8, 3),
-        updatedAt: null,
+        updatedAt: new Date(2020, 8, 3),
       },
     },
     columnOrder: ['column-0', 'column-1', 'column-2'],
@@ -45,26 +56,14 @@ function Board(props: any) {
     setColorIndex(state.columnOrder.length - 1);
   }, []);
 
-  const addCard = (columnId: any, cardTitle: any) => {
-    const newCard = {
-      id: uuidv4(),
-      cardTitle,
-      note: '',
-      checklists: [],
-      activities: [],
-    };
-    state.columns[columnId].cards.push(newCard);
-    setState({
-      ...state,
-    } as any);
-  };
-
   const addSection = (sectionTitle: any) => {
     const newSection = {
       id: uuidv4(),
       title: sectionTitle,
       cards: [],
       colorIndex: colorIndex + 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     setColorIndex(colorIndex + 1);
     state.columns[newSection.id] = newSection;
@@ -74,8 +73,27 @@ function Board(props: any) {
     } as any);
   };
 
-  const updateSectionTitle = (id: any, sectionTitle: any) => {
-    state.columns[id].title = sectionTitle;
+  const addCard = (columnId: any, cardTitle: any) => {
+    const newCard = {
+      id: uuidv4(),
+      cardTitle,
+      note: '',
+      checklists: [],
+      activities: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    addActivity(columnId, newCard.id, 'This card is created');
+    updateDate(columnId, null);
+    state.columns[columnId].cards.push(newCard);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const updateSectionTitle = (columnId: any, sectionTitle: any) => {
+    state.columns[columnId].title = sectionTitle;
+    state.columns[columnId].updatedAt = new Date();
     setState({
       ...state,
     } as any);
@@ -87,7 +105,21 @@ function Board(props: any) {
         card.cardTitle = cardTitle;
       }
     });
-    console.log(state.columns[columnId]);
+    updateDate(columnId, cardId);
+    addActivity(columnId, cardId, `Card title is changed to ${cardTitle}`);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const updateCardNote = (columnId: any, cardId: any, note: any) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.note = note;
+      }
+    });
+    updateDate(columnId, cardId);
+    addActivity(columnId, cardId, `Card note is changed to ${note}`);
     setState({
       ...state,
     } as any);
@@ -203,6 +235,22 @@ function Board(props: any) {
         card.checklists.push({ id: uuidv4(), checklist, date: new Date() });
       }
     });
+    addActivity(columnId, cardId, `${checklist} is added to the checklist`);
+    updateDate(columnId, cardId);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const updateDate = (columnId: any, cardId: any) => {
+    if (cardId) {
+      state.columns[columnId].cards.map((card: any) => {
+        if (card.id === cardId) {
+          card.updatedAt = new Date();
+        }
+      });
+    }
+    state.columns[columnId].updatedAt = new Date();
     setState({
       ...state,
     } as any);
@@ -223,6 +271,12 @@ function Board(props: any) {
         });
       }
     });
+    updateDate(columnId, cardId);
+    addActivity(
+      columnId,
+      cardId,
+      `A checklist is updated to ${checklistContent}`
+    );
     setState({
       ...state,
     } as any);
@@ -231,7 +285,11 @@ function Board(props: any) {
   const addActivity = (columnId: any, cardId: any, activity: any) => {
     state.columns[columnId].cards.map((card: any) => {
       if (card.id === cardId) {
-        card.activities.push({ id: uuidv4(), activity, date: new Date() });
+        card.activities.unshift({
+          id: uuidv4(),
+          activity,
+          createdAt: new Date(),
+        });
       }
     });
     setState({
@@ -296,6 +354,7 @@ function Board(props: any) {
           updateChecklist={updateChecklist}
           addActivity={addActivity}
           updateCardTitle={updateCardTitle}
+          updateCardNote={updateCardNote}
         />
       )}
     </>

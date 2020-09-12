@@ -25,14 +25,16 @@ function Checklist(props: any) {
         {props.currentCard &&
           props.currentCard.checklists.map((checklist: any) => {
             return (
-              <ChecklistItem
-                currentCard={props.currentCard}
-                currentColumn={props.currentColumn}
-                checklist={checklist}
-                updateChecklist={props.updateChecklist}
-                addActivity={props.addActivity}
-                columns={props.columns}
-              />
+              <div key={checklist.id}>
+                <ChecklistItem
+                  currentCard={props.currentCard}
+                  currentColumn={props.currentColumn}
+                  checklist={checklist}
+                  updateChecklist={props.updateChecklist}
+                  addActivity={props.addActivity}
+                  columns={props.columns}
+                />
+              </div>
             );
           })}
       </div>

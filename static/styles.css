@@ -127,6 +127,7 @@ body {
     rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   width: 700px;
   min-height: 200px;
+  overflow: scroll;
 }
 
 .card-detail-header {
@@ -138,6 +139,8 @@ body {
 .card-detail-left {
   width: 100%;
   padding: 20px;
+  height: 800px;
+  overflow: scroll;
 }
 
 .card-deatil-title {
@@ -188,7 +191,7 @@ body {
   margin: 10px 0px;
 }
 
-.actibity-log {
+.activity-log {
   margin: 15px 0px;
   min-height: 50px;
   width: 100%;
@@ -245,8 +248,6 @@ body {
   height: 36px;
   padding: 0px 15px;
   border-radius: 5px;
-  border: none;
-  background-color: rgb(0, 170, 255);
   color: white;
   font-weight: 500;
 }
@@ -326,6 +327,24 @@ body {
 .section-title {
   display: flex;
   align-items: center;
+}
+
+.activity-row {
+  margin: 20px 0px;
+}
+
+.activity-icon {
+  font-size: 32px;
+  margin: 10px;
+  padding: 0px 10px;
+}
+
+.activity-content {
+  font-size: 16px;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .w-60per {
@@ -417,6 +436,26 @@ body {
 
 .text-skyblue {
   color: rgb(0, 170, 255);
+}
+
+.text-purple {
+  color: rgb(143, 126, 230);
+}
+
+.text-yellow {
+  color: rgb(255, 213, 0);
+}
+
+.text-red {
+  color: rgb(217, 54, 81);
+}
+
+.text-orange {
+  color: rgb(255, 159, 26);
+}
+
+.text-green {
+  color: rgb(138, 204, 71);
 }
 
 .text-grey {

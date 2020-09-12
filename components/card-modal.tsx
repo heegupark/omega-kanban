@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Checklist from './checklist';
+import CardNote from './card-note';
 import CardDetailHead from './card-detail-head';
+import Activity from './activity';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -27,15 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function CardModal(props: any) {
   const classes = useStyles();
-  const [note, setNote] = useState('');
-  const [isNoting, setIsNoting] = useState(false);
-  const [checklist, setChecklist] = useState('');
-
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      console.log(event.target);
-    }
-  };
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date()
@@ -43,19 +36,6 @@ function CardModal(props: any) {
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
-  };
-
-  const handleSubmitChecklist = (e: any) => {
-    if (e.key === 'Enter') {
-      if (checklist.trim().length > 0) {
-        props.addChecklist(
-          props.currentColumn.id,
-          props.currentCard.id,
-          checklist
-        );
-      }
-      setChecklist('');
-    }
   };
 
   return (
@@ -77,7 +57,9 @@ function CardModal(props: any) {
       <Fade in={props.open}>
         <div className="modal-paper">
           <div className="card-detail-header">
-            <button className="complete-btn cursor-pointer">Complete</button>
+            <button className="complete-btn cursor-pointer border-none bg-head-1">
+              Complete
+            </button>
             <div
               onClick={() => props.handleModalClose()}
               className="card-detail-close float-right cursor-pointer"
@@ -94,34 +76,11 @@ function CardModal(props: any) {
                 columns={props.columns}
               />
               <div>
-                <div className="card-deatil-note-box">
-                  {isNoting ? (
-                    <input
-                      id={props.currentCardId}
-                      className="card-deatil-note-input border-none"
-                      type="text"
-                      autoFocus
-                      onChange={(e) => setNote(e.target.value)}
-                      value={note}
-                      onKeyDown={(e) => handleKeyDown(e)}
-                      onBlur={() => setIsNoting(false)}
-                    />
-                  ) : note.length < 1 ? (
-                    <div
-                      onClick={() => setIsNoting(true)}
-                      className="card-detail-note cursor-text"
-                    >
-                      This task has no notes.
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => setIsNoting(true)}
-                      className="card-detail-note cursor-text"
-                    >
-                      {note}
-                    </div>
-                  )}
-                </div>
+                <CardNote
+                  currentColumn={props.currentColumn}
+                  currentCard={props.currentCard}
+                  updateCardNote={props.updateCardNote}
+                />
                 <Checklist
                   currentCard={props.currentCard}
                   currentColumn={props.currentColumn}
@@ -129,17 +88,11 @@ function CardModal(props: any) {
                   updateChecklist={props.updateChecklist}
                   addActivity={props.addActivity}
                 />
-                <div className="card-deatil-title">Activity</div>
-                <textarea
-                  className="card-detail-activity"
-                  placeholder="Add Comment"
-                ></textarea>
-                <div>
-                  <button className="complete-btn cursor-pointer float-right">
-                    Say it
-                  </button>
-                </div>
-                <div className="actibity-log"></div>
+                <Activity
+                  currentCard={props.currentCard}
+                  currentColumn={props.currentColumn}
+                  addActivity={props.addActivity}
+                />
               </div>
             </div>
             <div className="card-detail-right bg-grey-1">
