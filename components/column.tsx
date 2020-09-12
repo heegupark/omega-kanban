@@ -24,7 +24,8 @@ function Column(props: any) {
               reorder={props.reorder}
               column={props.column}
               index={props.index}
-              handleModalOpen={props.handleModalOpen}
+              setOpen={props.setOpen}
+              setCardForOpen={props.setCardForOpen}
               onDragEnd={props.onDragEnd}
               addCard={props.addCard}
             />

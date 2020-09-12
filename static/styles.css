@@ -140,6 +140,102 @@ body {
   padding: 20px;
 }
 
+.card-deatil-title {
+  color: rgb(61, 71, 77);
+  font-size: 20px;
+  margin: 10px 0px;
+  width: 100%;
+}
+
+.card-deatil-note-box {
+  height: 50px;
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.card-detail-note {
+  font-size: 16px;
+  color: rgb(140, 150, 155);
+  width: 100%;
+  padding: 11px 10px 10px 10px;
+  min-height: 40px;
+}
+
+.card-deatil-note-input {
+  font-size: 16px;
+  color: rgb(140, 150, 155);
+  width: 100%;
+  background-color: rgb(247, 249, 250);
+  border-radius: 5px;
+  min-height: 40px;
+  padding: 0px 10px;
+}
+
+.card-deatil-checklist {
+  font-size: 18px;
+  margin: 10px 0px;
+  width: 100%;
+  padding: 10px;
+}
+
+.card-detail-activity {
+  width: 100%;
+  resize: none;
+  height: 100px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgb(220, 226, 230);
+  margin: 10px 0px;
+}
+
+.actibity-log {
+  margin: 15px 0px;
+  min-height: 50px;
+  width: 100%;
+}
+
+.font-12px {
+  font-size: 12px;
+}
+
+.my-5px {
+  margin: 5px 0px;
+}
+
+.my-10px {
+  margin: 10px 0px;
+}
+
+.card-detail-project-info {
+  padding: 15px;
+  font-size: 15px;
+  color: rgb(138, 148, 153);
+}
+
+.card-detail-body {
+  display: flex;
+}
+
+.card-detail-right {
+  width: 300px;
+  border-radius: 0px 0px 10px 0px;
+  border-left: 1px solid rgb(211, 211, 211);
+}
+
+.card-detail-close {
+  font-size: 24px;
+  margin: 5px;
+}
+
+.card-detail-close:hover {
+  color: rgb(97, 97, 97);
+}
+
+.due-date {
+  padding: 10px;
+  border-bottom: 1px solid rgb(211, 211, 211);
+}
+
 .card-content-title {
   height: 30px;
   padding: 10px;
@@ -155,6 +251,10 @@ body {
   font-weight: 500;
 }
 
+.complete-btn:hover {
+  background-color: rgb(70, 193, 254);
+}
+
 .add-card-icon {
   border-radius: 50%;
   color: rgb(138, 148, 153);
@@ -167,6 +267,7 @@ body {
   padding: 15px;
   margin: 10px;
   border-radius: 10px;
+  font-size: 16px;
   border: 2px solid rgb(0, 170, 255);
 }
 
@@ -191,6 +292,30 @@ body {
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px 0px,
     rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.checklist-row {
+  padding: 2px 10px;
+  align-content: center;
+  border-radius: 7px;
+  margin: 7px 0px;
+}
+
+.checklist-row:hover {
+  background-color: rgb(247, 247, 247);
+}
+
+.checklist-circle {
+  color: rgb(0, 170, 255);
+  font-size: 22px;
+  margin-top: 2px;
+}
+
+.checklist-content {
+  padding: 0px 10px;
+  font-size: 18px;
+  color: rgb(110, 117, 122);
+  background-color: transparent;
 }
 
 .icon-box {
@@ -223,9 +348,21 @@ body {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.circle-icon {
+  padding: 2px 3px;
+  border-radius: 50%;
+  background-color: rgb(215, 215, 215);
+  margin: 7px;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.display-flex {
+  display: flex;
   align-items: center;
 }
 
@@ -297,6 +434,10 @@ body {
   cursor: text;
 }
 
+.float-right {
+  float: right;
+}
+
 .w-100per {
   width: 100%;
 }
@@ -309,6 +450,11 @@ body {
   box-shadow: rgba(0, 0, 0, 0.02) 0px 0px 0px 1px,
     rgba(0, 0, 0, 0.05) 0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px;
 }
+
+.border-none {
+  border: none;
+}
+
 @media (max-resolution: 1dppx) and (max-width: 1024px) and (max-height: 1366px) {
 }
 

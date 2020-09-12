@@ -14,18 +14,24 @@ function Board(props: any) {
         title: 'Plan',
         cards: [],
         colorIndex: 0,
+        createdAt: new Date(2020, 8, 1),
+        updatedAt: null,
       },
       'column-1': {
         id: 'column-1',
         title: 'Progress',
         cards: [],
         colorIndex: 1,
+        createdAt: new Date(2020, 8, 2),
+        updatedAt: null,
       },
       'column-2': {
         id: 'column-2',
         title: 'Complete',
         cards: [],
         colorIndex: 2,
+        createdAt: new Date(2020, 8, 3),
+        updatedAt: null,
       },
     },
     columnOrder: ['column-0', 'column-1', 'column-2'],
@@ -33,6 +39,7 @@ function Board(props: any) {
 
   const [colorIndex, setColorIndex] = useState(0);
   const [currentCard, setCurrentCard] = useState({} as any);
+  const [currentColumn, setCurrentColumn] = useState({} as any);
 
   useEffect(() => {
     setColorIndex(state.columnOrder.length - 1);
@@ -42,6 +49,9 @@ function Board(props: any) {
     const newCard = {
       id: uuidv4(),
       cardTitle,
+      note: '',
+      checklists: [],
+      activities: [],
     };
     state.columns[columnId].cards.push(newCard);
     setState({
@@ -163,17 +173,27 @@ function Board(props: any) {
   //for modal
   const [open, setOpen] = React.useState(false);
 
-  const handleModalOpen = (columnId: any, cardId: any) => {
+  const setCardForOpen = (columnId: any, cardId: any) => {
     const card = state.columns[columnId].cards.filter(
       (card: any) => card.id === cardId
     );
-    console.log(card[0]);
     setCurrentCard(card[0]);
-    setOpen(true);
+    setCurrentColumn(state.columns[columnId]);
   };
 
   const handleModalClose = () => {
     setOpen(false);
+  };
+
+  const addChecklist = (columnId: any, cardId: any, checklist: any) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.checklists.push({ id: uuidv4(), checklist });
+      }
+    });
+    setState({
+      ...state,
+    } as any);
   };
 
   return (
@@ -207,7 +227,8 @@ function Board(props: any) {
                       index={index}
                       reorder={reorder}
                       addCard={addCard}
-                      handleModalOpen={handleModalOpen}
+                      setOpen={setOpen}
+                      setCardForOpen={setCardForOpen}
                       updateSectionTitle={updateSectionTitle}
                       deleteColumn={deleteColumn}
                       onDragEnd={onDragEnd}
@@ -221,11 +242,16 @@ function Board(props: any) {
         </DragDropContext>
         <AddSection colorIndex={colorIndex} addSection={addSection} />
       </div>
-      <CardModal
-        open={open}
-        handleModalClose={handleModalClose}
-        currentCard={currentCard}
-      />
+      {open && (
+        <CardModal
+          open={true}
+          projectName={props.projectName}
+          currentColumn={currentColumn}
+          handleModalClose={handleModalClose}
+          currentCard={currentCard}
+          addChecklist={addChecklist}
+        />
+      )}
     </>
   );
 }

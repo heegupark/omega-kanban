@@ -17,7 +17,8 @@ function Card(props: any) {
   });
 
   const expandCard = () => {
-    props.handleModalOpen(props.column.id, props.card.id);
+    props.setCardForOpen(props.column.id, props.card.id);
+    props.setOpen(true);
   };
 
   return (

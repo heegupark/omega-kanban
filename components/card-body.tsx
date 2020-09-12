@@ -61,10 +61,11 @@ function CardBody(props: any) {
                   {(provided: any, snapshot: any) => (
                     <Card
                       card={card}
+                      setOpen={props.setOpen}
                       column={props.column}
                       provided={provided}
                       isDragging={snapshot.isDragging}
-                      handleModalOpen={props.handleModalOpen}
+                      setCardForOpen={props.setCardForOpen}
                     />
                   )}
                 </Draggable>
