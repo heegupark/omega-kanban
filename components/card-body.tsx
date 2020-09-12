@@ -16,21 +16,20 @@ function CardBody(props: any) {
     }
   }, []);
 
-  const onDragStart = (result: any) => {
-    setIsDragging(true);
-    if (cardTitle.length < 1) {
-      setIsAdding(false);
-    }
-  };
+  // const onDragStart = (result: any) => {
+  //   setIsDragging(true);
+  //   if (cardTitle.length < 1) {
+  //     setIsAdding(false);
+  //   }
+  // };
 
-  const onDragEnd = (result: any) => {
-    setIsDragging(false);
-    props.onDragEnd(result);
-  };
+  // const onDragEnd = (result: any) => {
+  //   setIsDragging(false);
+  //   props.onDragEnd(result);
+  // };
 
   const handleAddCard = () => {
     setIsAdding(true);
-    // setCards([...cards, 1]);
   };
 
   const handleAddCardBlur = () => {
@@ -45,8 +44,7 @@ function CardBody(props: any) {
 
   const handleCardTitleSubmit = () => {
     if (cardTitle.length > 0) {
-      // setCards([...cards, { cardTitle }] as any);
-      props.addCard(props.column.id, { cardTitle });
+      props.addCard(props.column.id, cardTitle);
       setCardTitle('');
     }
     setIsAdding(false);
@@ -63,8 +61,10 @@ function CardBody(props: any) {
                   {(provided: any, snapshot: any) => (
                     <Card
                       card={card}
+                      column={props.column}
                       provided={provided}
                       isDragging={snapshot.isDragging}
+                      handleModalOpen={props.handleModalOpen}
                     />
                   )}
                 </Draggable>
@@ -74,7 +74,7 @@ function CardBody(props: any) {
               ''
             ) : isAdding ? (
               <Zoom in={isAdding}>
-                <div className="h-top flex-center mb-25px">
+                <div className="h-top mt-5px flex-center mb-25px">
                   <input
                     className="box-shadow-1 w-100per add-card-title"
                     value={cardTitle}
@@ -91,6 +91,18 @@ function CardBody(props: any) {
                   onClick={() => handleAddCard()}
                   className="add-card-icon box-shadow-1 fas fa-plus"
                 ></i>
+              </div>
+            )}
+            {!isAdding && props.column.cards.length === 0 && (
+              <div className="no-task flex-center flex-column">
+                <div>
+                  <i className="no-task-check text-grey far fa-check-circle"></i>
+                </div>
+                <div className="no-task-title text-grey">No Task</div>
+                <div className="no-task-desc text-grey">Drag tasks here</div>
+                <div className="no-task-desc text-grey">
+                  or click + to add new tasks
+                </div>
               </div>
             )}
             {provided.placeholder}

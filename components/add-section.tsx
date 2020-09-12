@@ -11,20 +11,22 @@ function AddSection(props: any) {
   };
 
   const handleSectionTitleSubmit = () => {
-    props.createCardBox({ title: sectionTitle });
+    props.addSection(sectionTitle);
     setSectionTitle('');
     setIsAdding(false);
   };
 
   return (
     <>
-      <div className="card-box">
+      <div className={`card-box bg-grey-${(props.colorIndex - 1) % 2}`}>
         <div
           onClick={() => {
             setIsAdding(true);
           }}
           className={`add-section h-top ${
-            isAdding ? 'bg-yellow' : 'bg-lightgrey'
+            isAdding
+              ? `bg-head-${(props.colorIndex + 1) % 7}`
+              : `bg-grey-${props.colorIndex % 2}`
           } text-skyblue cursor-pointer`}
         >
           <div className="icon-box">
@@ -38,7 +40,7 @@ function AddSection(props: any) {
             <div className="add-section-title-box">
               <div className="h-top flex-center w-90per">
                 <input
-                  className="w-100per change-project-title"
+                  className="w-100per change-section-title"
                   value={sectionTitle}
                   autoFocus
                   onBlur={() => setIsAdding(false)}

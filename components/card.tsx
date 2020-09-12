@@ -16,6 +16,10 @@ function Card(props: any) {
     height: isDragging ? '100px' : '150px',
   });
 
+  const expandCard = () => {
+    props.handleModalOpen(props.column.id, props.card.id);
+  };
+
   return (
     <div
       ref={props.provided.innerRef}
@@ -25,6 +29,7 @@ function Card(props: any) {
         props.isDragging,
         props.provided.draggableProps.style
       )}
+      onClick={() => expandCard()}
     >
       <div className="card">
         <div className="card-content-title">{props.card.cardTitle}</div>

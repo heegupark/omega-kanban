@@ -14,9 +14,8 @@ function ProjectName(props: any) {
     }
     props.setView('board');
   };
-
   return (
-    <div className="home flex-center bg-skyblue">
+    <div className={`home flex-center bg-head-0`}>
       <form className="project-name" noValidate autoComplete="off">
         <TextField
           className="project-name-text"

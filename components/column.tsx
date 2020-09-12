@@ -12,15 +12,19 @@ function Column(props: any) {
           {...provided.draggableProps}
           ref={provided.innerRef}
         >
-          <div className="card-box">
+          <div className={`card-box bg-grey-${props.index % 2}`}>
             <CardHead
               column={props.column}
+              index={props.index}
+              updateSectionTitle={props.updateSectionTitle}
+              deleteColumn={props.deleteColumn}
               dragHandleProps={provided.dragHandleProps}
             />
             <CardBody
               reorder={props.reorder}
               column={props.column}
               index={props.index}
+              handleModalOpen={props.handleModalOpen}
               onDragEnd={props.onDragEnd}
               addCard={props.addCard}
             />

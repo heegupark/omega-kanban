@@ -14,7 +14,13 @@ export default function Main(props: any) {
       );
       break;
     case 'board':
-      element = <Board projectName={projectName} />;
+      element = (
+        <Board
+          setView={setView}
+          setProjectName={setProjectName}
+          projectName={projectName}
+        />
+      );
       break;
   }
 

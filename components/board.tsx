@@ -1,37 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Top from './top';
 import Column from './column';
 import AddSection from './add-section';
 import { v4 as uuidv4 } from 'uuid';
+import CardModal from './card-modal';
 
-const itemsFromBackend = [
-  { id: uuidv4(), cardTitle: 'First task' },
-  { id: uuidv4(), cardTitle: 'Second task' },
-  { id: uuidv4(), cardTitle: 'Third task' },
-  { id: uuidv4(), cardTitle: 'Fourth task' },
-  { id: uuidv4(), cardTitle: 'Fifth task' },
-];
 function Board(props: any) {
-  const [cardBoxes, setCardBoxes] = useState([{ title: 'progress' }]);
   const [state, setState] = useState({
     columns: {
       'column-0': {
         id: 'column-0',
         title: 'Plan',
-        cards: itemsFromBackend,
+        cards: [],
+        colorIndex: 0,
       },
       'column-1': {
         id: 'column-1',
         title: 'Progress',
         cards: [],
+        colorIndex: 1,
+      },
+      'column-2': {
+        id: 'column-2',
+        title: 'Complete',
+        cards: [],
+        colorIndex: 2,
       },
     },
-    columnOrder: ['column-0', 'column-1'],
+    columnOrder: ['column-0', 'column-1', 'column-2'],
   } as any);
 
-  const addCard = (columnId: any, card: any) => {
-    state.columns[columnId].cards.push(card);
+  const [colorIndex, setColorIndex] = useState(0);
+  const [currentCard, setCurrentCard] = useState({} as any);
+
+  useEffect(() => {
+    setColorIndex(state.columnOrder.length - 1);
+  }, []);
+
+  const addCard = (columnId: any, cardTitle: any) => {
+    const newCard = {
+      id: uuidv4(),
+      cardTitle,
+    };
+    state.columns[columnId].cards.push(newCard);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const addSection = (sectionTitle: any) => {
+    const newSection = {
+      id: uuidv4(),
+      title: sectionTitle,
+      cards: [],
+      colorIndex: colorIndex + 1,
+    };
+    setColorIndex(colorIndex + 1);
+    state.columns[newSection.id] = newSection;
+    state.columnOrder.push(newSection.id);
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const updateSectionTitle = (id: any, sectionTitle: any) => {
+    state.columns[id].title = sectionTitle;
+    setState({
+      ...state,
+    } as any);
+  };
+
+  const deleteColumn = (id: any) => {
+    delete state.columns[id];
+    state.columnOrder.splice(state.columnOrder.indexOf(id), 1);
+    setState({
+      ...state,
+    } as any);
   };
 
   const onDragEnd = (result: any) => {
@@ -52,7 +97,6 @@ function Board(props: any) {
       return;
     }
 
-    console.log(result.source.droppableId);
     if (result.source.droppableId === result.destination.droppableId) {
       const column = state.columns[result.source.droppableId];
       const cards = reorder(
@@ -61,7 +105,6 @@ function Board(props: any) {
         result.destination.index
       );
 
-      // updating column entry
       const newState = {
         ...state,
         columns: {
@@ -110,10 +153,6 @@ function Board(props: any) {
     ...draggableStyle,
   });
 
-  const createCardBox = (cardBox: any) => {
-    setCardBoxes([...cardBoxes, cardBox] as any);
-  };
-
   const reorder = (list: any, startIndex: any, endIndex: any) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -121,9 +160,29 @@ function Board(props: any) {
     return result;
   };
 
+  //for modal
+  const [open, setOpen] = React.useState(false);
+
+  const handleModalOpen = (columnId: any, cardId: any) => {
+    const card = state.columns[columnId].cards.filter(
+      (card: any) => card.id === cardId
+    );
+    console.log(card[0]);
+    setCurrentCard(card[0]);
+    setOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
-      <Top projectName={props.projectName} />
+      <Top
+        setView={props.setView}
+        setProjectName={props.setProjectName}
+        projectName={props.projectName}
+      />
       <div className="board">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable
@@ -148,6 +207,9 @@ function Board(props: any) {
                       index={index}
                       reorder={reorder}
                       addCard={addCard}
+                      handleModalOpen={handleModalOpen}
+                      updateSectionTitle={updateSectionTitle}
+                      deleteColumn={deleteColumn}
                       onDragEnd={onDragEnd}
                     />
                   );
@@ -157,8 +219,13 @@ function Board(props: any) {
             )}
           </Droppable>
         </DragDropContext>
-        <AddSection createCardBox={createCardBox} />
+        <AddSection colorIndex={colorIndex} addSection={addSection} />
       </div>
+      <CardModal
+        open={open}
+        handleModalClose={handleModalClose}
+        currentCard={currentCard}
+      />
     </>
   );
 }
