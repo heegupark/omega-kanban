@@ -22,7 +22,8 @@ body {
 }
 
 .project-name {
-  width: 400px;
+  max-width: 400px;
+  width: 90%;
   display: flex;
   justify-content: space-around;
 }
@@ -116,7 +117,7 @@ body {
 }
 
 .activity-log-content {
-  word-wrap: break-word;
+  word-break: break-all;
   width: 360px;
 }
 
@@ -206,6 +207,7 @@ body {
     rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   width: 700px;
   min-height: 200px;
+  height: 90%;
   overflow: scroll;
 }
 
@@ -643,6 +645,45 @@ body {
 }
 
 @media (max-width: 575.98px) {
+  body {
+    font-size: 13px;
+  }
+
+  .card-detail-left {
+    padding: 5px;
+  }
+
+  .card-deatil-title {
+    font-size: 14px;
+  }
+
+  .card-detail-note {
+    font-size: 13px;
+  }
+
+  .card-deatil-checklist {
+    font-size: 13px;
+  }
+
+  .complete-btn {
+    height: 28px;
+  }
+
+  .activity-log-content {
+    width: 100%;
+  }
+
+  .activity-icon {
+    padding: 0px;
+  }
+
+  .activity-content {
+    font-size: 12px;
+  }
+
+  .modal-paper {
+    height: 100%;
+  }
 }
 
 @media (max-height: 375px) {
