@@ -36,7 +36,7 @@ function CardNote(props: any) {
           onClick={() => setIsNoting(true)}
           className="card-detail-note cursor-text"
         >
-          {note}
+          {note.length > 70 ? note.substr(0, 40) + '...' : note}
         </div>
       )}
     </div>

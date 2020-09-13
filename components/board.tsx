@@ -417,11 +417,13 @@ function Board(props: any) {
           addChecklist={addChecklist}
           updateChecklist={updateChecklist}
           addActivity={addActivity}
+          updateDate={updateDate}
           updateCardTitle={updateCardTitle}
           updateCardNote={updateCardNote}
           completeChecklist={completeChecklist}
           deleteChecklist={deleteChecklist}
           setDueDate={setDueDate}
+          convertDate={convertDate}
         />
       )}
     </>

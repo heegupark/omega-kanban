@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Checklist from './checklist';
 import CardNote from './card-note';
 import DueDate from './due-date';
+import CardInfo from './card-info';
 import CardDetailHead from './card-detail-head';
 import Activity from './activity';
 import Modal from '@material-ui/core/Modal';
@@ -81,6 +82,7 @@ function CardModal(props: any) {
                   currentCard={props.currentCard}
                   currentColumn={props.currentColumn}
                   addActivity={props.addActivity}
+                  updateDate={props.updateDate}
                 />
               </div>
             </div>
@@ -89,46 +91,14 @@ function CardModal(props: any) {
                 currentCard={props.currentCard}
                 currentColumn={props.currentColumn}
                 setDueDate={props.setDueDate}
+                convertDate={props.convertDate}
               />
-              <div className="card-detail-project-info">
-                <div className="my-5px">{props.projectName}</div>
-                <div className="font-12px my-5px">
-                  {props.currentColumn.title}
-                </div>
-                <div className="my-10px display-flex">
-                  <div className="circle-icon">
-                    <i className="fas fa-plus-circle"></i>
-                  </div>
-                  <div>
-                    <div className="my-5px">Created</div>
-                    <div className="font-12px my-5px">
-                      {props.createdAt || 'undefined'}
-                    </div>
-                  </div>
-                </div>
-                <div className="my-10px display-flex">
-                  <div className="circle-icon">
-                    <i className="fas fa-pen"></i>
-                  </div>
-                  <div>
-                    <div className="my-5px">Updated</div>
-                    <div className="font-12px my-5px">
-                      {props.updatedAt || 'undefined'}
-                    </div>
-                  </div>
-                </div>
-                <div className="my-10px display-flex">
-                  <div className="circle-icon">
-                    <i className="fas fa-link"></i>
-                  </div>
-                  <div>
-                    <div className="my-5px">Task ID</div>
-                    <div className="font-12px my-5px">
-                      {props.currentCard.id}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CardInfo
+                projectName={props.projectName}
+                currentCard={props.currentCard}
+                currentColumn={props.currentColumn}
+                convertDate={props.convertDate}
+              />
             </div>
           </div>
         </div>

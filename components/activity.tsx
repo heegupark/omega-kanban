@@ -5,6 +5,7 @@ function Activity(props: any) {
   const handleActivitySubmit = () => {
     if (activity.trim().length > 0) {
       props.addActivity(props.currentColumn.id, props.currentCard.id, activity);
+      props.updateDate(props.currentColumn.id, props.currentCard.id);
       setActivity('');
     }
   };
@@ -97,7 +98,7 @@ function Activity(props: any) {
                 <div className="my-5px text-bolder">
                   {getTimeMsg(activity.createdAt)}
                 </div>
-                <div className="my-5px">
+                <div className="my-5px activity-log-content">
                   {activity.activity.split('||')[0]}
                   <b>{activity.activity.split('||')[1]}</b>
                 </div>

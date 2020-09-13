@@ -115,8 +115,45 @@ body {
   height: 800px;
 }
 
+.activity-log-content {
+  word-wrap: break-word;
+  width: 360px;
+}
+
 .card {
-  /* min-height: 150px; */
+  padding: 10px;
+  opacity: 0.5;
+  word-wrap: break-word;
+  height: 100%;
+}
+
+.card:hover {
+  opacity: 1;
+}
+
+.card-content-title {
+  height: 30px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.card-content-note {
+  height: 70px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.card-content-bottom {
+  font-size: 12px;
+  margin-top: 20px;
+  height: 20px;
+}
+
+.card-checklist-icon {
+  padding: 5px;
+  background-color: rgb(220, 220, 220);
+  margin: 10px 10px 10px 0px;
+  border-radius: 50%;
 }
 
 .modal-paper {
@@ -237,11 +274,6 @@ body {
 .due-date {
   padding: 10px;
   border-bottom: 1px solid rgb(211, 211, 211);
-}
-
-.card-content-title {
-  height: 30px;
-  padding: 10px;
 }
 
 .complete-btn {

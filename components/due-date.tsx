@@ -15,13 +15,6 @@ function DueDate(props: any) {
     props.setDueDate(props.currentColumn.id, props.currentCard.id, date);
   };
 
-  const convertDate = (date: Date) => {
-    const month = date.toString().split(' ')[1];
-    const day = date.toString().split(' ')[2];
-    const year = date.toString().split(' ')[3];
-    return `${month} ${day}, ${year}`;
-  };
-
   return (
     <div className="due-date">
       {selectedDate && !isDueDateChange ? (
@@ -30,7 +23,7 @@ function DueDate(props: any) {
           className="due-on text-orange text-bolder flex-center h-top"
         >
           <i className="far fa-calendar-alt"></i>
-          <div>{`Due on ${convertDate(selectedDate)}`}</div>
+          <div>{`Due on ${props.convertDate(selectedDate)}`}</div>
         </div>
       ) : (
         <div className="h-top flex-center">

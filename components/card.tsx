@@ -13,12 +13,21 @@ function Card(props: any) {
       'rgba(0, 0, 0, 0.02) 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px',
     background: isDragging ? 'rgb(241,251,255)' : 'white',
     ...draggableStyle,
-    height: isDragging ? '100px' : '150px',
+    // minHeight: '150px',
+    height: isDragging ? '100px' : '100%',
   });
 
   const expandCard = () => {
     props.setCardForOpen(props.column.id, props.card.id);
     props.setOpen(true);
+  };
+
+  const checklistStatus = () => {
+    const length = props.card.checklists.length;
+    const completed = props.card.checklists.filter(
+      (checklist: any) => checklist.isChecked
+    );
+    return `${completed.length} / ${length}`;
   };
 
   return (
@@ -32,8 +41,15 @@ function Card(props: any) {
       )}
       onClick={() => expandCard()}
     >
-      <div className="card">
+      <div className="card cursor-pointer">
         <div className="card-content-title">{props.card.cardTitle}</div>
+        <div className="card-content-note">{props.card.note}</div>
+        <div className="card-content-bottom display-flex">
+          <div>
+            <i className="card-checklist-icon fas fa-list-ul"></i>
+          </div>
+          <div>{checklistStatus()}</div>
+        </div>
       </div>
     </div>
   );
