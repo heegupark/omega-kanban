@@ -65,7 +65,6 @@ function Disclaimer(props: any) {
       <Modal
         className={classes.modal}
         open={open}
-        onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -89,8 +88,8 @@ function Disclaimer(props: any) {
               Accept
             </Button>
             <p className={classes.paragraph}>
-              I built this app using React, React Hooks, Next.js, Socket.io and
-              Typescript to provide chatting functions.
+              I built this app using React, React Hooks, Next.js and Typescript
+              to provide Kanban functions.
             </p>
             <div className={classes.support}>
               {'If you have any questions, please email to '}
