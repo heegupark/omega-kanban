@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import Checklist from './checklist';
 import CardNote from './card-note';
+import DueDate from './due-date';
 import CardDetailHead from './card-detail-head';
 import Activity from './activity';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,14 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function CardModal(props: any) {
   const classes = useStyles();
-
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date()
-  );
-
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
 
   return (
     <Modal
@@ -98,24 +85,11 @@ function CardModal(props: any) {
               </div>
             </div>
             <div className="card-detail-right bg-grey-1">
-              <div className="due-date">
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid container justify="space-around">
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      format="MM/dd/yyyy"
-                      id="date-picker-inline"
-                      label="Due Date"
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                      KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                      }}
-                    />
-                  </Grid>
-                </MuiPickersUtilsProvider>
-              </div>
+              <DueDate
+                currentCard={props.currentCard}
+                currentColumn={props.currentColumn}
+                setDueDate={props.setDueDate}
+              />
               <div className="card-detail-project-info">
                 <div className="my-5px">{props.projectName}</div>
                 <div className="font-12px my-5px">

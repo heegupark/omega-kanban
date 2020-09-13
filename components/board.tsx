@@ -80,6 +80,7 @@ function Board(props: any) {
       note: '',
       checklists: [],
       activities: [],
+      dueDate: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -325,6 +326,26 @@ function Board(props: any) {
     } as any);
   };
 
+  const convertDate = (date: Date) => {
+    const month = date.toString().split(' ')[1];
+    const day = date.toString().split(' ')[2];
+    const year = date.toString().split(' ')[3];
+    return `${month} ${day}, ${year}`;
+  };
+
+  const setDueDate = (columnId: any, cardId: any, date: Date) => {
+    state.columns[columnId].cards.map((card: any) => {
+      if (card.id === cardId) {
+        card.dueDate = new Date(date);
+      }
+    });
+    updateDate(columnId, cardId);
+    addActivity(columnId, cardId, `A due date is set to ${convertDate(date)}`);
+    setState({
+      ...state,
+    } as any);
+  };
+
   const addActivity = (columnId: any, cardId: any, activity: any) => {
     state.columns[columnId].cards.map((card: any) => {
       if (card.id === cardId) {
@@ -400,6 +421,7 @@ function Board(props: any) {
           updateCardNote={updateCardNote}
           completeChecklist={completeChecklist}
           deleteChecklist={deleteChecklist}
+          setDueDate={setDueDate}
         />
       )}
     </>

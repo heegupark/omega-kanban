@@ -330,6 +330,11 @@ body {
   background-color: transparent;
 }
 
+.due-on > i,
+.due-on > div {
+  margin: 0px 10px;
+}
+
 .icon-box {
   margin: 0px 20px;
 }
