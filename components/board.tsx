@@ -152,6 +152,18 @@ function Board(props: any) {
     } as any);
   };
 
+  const deleteCard = (columnId: any, cardId: any) => {
+    state.columns[columnId].cards.map((card: any, index: any) => {
+      if (card.id === cardId) {
+        state.columns[columnId].cards.splice(index, 1);
+      }
+    });
+    updateDate(columnId, cardId);
+    setState({
+      ...state,
+    } as any);
+  };
+
   const onDragEnd = (result: any) => {
     if (!result.destination) {
       return;
@@ -444,6 +456,7 @@ function Board(props: any) {
           setDueDate={setDueDate}
           convertDate={convertDate}
           completeCard={completeCard}
+          deleteCard={deleteCard}
         />
       )}
     </>
