@@ -28,6 +28,7 @@ function Column(props: any) {
               setCardForOpen={props.setCardForOpen}
               onDragEnd={props.onDragEnd}
               addCard={props.addCard}
+              convertDate={props.convertDate}
             />
           </div>
         </div>

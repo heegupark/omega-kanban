@@ -66,6 +66,7 @@ function CardBody(props: any) {
                       provided={provided}
                       isDragging={snapshot.isDragging}
                       setCardForOpen={props.setCardForOpen}
+                      convertDate={props.convertDate}
                     />
                   )}
                 </Draggable>

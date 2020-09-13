@@ -127,6 +127,24 @@ body {
   height: 100%;
 }
 
+.card-completed {
+  /* opacity: 0.5; */
+  word-wrap: break-word;
+  height: 100%;
+}
+
+.card-completed-head {
+  background: rgb(216, 245, 216);
+  color: rgb(70, 206, 70);
+  margin: -15px -15px 20px -15px;
+  padding: 10px 15px 10px 15px;
+  border-radius: 10px 10px 0px 00px;
+}
+
+.card-completed-head > i {
+  padding: 0px 5px;
+}
+
 .card:hover {
   opacity: 1;
 }
@@ -156,6 +174,10 @@ body {
   border-radius: 50%;
 }
 
+.ml-10px {
+  margin-left: 10px;
+}
+
 .modal-paper {
   background-color: white;
   border: 1px solid #eeeeee;
@@ -171,6 +193,26 @@ body {
   width: 100%;
   padding: 20px;
   border-bottom: 1px solid rgb(220, 226, 230);
+  display: flex;
+}
+
+.card-modal-header {
+  width: 100%;
+  /* padding: 20px; */
+  display: flex;
+}
+
+.card-modal-header-check {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+  margin: 0px 15px;
+}
+
+.card-modal-header-second {
+  width: 100%;
+  padding: 20px;
+  display: flex;
 }
 
 .card-detail-left {
@@ -296,6 +338,15 @@ body {
   color: white;
   font-weight: 500;
   background-color: rgb(147, 147, 147);
+}
+
+.archive-btn {
+  height: 36px;
+  padding: 0px 15px;
+  border-radius: 5px;
+  color: rgb(48, 191, 191);
+  font-weight: 500;
+  border: 1px solid rgb(48, 191, 191);
 }
 
 .add-card-icon {

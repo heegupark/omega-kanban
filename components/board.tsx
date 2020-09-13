@@ -17,6 +17,7 @@ function Board(props: any) {
             id: uuidv4(),
             cardTitle: 'Create HTML skeleton',
             note: '',
+            isCardCompleted: false,
             checklists: [],
             activities: [],
             dueDate: new Date(2020, 9, 11),
@@ -78,6 +79,7 @@ function Board(props: any) {
       id: uuidv4(),
       cardTitle,
       note: '',
+      isCardCompleted: false,
       checklists: [],
       activities: [],
       dueDate: null,
@@ -92,6 +94,22 @@ function Board(props: any) {
     } as any);
   };
 
+  const completeCard = (columnId: any, cardId: any) => {
+    let completeCard = null;
+    state.columns[columnId].cards.map((card: any, index: any) => {
+      if (card.id === cardId) {
+        card.isCardCompleted = true;
+        completeCard = card;
+        state.columns[columnId].cards.splice(index, 1);
+      }
+    });
+    state.columns[columnId].cards.push(completeCard);
+    updateDate(columnId, cardId);
+    addActivity(columnId, cardId, `Card is completed`);
+    setState({
+      ...state,
+    } as any);
+  };
   const updateSectionTitle = (columnId: any, sectionTitle: any) => {
     state.columns[columnId].title = sectionTitle;
     state.columns[columnId].updatedAt = new Date();
@@ -397,6 +415,7 @@ function Board(props: any) {
                       updateSectionTitle={updateSectionTitle}
                       deleteColumn={deleteColumn}
                       onDragEnd={onDragEnd}
+                      convertDate={convertDate}
                     />
                   );
                 })}
@@ -424,6 +443,7 @@ function Board(props: any) {
           deleteChecklist={deleteChecklist}
           setDueDate={setDueDate}
           convertDate={convertDate}
+          completeCard={completeCard}
         />
       )}
     </>

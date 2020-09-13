@@ -19,7 +19,9 @@ function DueDate(props: any) {
     <div className="due-date">
       {selectedDate && !isDueDateChange ? (
         <div
-          onClick={() => setIsDueDateChange(true)}
+          onClick={() => {
+            if (!props.currentCard.isCardCompleted) setIsDueDateChange(true);
+          }}
           className="due-on text-orange text-bolder flex-center h-top"
         >
           <i className="far fa-calendar-alt"></i>

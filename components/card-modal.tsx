@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Checklist from './checklist';
+import CardHeader from './card-header';
 import CardNote from './card-note';
 import DueDate from './due-date';
 import CardInfo from './card-info';
@@ -44,17 +45,13 @@ function CardModal(props: any) {
     >
       <Fade in={props.open}>
         <div className="modal-paper">
-          <div className="card-detail-header">
-            <button className="complete-btn cursor-pointer border-none bg-head-1">
-              Complete
-            </button>
-            <div
-              onClick={() => props.handleModalClose()}
-              className="card-detail-close float-right cursor-pointer"
-            >
-              <i className="fas fa-times"></i>
-            </div>
-          </div>
+          <CardHeader
+            currentColumn={props.currentColumn}
+            currentCard={props.currentCard}
+            convertDate={props.convertDate}
+            handleModalClose={props.handleModalClose}
+            completeCard={props.completeCard}
+          />
           <div className="card-detail-body">
             <div className="card-detail-left">
               <CardDetailHead

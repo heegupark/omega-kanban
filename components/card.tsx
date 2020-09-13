@@ -41,16 +41,38 @@ function Card(props: any) {
       )}
       onClick={() => expandCard()}
     >
-      <div className="card cursor-pointer">
-        <div className="card-content-title">{props.card.cardTitle}</div>
-        <div className="card-content-note">{props.card.note}</div>
-        <div className="card-content-bottom display-flex">
-          <div>
-            <i className="card-checklist-icon fas fa-list-ul"></i>
+      {props.card.isCardCompleted ? (
+        <div className="card-completed cursor-pointer">
+          <div className="card-completed-head display-flex">
+            <i className="fas fa-check-circle"></i>
+            <div>{'Completed'}</div>
           </div>
-          <div>{checklistStatus()}</div>
+          <div className="card-content-title text-grey">
+            <s>{props.card.cardTitle}</s>
+          </div>
+          <div className="card-content-bottom text-grey display-flex">
+            <div>
+              <i className="card-checklist-icon far fa-calendar-check"></i>
+            </div>
+            <div>{props.convertDate(props.card.updatedAt)}</div>
+            <div className="ml-10px">
+              <i className="card-checklist-icon fas fa-list-ul"></i>
+            </div>
+            <div>{checklistStatus()}</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="card cursor-pointer">
+          <div className="card-content-title">{props.card.cardTitle}</div>
+          <div className="card-content-note">{props.card.note}</div>
+          <div className="card-content-bottom display-flex">
+            <div>
+              <i className="card-checklist-icon fas fa-list-ul"></i>
+            </div>
+            <div>{checklistStatus()}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
