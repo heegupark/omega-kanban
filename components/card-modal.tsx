@@ -26,15 +26,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function CardModal(props: any) {
-  const [isDeleting, setIsDeleting] = useState(false);
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [category, setCategory] = useState('delete');
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setCategory('delete');
     setOpen(false);
   };
 
@@ -43,6 +44,71 @@ function CardModal(props: any) {
     handleClose();
     props.handleModalClose();
   };
+
+  const handleArchiveBtn = () => {
+    props.archiveCard(props.currentColumn.id, props.currentCard.id);
+    handleClose();
+    props.handleModalClose();
+  };
+
+  let modalElement = null;
+  switch (category) {
+    case 'archive':
+      modalElement = (
+        <div className="modal-delete">
+          <div className="delete-btn-desc text-center">
+            You cannot redo this.
+          </div>
+          <div className="delete-btn-desc text-center">
+            Do you want to archive this card?
+          </div>
+          <div className="delete-btn-box">
+            <Button
+              onClick={() => handleArchiveBtn()}
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              Archive
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleClose()}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      );
+      break;
+    default:
+      modalElement = (
+        <div className="modal-delete">
+          <div className="delete-btn-desc">
+            Do you want to delete this card?
+          </div>
+          <div className="delete-btn-box">
+            <Button
+              onClick={() => handleDeleteBtn()}
+              size="small"
+              variant="outlined"
+              color="secondary"
+            >
+              Delete
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleClose()}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      );
+      break;
+  }
 
   return (
     <Modal
@@ -69,6 +135,8 @@ function CardModal(props: any) {
               convertDate={props.convertDate}
               handleModalClose={props.handleModalClose}
               completeCard={props.completeCard}
+              setCategory={setCategory}
+              handleOpen={handleOpen}
             />
             <div className="card-detail-body">
               <div className="card-detail-left">
@@ -114,14 +182,16 @@ function CardModal(props: any) {
                   currentColumn={props.currentColumn}
                   convertDate={props.convertDate}
                 />
-                <div className="flex-center">
-                  <button
-                    onClick={() => handleOpen()}
-                    className="delete-card-btn border-none text-red cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </div>
+                {!props.currentCard.isArchived && (
+                  <div className="flex-center">
+                    <button
+                      onClick={() => handleOpen()}
+                      className="delete-card-btn border-none text-red cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -130,37 +200,13 @@ function CardModal(props: any) {
             aria-describedby="transition-modal-description"
             className={classes.modal}
             open={open}
-            // onClose={handleClose}
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{
               timeout: 500,
             }}
           >
-            <Fade in={open}>
-              <div className="modal-delete">
-                <div className="delete-btn-desc">
-                  Do you want to delete this card?
-                </div>
-                <div className="delete-btn-box">
-                  <Button
-                    onClick={() => handleDeleteBtn()}
-                    size="small"
-                    variant="outlined"
-                    color="secondary"
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={() => handleClose()}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </Fade>
+            <Fade in={open}>{modalElement}</Fade>
           </Modal>
         </>
       </Fade>

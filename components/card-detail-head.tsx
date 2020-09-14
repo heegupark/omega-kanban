@@ -18,6 +18,7 @@ function CardDetailHead(props: any) {
     <div id="transition-modal-title">
       <input
         id={props.currentCard.id}
+        disabled={props.currentCard.isArchived}
         className="card-deatil-title border-none"
         type="text"
         onChange={(e) => setCardDetailTitle(e.target.value)}

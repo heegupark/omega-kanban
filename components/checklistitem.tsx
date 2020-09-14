@@ -65,55 +65,80 @@ function ChecklistItem(props: any) {
   };
 
   return (
-    <div
-      id={props.checklist.id}
-      onMouseOver={() => setShowAngle(true)}
-      onMouseLeave={() => setShowAngle(false)}
-      className="display-flex checklist-row"
-    >
-      <div
-        className="checklist-circle cursor-pointer"
-        onClick={() => handleCompleteChecklist()}
-      >
-        {props.checklist.isChecked ? (
-          <Zoom in={true}>
-            <i className="far fa-check-circle"></i>
-          </Zoom>
-        ) : (
-          <i className="far fa-circle"></i>
-        )}
-      </div>
-      {props.checklist.isChecked ? (
-        <div className="checklist-content">
-          <s>{checklist}</s>
+    <>
+      {props.currentCard.isArchived ? (
+        <div className="display-flex checklist-row-no-hover">
+          <div className="checklist-circle">
+            {props.checklist.isChecked ? (
+              <i className="far fa-check-circle"></i>
+            ) : (
+              <i className="far fa-circle"></i>
+            )}
+          </div>
+          {props.checklist.isChecked ? (
+            <div className="checklist-content">
+              <s>{checklist}</s>
+            </div>
+          ) : (
+            <input
+              value={checklist}
+              disabled={true}
+              className="checklist-content border-none"
+            ></input>
+          )}
         </div>
       ) : (
-        <input
-          value={checklist}
-          onChange={(e) => setChecklist(e.target.value)}
-          onKeyDown={(e) => handleChecklistSubmit(e)}
-          className="checklist-content border-none"
-        ></input>
-      )}
-      <div className="card-head-angle cursor-pointer">
-        {checklist && showAngle && (
-          <>
-            <i onClick={handleClick} className="fas fa-angle-down"></i>
-          </>
-        )}
-        <StyledMenu
-          id="delete-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
+        <div
+          id={props.checklist.id}
+          onMouseOver={() => setShowAngle(true)}
+          onMouseLeave={() => setShowAngle(false)}
+          className="display-flex checklist-row"
         >
-          <MenuItem onClick={() => handleDeleteColClick()}>
-            <ListItemText primary="Delete" />
-          </MenuItem>
-        </StyledMenu>
-      </div>
-    </div>
+          <div
+            className="checklist-circle cursor-pointer"
+            onClick={() => handleCompleteChecklist()}
+          >
+            {props.checklist.isChecked ? (
+              <Zoom in={true}>
+                <i className="far fa-check-circle"></i>
+              </Zoom>
+            ) : (
+              <i className="far fa-circle"></i>
+            )}
+          </div>
+          {props.checklist.isChecked ? (
+            <div className="checklist-content">
+              <s>{checklist}</s>
+            </div>
+          ) : (
+            <input
+              value={checklist}
+              onChange={(e) => setChecklist(e.target.value)}
+              onKeyDown={(e) => handleChecklistSubmit(e)}
+              className="checklist-content border-none"
+            ></input>
+          )}
+          <div className="card-head-angle cursor-pointer">
+            {checklist && showAngle && (
+              <>
+                <i onClick={handleClick} className="fas fa-angle-down"></i>
+              </>
+            )}
+            <StyledMenu
+              id="delete-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={() => handleDeleteColClick()}>
+                <ListItemText primary="Delete" />
+              </MenuItem>
+            </StyledMenu>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 export default ChecklistItem;

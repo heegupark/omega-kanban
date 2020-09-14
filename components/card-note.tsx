@@ -13,7 +13,15 @@ function CardNote(props: any) {
 
   return (
     <div className="card-deatil-note-box">
-      {isNoting ? (
+      {props.currentCard.isArchived ? (
+        note.length < 1 ? (
+          <div className="card-detail-note">This task has no notes.</div>
+        ) : (
+          <div className="card-detail-note">
+            {note.length > 70 ? note.substr(0, 40) + '...' : note}
+          </div>
+        )
+      ) : isNoting ? (
         <input
           id={props.currentCardId}
           className="card-deatil-note-input border-none"

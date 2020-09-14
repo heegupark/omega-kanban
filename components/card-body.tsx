@@ -8,25 +8,6 @@ function CardBody(props: any) {
   const [isAdding, setIsAdding] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [cardTitle, setCardTitle] = useState('');
-  // const [cardBoxTitle, setCardBoxTitle] = useState('');
-
-  // useEffect(() => {
-  //   if (props.cardBoxTitle) {
-  //     setCardBoxTitle(props.cardBoxTitle);
-  //   }
-  // }, []);
-
-  // const onDragStart = (result: any) => {
-  //   setIsDragging(true);
-  //   if (cardTitle.length < 1) {
-  //     setIsAdding(false);
-  //   }
-  // };
-
-  // const onDragEnd = (result: any) => {
-  //   setIsDragging(false);
-  //   props.onDragEnd(result);
-  // };
 
   const handleAddCard = () => {
     setIsAdding(true);
@@ -51,67 +32,85 @@ function CardBody(props: any) {
   };
 
   return (
-    <div className="card-body">
-      <Droppable droppableId={props.column.id}>
-        {(provided: any, snapshot: any) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
-            {props.column.cards.map((card: any, index: any) => {
-              return (
-                <Draggable key={card.id} draggableId={card.id} index={index}>
-                  {(provided: any, snapshot: any) => (
-                    <Card
-                      card={card}
-                      setOpen={props.setOpen}
-                      column={props.column}
-                      provided={provided}
-                      isDragging={snapshot.isDragging}
-                      setCardForOpen={props.setCardForOpen}
-                      convertDate={props.convertDate}
-                    />
-                  )}
-                </Draggable>
-              );
-            })}
-            {isDragging ? (
-              ''
-            ) : isAdding ? (
-              <Zoom in={isAdding}>
-                <div className="h-top mt-5px flex-center mb-25px">
-                  <input
-                    className="box-shadow-1 w-100per add-card-title"
-                    value={cardTitle}
-                    autoFocus
-                    onBlur={() => handleAddCardBlur()}
-                    onKeyDown={(event) => handleKeyDownForAddCard(event)}
-                    onChange={(e) => setCardTitle(e.target.value)}
-                  ></input>
-                </div>
-              </Zoom>
-            ) : (
-              <div className="h-top flex-center mb-25px cursor-pointer">
-                <i
-                  onClick={() => handleAddCard()}
-                  className="add-card-icon box-shadow-1 fas fa-plus"
-                ></i>
+    <>
+      {props.column.id === 'archive' ? (
+        <div>
+          {props.column.cards.map((card: any, index: any) => {
+            return (
+              <div key={card.id}>
+                <Card
+                  card={card}
+                  setOpen={props.setOpen}
+                  column={props.column}
+                  setCardForOpen={props.setCardForOpen}
+                  convertDate={props.convertDate}
+                />
               </div>
-            )}
-            {!isAdding && props.column.cards.length === 0 && (
-              <div className="no-task flex-center flex-column">
-                <div>
-                  <i className="no-task-check text-grey far fa-check-circle"></i>
+            );
+          })}
+        </div>
+      ) : (
+        <Droppable droppableId={props.column.id}>
+          {(provided: any, snapshot: any) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {props.column.cards.map((card: any, index: any) => {
+                return (
+                  <Draggable key={card.id} draggableId={card.id} index={index}>
+                    {(provided: any, snapshot: any) => (
+                      <Card
+                        card={card}
+                        setOpen={props.setOpen}
+                        column={props.column}
+                        provided={provided}
+                        isDragging={snapshot.isDragging}
+                        setCardForOpen={props.setCardForOpen}
+                        convertDate={props.convertDate}
+                      />
+                    )}
+                  </Draggable>
+                );
+              })}
+              {isDragging ? (
+                ''
+              ) : isAdding ? (
+                <Zoom in={isAdding}>
+                  <div className="h-top mt-5px flex-center mb-25px">
+                    <input
+                      className="box-shadow-1 w-100per add-card-title"
+                      value={cardTitle}
+                      autoFocus
+                      onBlur={() => handleAddCardBlur()}
+                      onKeyDown={(event) => handleKeyDownForAddCard(event)}
+                      onChange={(e) => setCardTitle(e.target.value)}
+                    ></input>
+                  </div>
+                </Zoom>
+              ) : (
+                <div className="h-top flex-center mb-25px cursor-pointer">
+                  <i
+                    onClick={() => handleAddCard()}
+                    className="add-card-icon box-shadow-1 fas fa-plus"
+                  ></i>
                 </div>
-                <div className="no-task-title text-grey">No Task</div>
-                <div className="no-task-desc text-grey">Drag tasks here</div>
-                <div className="no-task-desc text-grey">
-                  or click + to add new tasks
+              )}
+              {!isAdding && props.column.cards.length === 0 && (
+                <div className="no-task flex-center flex-column">
+                  <div>
+                    <i className="no-task-check text-grey far fa-check-circle"></i>
+                  </div>
+                  <div className="no-task-title text-grey">No Task</div>
+                  <div className="no-task-desc text-grey">Drag tasks here</div>
+                  <div className="no-task-desc text-grey">
+                    or click + to add new tasks
+                  </div>
                 </div>
-              </div>
-            )}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </div>
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      )}
+    </>
   );
 }
 export default CardBody;

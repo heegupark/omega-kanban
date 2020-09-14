@@ -37,6 +37,7 @@ function DueDate(props: any) {
                 format="MM/dd/yyyy"
                 id="date-picker-inline"
                 label="Due Date"
+                disabled={props.currentCard.isArchived}
                 value={selectedDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{

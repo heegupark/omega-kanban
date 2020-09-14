@@ -78,70 +78,90 @@ function CardHead(props: any) {
     case props.column.title.toLowerCase().includes('step'):
       iconElement = <i className="fas fa-walking"></i>;
       break;
+    case props.column.title.toLowerCase().includes('archive'):
+      iconElement = <i className="fas fa-archive"></i>;
+      break;
     default:
       iconElement = <i className="fas fa-bolt"></i>;
   }
   return (
-    <div
-      className={`subtitle-box h-top bg-head-${
-        props.column.colorIndex % 7
-      } text-white`}
-      onMouseOver={() => setShowAngle(true)}
-      onMouseLeave={() => setShowAngle(false)}
-    >
-      <div {...props.dragHandleProps} className="icon-box">
-        {iconElement}
-      </div>
-      <div
-        onClick={() => setIsCardBoxTileChanging(true)}
-        className="section-title w-60per h-top cursor-text"
-      >
-        {isCardBoxTileChanging ? (
-          <div
-            className="h-top flex-center w-90per"
-            onBlur={() => handleCardBoxTitleBlur()}
-          >
-            <input
-              className="w-100per change-section-title"
-              value={cardBoxTitle}
-              autoFocus
-              onKeyDown={(event) => handleKeyDownForCardBoxTitle(event)}
-              onBlur={() => setIsCardBoxTileChanging(false)}
-              onChange={(e) => {
-                if (e.target.value.trim().length < 1) {
-                  setCardBoxTitle(e.target.value.trim());
-                } else {
-                  setCardBoxTitle(e.target.value);
-                }
-              }}
-            ></input>
-          </div>
-        ) : (
-          <>
+    <>
+      {props.column.id === 'archive' ? (
+        <div className={`subtitle-box h-top bg-grey-2`}>
+          <div className="icon-box">{iconElement}</div>
+          <div className="section-title w-60per h-top">
             <div className="p-10px">{props.column.title}</div>
-          </>
-        )}
-      </div>
-      <div className="card-head-angle cursor-pointer">
-        {!isCardBoxTileChanging && showAngle && (
-          <>
-            <i onClick={handleClick} className="fas fa-angle-down"></i>
-          </>
-        )}
-        <StyledMenu
-          id="delete-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
+          </div>
+          <div className="card-head-angle"></div>
+          <div className="cards-num flex-center">
+            {props.column.cards.length}
+          </div>
+        </div>
+      ) : (
+        <div
+          className={`subtitle-box h-top bg-head-${
+            props.column.colorIndex % 7
+          } text-white`}
+          onMouseOver={() => setShowAngle(true)}
+          onMouseLeave={() => setShowAngle(false)}
         >
-          <MenuItem onClick={() => handleDeleteColClick()}>
-            <ListItemText primary="Delete" />
-          </MenuItem>
-        </StyledMenu>
-      </div>
-      <div className="cards-num flex-center">{props.column.cards.length}</div>
-    </div>
+          <div {...props.dragHandleProps} className="icon-box">
+            {iconElement}
+          </div>
+          <div
+            onClick={() => setIsCardBoxTileChanging(true)}
+            className="section-title w-60per h-top cursor-text"
+          >
+            {isCardBoxTileChanging ? (
+              <div
+                className="h-top flex-center w-90per"
+                onBlur={() => handleCardBoxTitleBlur()}
+              >
+                <input
+                  className="w-100per change-section-title"
+                  value={cardBoxTitle}
+                  autoFocus
+                  onKeyDown={(event) => handleKeyDownForCardBoxTitle(event)}
+                  onBlur={() => setIsCardBoxTileChanging(false)}
+                  onChange={(e) => {
+                    if (e.target.value.trim().length < 1) {
+                      setCardBoxTitle(e.target.value.trim());
+                    } else {
+                      setCardBoxTitle(e.target.value);
+                    }
+                  }}
+                ></input>
+              </div>
+            ) : (
+              <>
+                <div className="p-10px">{props.column.title}</div>
+              </>
+            )}
+          </div>
+          <div className="card-head-angle cursor-pointer">
+            {!isCardBoxTileChanging && showAngle && (
+              <>
+                <i onClick={handleClick} className="fas fa-angle-down"></i>
+              </>
+            )}
+            <StyledMenu
+              id="delete-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={() => handleDeleteColClick()}>
+                <ListItemText primary="Delete" />
+              </MenuItem>
+            </StyledMenu>
+          </div>
+          <div className="cards-num flex-center">
+            {props.column.cards.length}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 export default CardHead;

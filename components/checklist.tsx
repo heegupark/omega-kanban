@@ -19,7 +19,7 @@ function Checklist(props: any) {
   };
 
   return (
-    <>
+    <div className="checklist-box">
       <div className="card-deatil-title">Checklist</div>
       <div>
         {props.currentCard &&
@@ -39,6 +39,9 @@ function Checklist(props: any) {
               </div>
             );
           })}
+        {props.currentCard.checklists.length === 0 && (
+          <div className="card-detail-note">This task has no checklists.</div>
+        )}
       </div>
       {addChecklist && (
         <div>
@@ -59,13 +62,15 @@ function Checklist(props: any) {
           </div>
         </div>
       )}
-      <div
-        onClick={() => setAddChecklist(true)}
-        className="card-deatil-checklist text-skyblue cursor-pointer"
-      >
-        + Add Checklist Item
-      </div>
-    </>
+      {!props.currentCard.isArchived && (
+        <div
+          onClick={() => setAddChecklist(true)}
+          className="card-deatil-checklist text-skyblue cursor-pointer"
+        >
+          + Add Checklist Item
+        </div>
+      )}
+    </div>
   );
 }
 export default Checklist;

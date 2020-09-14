@@ -31,24 +31,46 @@ function CardHeader(props: any) {
   };
   return (
     <div className="card-detail-header">
-      {isCardCompleted ? (
-        <>
-          <div className="card-modal-header">
-            <button className="archive-btn cursor-pointer">Archive</button>
-            <div className="card-modal-header-check">
-              <i className="text-green fas fa-check-circle"></i>
-            </div>
-            <div>
-              <div className="text-grey">{`Completed on ${props.convertDate(
-                props.currentCard.updatedAt
-              )}`}</div>
-              <div>{`Time to complete : ${daysDifference(
-                props.currentCard.updatedAt,
-                props.currentCard.createdAt
-              )}`}</div>
-            </div>
+      {props.currentCard.isArchived ? (
+        <div className="card-modal-header">
+          <button className="archive-btn">Archived</button>
+          <div className="card-modal-header-check">
+            <i className="text-green fas fa-check-circle"></i>
           </div>
-        </>
+          <div>
+            <div className="text-grey">{`Completed on ${props.convertDate(
+              props.currentCard.updatedAt
+            )}`}</div>
+            <div>{`Time to complete : ${daysDifference(
+              props.currentCard.updatedAt,
+              props.currentCard.createdAt
+            )}`}</div>
+          </div>
+        </div>
+      ) : isCardCompleted ? (
+        <div className="card-modal-header">
+          <button
+            onClick={() => {
+              props.setCategory('archive');
+              props.handleOpen();
+            }}
+            className="archive-btn cursor-pointer"
+          >
+            Archive
+          </button>
+          <div className="card-modal-header-check">
+            <i className="text-green fas fa-check-circle"></i>
+          </div>
+          <div>
+            <div className="text-grey">{`Completed on ${props.convertDate(
+              props.currentCard.updatedAt
+            )}`}</div>
+            <div>{`Time to complete: ${daysDifference(
+              props.currentCard.updatedAt,
+              props.currentCard.createdAt
+            )}`}</div>
+          </div>
+        </div>
       ) : (
         <div className="card-modal-header">
           <button

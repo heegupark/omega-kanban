@@ -116,6 +116,11 @@ body {
   height: 800px;
 }
 
+.archive-card-body {
+  overflow-y: scroll;
+  height: 860px;
+}
+
 .activity-log-content {
   word-break: break-all;
   width: 360px;
@@ -251,6 +256,10 @@ body {
   width: 100%;
 }
 
+.checklist-box {
+  min-height: 50px;
+}
+
 .card-deatil-note-box {
   height: 50px;
   width: 100%;
@@ -362,6 +371,10 @@ body {
   background-color: rgb(147, 147, 147);
 }
 
+.text-center {
+  text-align: center;
+}
+
 .archive-btn {
   height: 36px;
   padding: 0px 15px;
@@ -369,6 +382,11 @@ body {
   color: rgb(48, 191, 191);
   font-weight: 500;
   border: 1px solid rgb(48, 191, 191);
+}
+
+.archive-btn:hover {
+  color: rgb(74, 81, 81);
+  border: 1px solid rgb(74, 81, 81);
 }
 
 .add-card-icon {
@@ -411,6 +429,13 @@ body {
 }
 
 .checklist-row {
+  padding: 2px 10px;
+  align-content: center;
+  border-radius: 7px;
+  margin: 7px 0px;
+}
+
+.checklist-row-no-hover {
   padding: 2px 10px;
   align-content: center;
   border-radius: 7px;
@@ -461,6 +486,22 @@ body {
 
 .activity-content {
   font-size: 14px;
+}
+
+.archive {
+  /*  */
+}
+
+.card-archived {
+  user-select: none;
+  padding: 15px;
+  margin: 5px 10px;
+  border: 1px solid rgb(225, 225, 225);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 0px 0px 1px rgba(0, 0, 0, 0.05),
+    0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px;
+  background-color: rgb(220, 226, 230);
+  height: '100%';
 }
 
 .text-bolder {
@@ -552,6 +593,14 @@ body {
 
 .bg-grey-1 {
   background-color: rgb(236, 239, 240);
+}
+
+.bg-grey-2 {
+  background-color: rgb(169, 169, 169);
+}
+
+.bg-grey-3 {
+  background-color: rgb(198, 198, 198);
 }
 
 .h-top {

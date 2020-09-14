@@ -51,6 +51,7 @@ function Activity(props: any) {
       <textarea
         className="card-detail-activity"
         placeholder="Add Comment"
+        disabled={props.currentCard.isArchived}
         onChange={(e) => setActivity(e.target.value)}
         value={activity}
       >

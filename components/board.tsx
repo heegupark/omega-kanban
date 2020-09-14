@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { v4 as uuidv4 } from 'uuid';
 import Top from './top';
 import Column from './column';
 import AddSection from './add-section';
-import { v4 as uuidv4 } from 'uuid';
+import Archive from './archive';
 import CardModal from './card-modal';
 
 function Board(props: any) {
@@ -18,6 +19,7 @@ function Board(props: any) {
             cardTitle: 'Create HTML skeleton',
             note: '',
             isCardCompleted: false,
+            isArchived: false,
             checklists: [],
             activities: [],
             dueDate: new Date(2020, 9, 11),
@@ -47,6 +49,14 @@ function Board(props: any) {
       },
     },
     columnOrder: ['column-0', 'column-1', 'column-2'],
+    archive: {
+      id: 'archive',
+      title: 'Archive',
+      cards: [],
+      colorIndex: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   } as any);
 
   const [colorIndex, setColorIndex] = useState(0);
@@ -57,15 +67,18 @@ function Board(props: any) {
     setColorIndex(state.columnOrder.length - 1);
   }, []);
 
-  const addSection = (sectionTitle: any) => {
+  const addSection = (sectionTitle: any, card: any) => {
     const newSection = {
       id: uuidv4(),
       title: sectionTitle,
-      cards: [],
+      cards: [] as any,
       colorIndex: colorIndex + 1,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+    if (card) {
+      newSection.cards.push(card);
+    }
     setColorIndex(colorIndex + 1);
     state.columns[newSection.id] = newSection;
     state.columnOrder.push(newSection.id);
@@ -80,6 +93,7 @@ function Board(props: any) {
       cardTitle,
       note: '',
       isCardCompleted: false,
+      isArchived: false,
       checklists: [],
       activities: [],
       dueDate: null,
@@ -164,6 +178,22 @@ function Board(props: any) {
     } as any);
   };
 
+  const archiveCard = (columnId: any, cardId: any) => {
+    let tempCard = null as any;
+    state.columns[columnId].cards.map((card: any, index: any) => {
+      if (card.id === cardId) {
+        card.isArchived = true;
+        tempCard = card;
+        state.columns[columnId].cards.splice(index, 1);
+      }
+    });
+    updateDate(columnId, cardId);
+    state.archive.cards.push(tempCard);
+    addActivity('archive', cardId, `Card is archived`);
+    setState({
+      ...state,
+    } as any);
+  };
   const onDragEnd = (result: any) => {
     if (!result.destination) {
       return;
@@ -245,15 +275,21 @@ function Board(props: any) {
     return result;
   };
 
-  //for modal
   const [open, setOpen] = React.useState(false);
-
   const setCardForOpen = (columnId: any, cardId: any) => {
-    const card = state.columns[columnId].cards.filter(
-      (card: any) => card.id === cardId
-    );
-    setCurrentCard(card[0]);
-    setCurrentColumn(state.columns[columnId]);
+    if (columnId === 'archive') {
+      const card = state.archive.cards.filter(
+        (card: any) => card.id === cardId
+      );
+      setCurrentCard(card[0]);
+      setCurrentColumn(state.archive);
+    } else {
+      const card = state.columns[columnId].cards.filter(
+        (card: any) => card.id === cardId
+      );
+      setCurrentCard(card[0]);
+      setCurrentColumn(state.columns[columnId]);
+    }
   };
 
   const handleModalClose = () => {
@@ -377,15 +413,28 @@ function Board(props: any) {
   };
 
   const addActivity = (columnId: any, cardId: any, activity: any) => {
-    state.columns[columnId].cards.map((card: any) => {
-      if (card.id === cardId) {
-        card.activities.unshift({
-          id: uuidv4(),
-          activity,
-          createdAt: new Date(),
-        });
-      }
-    });
+    if (columnId === 'archive') {
+      state.archive.cards.map((card: any) => {
+        if (card.id === cardId) {
+          card.activities.unshift({
+            id: uuidv4(),
+            activity,
+            createdAt: new Date(),
+          });
+        }
+      });
+    } else {
+      state.columns[columnId].cards.map((card: any) => {
+        if (card.id === cardId) {
+          card.activities.unshift({
+            id: uuidv4(),
+            activity,
+            createdAt: new Date(),
+          });
+        }
+      });
+    }
+
     setState({
       ...state,
     } as any);
@@ -436,6 +485,14 @@ function Board(props: any) {
             )}
           </Droppable>
         </DragDropContext>
+        {state.archive.cards.length > 0 && (
+          <Archive
+            archive={state.archive}
+            setCardForOpen={setCardForOpen}
+            convertDate={convertDate}
+            setOpen={setOpen}
+          />
+        )}
         <AddSection colorIndex={colorIndex} addSection={addSection} />
       </div>
       {open && (
@@ -457,6 +514,7 @@ function Board(props: any) {
           convertDate={convertDate}
           completeCard={completeCard}
           deleteCard={deleteCard}
+          archiveCard={archiveCard}
         />
       )}
     </>
