@@ -102,12 +102,14 @@ function Card(props: any) {
             <div className="card cursor-pointer">
               <div className="card-content-title">{props.card.cardTitle}</div>
               <div className="card-content-note">{props.card.note}</div>
-              <div className="card-content-bottom display-flex">
-                <div>
-                  <i className="card-checklist-icon fas fa-list-ul"></i>
+              {!props.isDragging && (
+                <div className="card-content-bottom display-flex">
+                  <div>
+                    <i className="card-checklist-icon fas fa-list-ul"></i>
+                  </div>
+                  <div>{checklistStatus()}</div>
                 </div>
-                <div>{checklistStatus()}</div>
-              </div>
+              )}
             </div>
           )}
         </div>
