@@ -6,8 +6,10 @@ import Column from './column';
 import AddSection from './add-section';
 import Archive from './archive';
 import CardModal from './card-modal';
+import { VariantType, useSnackbar } from 'notistack';
 
 function Board(props: any) {
+  const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState({
     columns: {
       'column-0': {
@@ -434,10 +436,14 @@ function Board(props: any) {
         }
       });
     }
-
+    handleSnackbar(activity, 'info');
     setState({
       ...state,
     } as any);
+  };
+
+  const handleSnackbar = (message: string, variant: VariantType) => {
+    enqueueSnackbar(message, { variant });
   };
 
   return (

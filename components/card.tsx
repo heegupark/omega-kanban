@@ -18,7 +18,6 @@ function Card(props: any) {
   });
 
   const expandCard = () => {
-    console.log(props.column.id, props.card.id);
     props.setCardForOpen(props.column.id, props.card.id);
     props.setOpen(true);
   };
