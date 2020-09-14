@@ -7,11 +7,13 @@ export default function Main(props: any) {
   const [view, setView] = useState('project-name' as string);
   const [projectName, setProjectName] = React.useState('' as any);
   const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
+
   useEffect(() => {
     if (localStorage.getItem('omegakanbanaccept')) {
       setIsAcceptDisclaimer(true);
     }
   });
+
   let element = null;
   switch (view) {
     case 'project-name':

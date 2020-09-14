@@ -81,6 +81,7 @@ function Board(props: any) {
     if (card) {
       newSection.cards.push(card);
     }
+    handleSnackbar(`'${sectionTitle}' is created`, 'success');
     setColorIndex(colorIndex + 1);
     state.columns[newSection.id] = newSection;
     state.columnOrder.push(newSection.id);
@@ -102,7 +103,11 @@ function Board(props: any) {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    addActivity(columnId, newCard.id, 'This card is created');
+    addActivity(
+      columnId,
+      newCard.id,
+      `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
+    );
     updateDate(columnId, null);
     state.columns[columnId].cards.push(newCard);
     setState({
@@ -161,8 +166,10 @@ function Board(props: any) {
   };
 
   const deleteColumn = (id: any) => {
+    const title = state.columns[id].title;
     delete state.columns[id];
     state.columnOrder.splice(state.columnOrder.indexOf(id), 1);
+    handleSnackbar(`'${title}' is deleted`, 'error');
     setState({
       ...state,
     } as any);
@@ -175,6 +182,7 @@ function Board(props: any) {
       }
     });
     updateDate(columnId, cardId);
+    handleSnackbar('A card is deleted', 'error');
     setState({
       ...state,
     } as any);
@@ -196,6 +204,7 @@ function Board(props: any) {
       ...state,
     } as any);
   };
+
   const onDragEnd = (result: any) => {
     if (!result.destination) {
       return;
@@ -206,6 +215,14 @@ function Board(props: any) {
         state.columnOrder,
         result.source.index,
         result.destination.index
+      );
+      handleSnackbar(
+        `'${
+          state.columns[state.columnOrder[result.source.index]].title
+        }' and '${
+          state.columns[state.columnOrder[result.destination.index]].title
+        }' are reordered`,
+        'success'
       );
       setState({
         ...state,
@@ -233,6 +250,7 @@ function Board(props: any) {
         },
       };
       setState(newState);
+      handleSnackbar(`A card is reordered in'${column.title}'`, 'success');
       return;
     }
 
@@ -260,7 +278,10 @@ function Board(props: any) {
         [newDestinationColumn.id]: newDestinationColumn,
       },
     };
-
+    handleSnackbar(
+      `A card is moved from '${newSourceColumn.title}' to '${newDestinationColumn.title}'`,
+      'success'
+    );
     setState(newState);
   };
 
@@ -436,10 +457,19 @@ function Board(props: any) {
         }
       });
     }
-    handleSnackbar(activity, 'info');
+    if (activity.toLowerCase().includes('archive')) {
+      handleSnackbar(activity, 'warning');
+    } else {
+      handleSnackbar(activity, 'info');
+    }
     setState({
       ...state,
     } as any);
+  };
+
+  const changeProjectName = (projectName: string) => {
+    handleSnackbar(`Project name is changed to '${projectName}'`, 'info');
+    props.setProjectName(projectName);
   };
 
   const handleSnackbar = (message: string, variant: VariantType) => {
@@ -450,7 +480,7 @@ function Board(props: any) {
     <>
       <Top
         setView={props.setView}
-        setProjectName={props.setProjectName}
+        setProjectName={changeProjectName}
         projectName={props.projectName}
       />
       <div className="board">
