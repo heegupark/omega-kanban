@@ -17,7 +17,7 @@ function AddSection(props: any) {
   };
 
   return (
-    <>
+    <div className="column">
       <div className={`card-box bg-grey-${(props.colorIndex - 1) % 2}`}>
         <div
           onClick={() => {
@@ -68,7 +68,7 @@ function AddSection(props: any) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export default AddSection;

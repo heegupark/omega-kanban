@@ -70,6 +70,7 @@ body {
   width: 320px;
   min-width: 320px;
   min-height: 100vh;
+  height: 100%;
   /* background-color: rgb(241, 244, 245); */
 }
 
