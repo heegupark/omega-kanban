@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from './card';
 import Zoom from '@material-ui/core/Zoom';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function CardBody(props: any) {
   // const [cards, setCards] = useState([]);
@@ -86,11 +87,13 @@ function CardBody(props: any) {
                   </div>
                 </Zoom>
               ) : (
-                <div className="h-top flex-center mb-25px cursor-pointer">
-                  <i
-                    onClick={() => handleAddCard()}
-                    className="add-card-icon box-shadow-1 fas fa-plus"
-                  ></i>
+                <div className="h-top flex-center mb-25px">
+                  <Tooltip title="Click to add a card" arrow>
+                    <i
+                      onClick={() => handleAddCard()}
+                      className="add-card-icon box-shadow-1 fas fa-plus cursor-pointer"
+                    ></i>
+                  </Tooltip>
                 </div>
               )}
               {!isAdding && props.column.cards.length === 0 && (

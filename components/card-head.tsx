@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const StyledMenu = withStyles({
   paper: {
@@ -140,9 +141,9 @@ function CardHead(props: any) {
           </div>
           <div className="card-head-angle cursor-pointer">
             {!isCardBoxTileChanging && showAngle && (
-              <>
+              <Tooltip title="Click to delete a section" arrow>
                 <i onClick={handleClick} className="fas fa-angle-down"></i>
-              </>
+              </Tooltip>
             )}
             <StyledMenu
               id="delete-menu"

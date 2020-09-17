@@ -397,6 +397,11 @@ body {
   background-color: white;
 }
 
+.add-card-icon:hover {
+  border: 2px groove rgb(0, 170, 255);
+  color: rgb(0, 170, 255);
+}
+
 .add-card-title {
   height: 100%;
   padding: 15px;
