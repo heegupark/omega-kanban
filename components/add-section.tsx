@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
+import IAddSectionProps from './interfaces/iaddsectionprops';
 
-function AddSection(props: any) {
+function AddSection(props: IAddSectionProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [sectionTitle, setSectionTitle] = useState('');
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleSectionTitleSubmit();
     }
   };
 
   const handleSectionTitleSubmit = () => {
-    props.addSection(sectionTitle);
+    props.addSection(sectionTitle, undefined);
     setSectionTitle('');
     setIsAdding(false);
   };

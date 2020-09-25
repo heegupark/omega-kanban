@@ -7,10 +7,15 @@ import AddSection from './add-section';
 import Archive from './archive';
 import CardModal from './card-modal';
 import { VariantType, useSnackbar } from 'notistack';
+import IMainProps from './interfaces/imainprops';
+import IColumns from './interfaces/icolumns';
+import ICard from './interfaces/icard';
+import ISection from './interfaces/isection';
+import IChecklist from './interfaces/ichecklist';
 
-function Board(props: any) {
+function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
-  const [state, setState] = useState({
+  const [state, setState] = useState<IColumns>({
     columns: {
       'column-0': {
         id: 'column-0',
@@ -59,21 +64,21 @@ function Board(props: any) {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-  } as any);
+  });
 
   const [colorIndex, setColorIndex] = useState(0);
-  const [currentCard, setCurrentCard] = useState({} as any);
-  const [currentColumn, setCurrentColumn] = useState({} as any);
+  const [currentCard, setCurrentCard] = useState<ICard>();
+  const [currentColumn, setCurrentColumn] = useState<ISection>();
 
   useEffect(() => {
     setColorIndex(state.columnOrder.length - 1);
   }, []);
 
-  const addSection = (sectionTitle: any, card: any) => {
-    const newSection = {
+  const addSection = (sectionTitle: string, card: ICard | undefined) => {
+    const newSection: ISection = {
       id: uuidv4(),
       title: sectionTitle,
-      cards: [] as any,
+      cards: [],
       colorIndex: colorIndex + 1,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -87,10 +92,10 @@ function Board(props: any) {
     state.columnOrder.push(newSection.id);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const addCard = (columnId: any, cardTitle: any) => {
+  const addCard = (columnId: string, cardTitle: string) => {
     const newCard = {
       id: uuidv4(),
       cardTitle,
@@ -99,7 +104,7 @@ function Board(props: any) {
       isArchived: false,
       checklists: [],
       activities: [],
-      dueDate: null,
+      dueDate: undefined,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -108,16 +113,16 @@ function Board(props: any) {
       newCard.id,
       `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
     );
-    updateDate(columnId, null);
+    updateDate(columnId, '');
     state.columns[columnId].cards.push(newCard);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const completeCard = (columnId: any, cardId: any) => {
-    let completeCard = null;
-    state.columns[columnId].cards.map((card: any, index: any) => {
+  const completeCard = (columnId: string, cardId: string) => {
+    let completeCard: ICard = {} as ICard;
+    state.columns[columnId].cards.map((card: ICard, index: number) => {
       if (card.id === cardId) {
         card.isCardCompleted = true;
         completeCard = card;
@@ -129,18 +134,22 @@ function Board(props: any) {
     addActivity(columnId, cardId, `Card is completed`);
     setState({
       ...state,
-    } as any);
+    });
   };
-  const updateSectionTitle = (columnId: any, sectionTitle: any) => {
+  const updateSectionTitle = (columnId: string, sectionTitle: string) => {
     state.columns[columnId].title = sectionTitle;
     state.columns[columnId].updatedAt = new Date();
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const updateCardTitle = (columnId: any, cardId: any, cardTitle: any) => {
-    state.columns[columnId].cards.map((card: any) => {
+  const updateCardTitle = (
+    columnId: string,
+    cardId: string,
+    cardTitle: string
+  ) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
         card.cardTitle = cardTitle;
       }
@@ -149,11 +158,11 @@ function Board(props: any) {
     addActivity(columnId, cardId, `Card title is changed to ${cardTitle}`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const updateCardNote = (columnId: any, cardId: any, note: any) => {
-    state.columns[columnId].cards.map((card: any) => {
+  const updateCardNote = (columnId: string, cardId: string, note: string) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
         card.note = note;
       }
@@ -162,21 +171,21 @@ function Board(props: any) {
     addActivity(columnId, cardId, `Card note is changed to ||${note}`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const deleteColumn = (id: any) => {
+  const deleteColumn = (id: string) => {
     const title = state.columns[id].title;
     delete state.columns[id];
     state.columnOrder.splice(state.columnOrder.indexOf(id), 1);
     handleSnackbar(`'${title}' is deleted`, 'error');
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const deleteCard = (columnId: any, cardId: any) => {
-    state.columns[columnId].cards.map((card: any, index: any) => {
+  const deleteCard = (columnId: string, cardId: string) => {
+    state.columns[columnId].cards.map((card: ICard, index: number) => {
       if (card.id === cardId) {
         state.columns[columnId].cards.splice(index, 1);
       }
@@ -185,12 +194,12 @@ function Board(props: any) {
     handleSnackbar('A card is deleted', 'error');
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const archiveCard = (columnId: any, cardId: any) => {
-    let tempCard = null as any;
-    state.columns[columnId].cards.map((card: any, index: any) => {
+  const archiveCard = (columnId: string, cardId: string) => {
+    let tempCard: ICard = {} as ICard;
+    state.columns[columnId].cards.map((card: ICard, index: number) => {
       if (card.id === cardId) {
         card.isArchived = true;
         tempCard = card;
@@ -202,7 +211,7 @@ function Board(props: any) {
     addActivity('archive', cardId, `Card is archived`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
   const onDragEnd = (result: any) => {
@@ -211,7 +220,7 @@ function Board(props: any) {
     }
 
     if (result.type === 'column') {
-      const columnOrder = reorder(
+      const columnOrder: Array<string> = reorderColumn(
         state.columnOrder,
         result.source.index,
         result.destination.index
@@ -227,13 +236,13 @@ function Board(props: any) {
       setState({
         ...state,
         columnOrder,
-      } as any);
+      });
       return;
     }
 
     if (result.source.droppableId === result.destination.droppableId) {
       const column = state.columns[result.source.droppableId];
-      const cards = reorder(
+      const cards = reorderCards(
         column.cards,
         result.source.index,
         result.destination.index
@@ -285,13 +294,28 @@ function Board(props: any) {
     setState(newState);
   };
 
-  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     display: 'flex',
     flexDirection: 'row',
     ...draggableStyle,
   });
 
-  const reorder = (list: any, startIndex: any, endIndex: any) => {
+  const reorderCards = (
+    list: Array<ICard>,
+    startIndex: number,
+    endIndex: number
+  ) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  const reorderColumn = (
+    list: Array<string>,
+    startIndex: number,
+    endIndex: number
+  ) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -299,16 +323,16 @@ function Board(props: any) {
   };
 
   const [open, setOpen] = React.useState(false);
-  const setCardForOpen = (columnId: any, cardId: any) => {
+  const setCardForOpen = (columnId: string, cardId: string) => {
     if (columnId === 'archive') {
       const card = state.archive.cards.filter(
-        (card: any) => card.id === cardId
+        (card: ICard) => card.id === cardId
       );
       setCurrentCard(card[0]);
       setCurrentColumn(state.archive);
     } else {
       const card = state.columns[columnId].cards.filter(
-        (card: any) => card.id === cardId
+        (card: ICard) => card.id === cardId
       );
       setCurrentCard(card[0]);
       setCurrentColumn(state.columns[columnId]);
@@ -319,8 +343,12 @@ function Board(props: any) {
     setOpen(false);
   };
 
-  const addChecklist = (columnId: any, cardId: any, checklist: any) => {
-    state.columns[columnId].cards.map((card: any) => {
+  const addChecklist = (
+    columnId: string,
+    cardId: string,
+    checklist: string
+  ) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
         card.checklists.push({
           id: uuidv4(),
@@ -334,12 +362,12 @@ function Board(props: any) {
     updateDate(columnId, cardId);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const updateDate = (columnId: any, cardId: any) => {
+  const updateDate = (columnId: string, cardId: string) => {
     if (cardId) {
-      state.columns[columnId].cards.map((card: any) => {
+      state.columns[columnId].cards.map((card: ICard) => {
         if (card.id === cardId) {
           card.updatedAt = new Date();
         }
@@ -348,18 +376,18 @@ function Board(props: any) {
     state.columns[columnId].updatedAt = new Date();
     setState({
       ...state,
-    } as any);
+    });
   };
 
   const updateChecklist = (
-    columnId: any,
-    cardId: any,
-    checklistId: any,
-    checklistContent: any
+    columnId: string,
+    cardId: string,
+    checklistId: string,
+    checklistContent: string
   ) => {
-    state.columns[columnId].cards.map((card: any) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
-        card.checklists.map((checklist: any) => {
+        card.checklists.map((checklist: IChecklist) => {
           if (checklist.id === checklistId) {
             checklist.checklist = checklistContent;
           }
@@ -374,18 +402,18 @@ function Board(props: any) {
     );
     setState({
       ...state,
-    } as any);
+    });
   };
 
   const completeChecklist = (
-    columnId: any,
-    cardId: any,
-    checklistId: any,
-    isChecked: any
+    columnId: string,
+    cardId: string,
+    checklistId: string,
+    isChecked: boolean
   ) => {
-    state.columns[columnId].cards.map((card: any) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
-        card.checklists.map((checklist: any) => {
+        card.checklists.map((checklist: IChecklist) => {
           if (checklist.id === checklistId) {
             checklist.isChecked = isChecked;
           }
@@ -397,14 +425,18 @@ function Board(props: any) {
     else addActivity(columnId, cardId, `A checklist is changed to incomplete`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const deleteChecklist = (columnId: any, cardId: any, checklistId: any) => {
-    state.columns[columnId].cards.map((card: any) => {
+  const deleteChecklist = (
+    columnId: string,
+    cardId: string,
+    checklistId: string
+  ) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
         card.checklists = card.checklists.filter(
-          (checklist: any) => checklist.id !== checklistId
+          (checklist: IChecklist) => checklist.id !== checklistId
         );
       }
     });
@@ -412,7 +444,7 @@ function Board(props: any) {
     addActivity(columnId, cardId, `A checklist is deleted`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
   const convertDate = (date: Date) => {
@@ -422,8 +454,8 @@ function Board(props: any) {
     return `${month} ${day}, ${year}`;
   };
 
-  const setDueDate = (columnId: any, cardId: any, date: Date) => {
-    state.columns[columnId].cards.map((card: any) => {
+  const setDueDate = (columnId: string, cardId: string, date: Date) => {
+    state.columns[columnId].cards.map((card: ICard) => {
       if (card.id === cardId) {
         card.dueDate = new Date(date);
       }
@@ -432,12 +464,12 @@ function Board(props: any) {
     addActivity(columnId, cardId, `A due date is set to ${convertDate(date)}`);
     setState({
       ...state,
-    } as any);
+    });
   };
 
-  const addActivity = (columnId: any, cardId: any, activity: any) => {
+  const addActivity = (columnId: string, cardId: string, activity: string) => {
     if (columnId === 'archive') {
-      state.archive.cards.map((card: any) => {
+      state.archive.cards.map((card: ICard) => {
         if (card.id === cardId) {
           card.activities.unshift({
             id: uuidv4(),
@@ -447,7 +479,7 @@ function Board(props: any) {
         }
       });
     } else {
-      state.columns[columnId].cards.map((card: any) => {
+      state.columns[columnId].cards.map((card: ICard) => {
         if (card.id === cardId) {
           card.activities.unshift({
             id: uuidv4(),
@@ -464,7 +496,7 @@ function Board(props: any) {
     }
     setState({
       ...state,
-    } as any);
+    });
   };
 
   const changeProjectName = (projectName: string) => {
@@ -499,20 +531,34 @@ function Board(props: any) {
                   provided.droppableProps.style
                 )}
               >
-                {state.columnOrder.map((columnId: any, index: any) => {
+                {state.columnOrder.map((columnId: string, index: number) => {
                   return (
                     <Column
                       key={columnId}
                       column={state.columns[columnId]}
                       index={index}
-                      reorder={reorder}
                       addCard={addCard}
                       setOpen={setOpen}
                       setCardForOpen={setCardForOpen}
                       updateSectionTitle={updateSectionTitle}
                       deleteColumn={deleteColumn}
-                      onDragEnd={onDragEnd}
+                      // onDragEnd={onDragEnd}
                       convertDate={convertDate}
+                      open={true}
+                      projectName={props.projectName}
+                      handleModalClose={handleModalClose}
+                      addChecklist={addChecklist}
+                      updateChecklist={updateChecklist}
+                      addActivity={addActivity}
+                      updateDate={updateDate}
+                      updateCardTitle={updateCardTitle}
+                      updateCardNote={updateCardNote}
+                      completeChecklist={completeChecklist}
+                      deleteChecklist={deleteChecklist}
+                      setDueDate={setDueDate}
+                      completeCard={completeCard}
+                      deleteCard={deleteCard}
+                      archiveCard={archiveCard}
                     />
                   );
                 })}
@@ -523,10 +569,30 @@ function Board(props: any) {
         </DragDropContext>
         {state.archive.cards.length > 0 && (
           <Archive
-            archive={state.archive}
+            index={0}
+            // onDragEnd={onDragEnd}
+            column={state.archive}
             setCardForOpen={setCardForOpen}
             convertDate={convertDate}
             setOpen={setOpen}
+            open={true}
+            projectName={props.projectName}
+            handleModalClose={handleModalClose}
+            updateSectionTitle={updateSectionTitle}
+            deleteColumn={deleteColumn}
+            addChecklist={addChecklist}
+            updateChecklist={updateChecklist}
+            addActivity={addActivity}
+            updateDate={updateDate}
+            updateCardTitle={updateCardTitle}
+            updateCardNote={updateCardNote}
+            completeChecklist={completeChecklist}
+            deleteChecklist={deleteChecklist}
+            setDueDate={setDueDate}
+            completeCard={completeCard}
+            deleteCard={deleteCard}
+            archiveCard={archiveCard}
+            addCard={addCard}
           />
         )}
         <AddSection colorIndex={colorIndex} addSection={addSection} />

@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
+import ICommonProps from './interfaces/icommonprops';
 
-function CardNote(props: any) {
+interface CardNoteProps extends ICommonProps {
+  currentCardId: string;
+  updateCardNote: (columnId: string, cardId: string, note: string) => void;
+}
+
+function CardNote(props: CardNoteProps) {
   const [note, setNote] = useState(props.currentCard.note);
   const [isNoting, setIsNoting] = useState(false);
 

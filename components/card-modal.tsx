@@ -130,58 +130,22 @@ function CardModal(props: any) {
         <>
           <div className="modal-paper">
             <CardHeader
-              currentColumn={props.currentColumn}
-              currentCard={props.currentCard}
-              convertDate={props.convertDate}
-              handleModalClose={props.handleModalClose}
-              completeCard={props.completeCard}
+              {...props}
               setCategory={setCategory}
               handleOpen={handleOpen}
             />
             <div className="card-detail-body">
               <div className="card-detail-left">
-                <CardDetailHead
-                  currentColumn={props.currentColumn}
-                  currentCard={props.currentCard}
-                  updateCardTitle={props.updateCardTitle}
-                  columns={props.columns}
-                />
+                <CardDetailHead {...props} />
                 <div>
-                  <CardNote
-                    currentColumn={props.currentColumn}
-                    currentCard={props.currentCard}
-                    updateCardNote={props.updateCardNote}
-                  />
-                  <Checklist
-                    currentCard={props.currentCard}
-                    currentColumn={props.currentColumn}
-                    addChecklist={props.addChecklist}
-                    updateChecklist={props.updateChecklist}
-                    addActivity={props.addActivity}
-                    completeChecklist={props.completeChecklist}
-                    deleteChecklist={props.deleteChecklist}
-                  />
-                  <Activity
-                    currentCard={props.currentCard}
-                    currentColumn={props.currentColumn}
-                    addActivity={props.addActivity}
-                    updateDate={props.updateDate}
-                  />
+                  <CardNote {...props} />
+                  <Checklist {...props} />
+                  <Activity {...props} />
                 </div>
               </div>
               <div className="card-detail-right bg-grey-1">
-                <DueDate
-                  currentCard={props.currentCard}
-                  currentColumn={props.currentColumn}
-                  setDueDate={props.setDueDate}
-                  convertDate={props.convertDate}
-                />
-                <CardInfo
-                  projectName={props.projectName}
-                  currentCard={props.currentCard}
-                  currentColumn={props.currentColumn}
-                  convertDate={props.convertDate}
-                />
+                <DueDate {...props} />
+                <CardInfo {...props} />
                 {!props.currentCard.isArchived && (
                   <div className="flex-center">
                     <button

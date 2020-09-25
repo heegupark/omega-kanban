@@ -1,10 +1,11 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-const randomWords = require('random-words' as any);
+import IMainProps from './interfaces/imainprops';
+const randomWords = require('random-words' as string);
 
-function ProjectName(props: any) {
-  const [projectName, setProjectName] = React.useState('' as any);
+function ProjectName(props: IMainProps) {
+  const [projectName, setProjectName] = React.useState<string>('');
 
   const handleStartBtnClick = () => {
     if (projectName.length === 0) {

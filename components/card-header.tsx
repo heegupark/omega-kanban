@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
+import ICommonProps from './interfaces/icommonprops';
 
-function CardHeader(props: any) {
+interface CardHeaderProps extends ICommonProps {
+  completeCard: (columnId: string, cardId: string) => void;
+  convertDate: (date: Date) => string;
+  handleOpen: () => void;
+  setCategory: (category: string) => void;
+  handleModalClose: () => void;
+}
+
+function CardHeader(props: CardHeaderProps) {
   const [isCardCompleted, setIsCardCompleted] = useState(
     props.currentCard.isCardCompleted
   );

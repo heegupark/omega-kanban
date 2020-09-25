@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from './card';
 import Zoom from '@material-ui/core/Zoom';
 import Tooltip from '@material-ui/core/Tooltip';
+import IColumnProps from './interfaces/icolumnprops';
 
-function CardBody(props: any) {
-  // const [cards, setCards] = useState([]);
+function CardBody(props: IColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [cardTitle, setCardTitle] = useState('');
@@ -18,7 +18,7 @@ function CardBody(props: any) {
     if (cardTitle.length < 1) setIsAdding(false);
   };
 
-  const handleKeyDownForAddCard = (event: any) => {
+  const handleKeyDownForAddCard = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleCardTitleSubmit();
     }
@@ -36,15 +36,14 @@ function CardBody(props: any) {
     <>
       {props.column.id === 'archive' ? (
         <div>
-          {props.column.cards.map((card: any, index: any) => {
+          {props.column.cards.map((card) => {
             return (
               <div key={card.id}>
                 <Card
+                  provided={undefined}
+                  isDragging={false}
                   card={card}
-                  setOpen={props.setOpen}
-                  column={props.column}
-                  setCardForOpen={props.setCardForOpen}
-                  convertDate={props.convertDate}
+                  {...props}
                 />
               </div>
             );
@@ -54,18 +53,15 @@ function CardBody(props: any) {
         <Droppable droppableId={props.column.id}>
           {(provided: any, snapshot: any) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {props.column.cards.map((card: any, index: any) => {
+              {props.column.cards.map((card, index: number) => {
                 return (
                   <Draggable key={card.id} draggableId={card.id} index={index}>
                     {(provided: any, snapshot: any) => (
                       <Card
                         card={card}
-                        setOpen={props.setOpen}
-                        column={props.column}
                         provided={provided}
                         isDragging={snapshot.isDragging}
-                        setCardForOpen={props.setCardForOpen}
-                        convertDate={props.convertDate}
+                        {...props}
                       />
                     )}
                   </Draggable>

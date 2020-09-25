@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import IActivity from './interfaces/iactivity';
+import ICardModalProps from './interfaces/icardmodalprops';
 
-function Activity(props: any) {
+function Activity(props: ICardModalProps) {
   const [activity, setActivity] = useState('');
   const handleActivitySubmit = () => {
     if (activity.trim().length > 0) {
@@ -9,9 +11,9 @@ function Activity(props: any) {
       setActivity('');
     }
   };
-  const getTimeMsg = (updatedAt: any) => {
-    const createdTime = new Date(updatedAt) as any;
-    const currentTime = new Date() as any;
+  const getTimeMsg = (updatedAt: Date) => {
+    const createdTime = new Date(updatedAt).valueOf();
+    const currentTime = new Date().valueOf();
     const second = 60;
     const minute = 60;
     const hour = 24;
@@ -19,7 +21,7 @@ function Activity(props: any) {
     const month = 12;
     let divider = 1;
     let timeMsg = '';
-    let diff = (currentTime - createdTime) / 1000;
+    let diff: number = (currentTime - createdTime) / 1000;
     if (diff <= second) {
       timeMsg = 'second';
     } else if (diff <= second * minute) {
@@ -70,7 +72,7 @@ function Activity(props: any) {
         </button>
       </div>
       <div className="activity-log">
-        {props.currentCard.activities.map((activity: any) => {
+        {props.currentCard.activities.map((activity: IActivity) => {
           let iconElement = null;
           const activityString = activity.activity.toString();
           switch (true) {

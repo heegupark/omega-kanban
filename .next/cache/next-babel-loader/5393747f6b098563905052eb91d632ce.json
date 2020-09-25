@@ -1,0 +1,1 @@
+{"ast":null,"code":"","map":{"version":3,"sources":[],"names":[],"mappings":"","sourcesContent":["export default interface IChecklist {\n  id: string;\n  checklist: string;\n  isChecked: boolean;\n  date: Date;\n}\n"]},"metadata":{},"sourceType":"module"}

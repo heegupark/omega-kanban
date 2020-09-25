@@ -5,14 +5,21 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import IDueDateProps from './interfaces/iduedateprops';
 
-function DueDate(props: any) {
-  const [selectedDate, setSelectedDate] = useState(props.currentCard.dueDate);
+function DueDate(props: IDueDateProps) {
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    props.currentCard.dueDate as Date
+  );
   const [isDueDateChange, setIsDueDateChange] = useState(false);
   const handleDateChange = (date: Date | null) => {
     setIsDueDateChange(false);
-    setSelectedDate(date);
-    props.setDueDate(props.currentColumn.id, props.currentCard.id, date);
+    setSelectedDate(date as Date);
+    props.setDueDate(
+      props.currentColumn.id,
+      props.currentCard.id,
+      date as Date
+    );
   };
 
   return (

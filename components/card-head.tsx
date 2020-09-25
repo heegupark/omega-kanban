@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
+import IColumnProps from './interfaces/icolumnprops';
 
 const StyledMenu = withStyles({
   paper: {
@@ -25,7 +26,11 @@ const StyledMenu = withStyles({
   />
 ));
 
-function CardHead(props: any) {
+interface ICardHeadProps extends IColumnProps {
+  dragHandleProps: any;
+}
+
+function CardHead(props: ICardHeadProps) {
   const [isCardBoxTileChanging, setIsCardBoxTileChanging] = useState(false);
   const [cardBoxTitle, setCardBoxTitle] = useState(props.column.title);
   const [showAngle, setShowAngle] = useState(false);
@@ -41,7 +46,7 @@ function CardHead(props: any) {
 
   const handleCardBoxTitleBlur = () => {};
 
-  const handleKeyDownForCardBoxTitle = (event: any) => {
+  const handleKeyDownForCardBoxTitle = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleCardBoxTitleSubmit();
     }
@@ -122,7 +127,9 @@ function CardHead(props: any) {
                   className="w-100per change-section-title"
                   value={cardBoxTitle}
                   autoFocus
-                  onKeyDown={(event) => handleKeyDownForCardBoxTitle(event)}
+                  onKeyDown={(event: KeyboardEvent) =>
+                    handleKeyDownForCardBoxTitle(event)
+                  }
                   onBlur={() => setIsCardBoxTileChanging(false)}
                   onChange={(e) => {
                     if (e.target.value.trim().length < 1) {

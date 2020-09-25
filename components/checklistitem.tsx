@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import Zoom from '@material-ui/core/Zoom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import IChecklistProps from './interfaces/ichecklistprops';
+import IChecklist from './interfaces/ichecklist';
+import ICard from './interfaces/icard';
+import ISection from './interfaces/isection';
 
 const StyledMenu = withStyles({
   paper: {
@@ -24,8 +28,15 @@ const StyledMenu = withStyles({
     {...props}
   />
 ));
-function ChecklistItem(props: any) {
-  const [checklist, setChecklist] = useState(props.checklist.checklist);
+
+interface IChecklistItemProps extends IChecklistProps {
+  checklist: IChecklist;
+  currentColumn: ISection;
+  currentCard: ICard;
+}
+
+function ChecklistItem(props: IChecklistItemProps) {
+  const [checklist, setChecklist] = useState<string>(props.checklist.checklist);
   const [showAngle, setShowAngle] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -37,7 +48,7 @@ function ChecklistItem(props: any) {
     setAnchorEl(null);
   };
 
-  const handleChecklistSubmit = (e: any) => {
+  const handleChecklistSubmit = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       props.updateChecklist(
         props.currentColumn.id,
@@ -89,7 +100,7 @@ function ChecklistItem(props: any) {
         </div>
       ) : (
         <div
-          id={props.checklist.id}
+          // id={props.checklist.id}
           onMouseOver={() => setShowAngle(true)}
           onMouseLeave={() => setShowAngle(false)}
           className="display-flex checklist-row"
@@ -98,7 +109,7 @@ function ChecklistItem(props: any) {
             className="checklist-circle cursor-pointer"
             onClick={() => handleCompleteChecklist()}
           >
-            {props.checklist.isChecked ? (
+            {props.checklist && props.checklist.isChecked ? (
               <Zoom in={true}>
                 <i className="far fa-check-circle"></i>
               </Zoom>
@@ -106,7 +117,7 @@ function ChecklistItem(props: any) {
               <i className="far fa-circle"></i>
             )}
           </div>
-          {props.checklist.isChecked ? (
+          {props.checklist && props.checklist.isChecked ? (
             <div className="checklist-content">
               <s>{checklist}</s>
             </div>

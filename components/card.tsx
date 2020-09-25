@@ -1,7 +1,9 @@
 import React from 'react';
+import IChecklist from './interfaces/ichecklist';
+import ICardProps from './interfaces/icardprops';
 
-function Card(props: any) {
-  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+function Card(props: ICardProps) {
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     userSelect: 'none',
     padding: '15px',
     margin: '5px 10px',
@@ -25,7 +27,7 @@ function Card(props: any) {
   const checklistStatus = () => {
     const length = props.card.checklists.length;
     const completed = props.card.checklists.filter(
-      (checklist: any) => checklist.isChecked
+      (checklist: IChecklist) => checklist.isChecked
     );
     return `${completed.length} / ${length}`;
   };

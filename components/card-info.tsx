@@ -1,6 +1,12 @@
 import React from 'react';
+import ICommonProps from './interfaces/icommonprops';
 
-function CardInfo(props: any) {
+interface CardInfoProps extends ICommonProps {
+  projectName: string;
+  convertDate: (date: Date) => string;
+}
+
+function CardInfo(props: CardInfoProps) {
   return (
     <div className="card-detail-project-info">
       <div className="my-5px">{props.projectName}</div>

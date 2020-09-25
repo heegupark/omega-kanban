@@ -46,7 +46,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Disclaimer(props: any) {
+interface DisclaimerProps {
+  setIsAcceptDisclaimer: (isAcceptDisclaimer: boolean) => void;
+}
+function Disclaimer(props: DisclaimerProps) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -55,7 +58,7 @@ function Disclaimer(props: any) {
   };
 
   const handleAcceptClick = () => {
-    localStorage.setItem('omegakanbanaccept', true as any);
+    localStorage.setItem('omegakanbanaccept', 'true');
     props.setIsAcceptDisclaimer(true);
     handleClose();
   };

@@ -3,7 +3,7 @@ import ProjectName from './project-name';
 import Disclaimer from './disclaimer';
 import Board from './board';
 
-export default function Main(props: any) {
+export default function Main() {
   const [view, setView] = useState('project-name' as string);
   const [projectName, setProjectName] = React.useState('' as any);
   const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
@@ -18,7 +18,11 @@ export default function Main(props: any) {
   switch (view) {
     case 'project-name':
       element = (
-        <ProjectName setView={setView} setProjectName={setProjectName} />
+        <ProjectName
+          setView={setView}
+          setProjectName={setProjectName}
+          projectName={projectName}
+        />
       );
       break;
     case 'board':

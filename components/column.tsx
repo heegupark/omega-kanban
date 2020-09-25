@@ -2,8 +2,9 @@ import React from 'react';
 import CardBody from './card-body';
 import CardHead from './card-head';
 import { Draggable } from 'react-beautiful-dnd';
+import IColumnProps from './interfaces/icolumnprops';
 
-function Column(props: any) {
+function Column(props: IColumnProps) {
   return (
     <Draggable draggableId={props.column.id} index={props.index}>
       {(provided: any) => (
@@ -13,23 +14,8 @@ function Column(props: any) {
           ref={provided.innerRef}
         >
           <div className={`card-box bg-grey-${props.index % 2}`}>
-            <CardHead
-              column={props.column}
-              index={props.index}
-              updateSectionTitle={props.updateSectionTitle}
-              deleteColumn={props.deleteColumn}
-              dragHandleProps={provided.dragHandleProps}
-            />
-            <CardBody
-              reorder={props.reorder}
-              column={props.column}
-              index={props.index}
-              setOpen={props.setOpen}
-              setCardForOpen={props.setCardForOpen}
-              onDragEnd={props.onDragEnd}
-              addCard={props.addCard}
-              convertDate={props.convertDate}
-            />
+            <CardHead {...props} dragHandleProps={provided.dragHandleProps} />
+            <CardBody {...props} />
           </div>
         </div>
       )}

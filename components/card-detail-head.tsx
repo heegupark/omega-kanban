@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 
 function CardDetailHead(props: any) {
   const [cardDetailTitle, setCardDetailTitle] = useState(
     props.currentCard.cardTitle
   );
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       props.updateCardTitle(
         props.currentColumn.id,
@@ -23,7 +23,7 @@ function CardDetailHead(props: any) {
         type="text"
         onChange={(e) => setCardDetailTitle(e.target.value)}
         value={cardDetailTitle}
-        onKeyDown={(e) => handleKeyDown(e)}
+        onKeyDown={(e: KeyboardEvent) => handleKeyDown(e)}
       />
     </div>
   );
