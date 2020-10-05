@@ -37,4 +37,4 @@
 ## Screen shot
 [Desktop]
 
-![Omega Kanban](https://github.com/heegupark/omega-talk/blob/master/kanban-ss-001.gif)
+![Omega Kanban](https://github.com/heegupark/omega-kanban/blob/master/kanban-ss-001.gif)
