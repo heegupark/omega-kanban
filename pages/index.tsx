@@ -1,19 +1,27 @@
-import React, { Component } from 'react';
-import Main from '../components/main';
-import IndexPage from '../components/index-page';
-import { SnackbarProvider } from 'notistack';
+import React, { useState, useEffect } from 'react';
+import ProjectName from '../components/project-name';
+import Disclaimer from '../components/disclaimer';
 
-export default class extends Component {
-  constructor(props: any) {
-    super(props);
-  }
+export default function Main() {
+  const [projectName, setProjectName] = React.useState('' as any);
+  const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
 
-  render() {
-    return (
-      <SnackbarProvider maxSnack={3}>
-        <IndexPage />
-        <Main />
-      </SnackbarProvider>
-    );
-  }
+  useEffect(() => {
+    if (localStorage.getItem('omegakanbanaccept')) {
+      setIsAcceptDisclaimer(true);
+    }
+  });
+
+  return (
+    <>
+      <ProjectName
+      // setView={setView}
+      // setProjectName={setProjectName}
+      // projectName={projectName}
+      />
+      {!isAcceptDisclaimer && (
+        <Disclaimer setIsAcceptDisclaimer={setIsAcceptDisclaimer} />
+      )}
+    </>
+  );
 }

@@ -1,44 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import ProjectName from './project-name';
 import Disclaimer from './disclaimer';
 import Board from './board';
 
-export default function Main() {
-  const [view, setView] = useState('project-name' as string);
-  const [projectName, setProjectName] = React.useState('' as any);
-  const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
+interface iProjectProps {
+  _id: string;
+  projectName: string;
+}
 
+export default function Main(props: iProjectProps) {
+  const [projectName, setProjectName] = React.useState(props.projectName);
+  const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
   useEffect(() => {
     if (localStorage.getItem('omegakanbanaccept')) {
       setIsAcceptDisclaimer(true);
     }
   });
 
-  let element = null;
-  switch (view) {
-    case 'project-name':
-      element = (
-        <ProjectName
-          setView={setView}
-          setProjectName={setProjectName}
-          projectName={projectName}
-        />
-      );
-      break;
-    case 'board':
-      element = (
-        <Board
-          setView={setView}
-          setProjectName={setProjectName}
-          projectName={projectName}
-        />
-      );
-      break;
-  }
-
   return (
     <>
-      {element}
+      <Board setProjectName={setProjectName} projectName={projectName} />
       {!isAcceptDisclaimer && (
         <Disclaimer setIsAcceptDisclaimer={setIsAcceptDisclaimer} />
       )}

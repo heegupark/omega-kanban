@@ -510,11 +510,7 @@ function Board(props: IMainProps) {
 
   return (
     <>
-      <Top
-        setView={props.setView}
-        setProjectName={changeProjectName}
-        projectName={props.projectName}
-      />
+      <Top setProjectName={changeProjectName} projectName={props.projectName} />
       <div className="board">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable

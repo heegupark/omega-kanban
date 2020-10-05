@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import IMainProps from './interfaces/imainprops';
 
-export default function Top(props: any) {
+export default function Top(props: IMainProps) {
   const [isProjectNameChanging, setIsProjectNameChanging] = useState(false);
   const [projectName, setProjectName] = useState(props.projectName);
+  const router = useRouter();
 
-  const handleKeyDownForProjectName = (event: any) => {
+  const handleKeyDownForProjectName = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       props.setProjectName(projectName);
       setIsProjectNameChanging(false);
@@ -14,7 +17,7 @@ export default function Top(props: any) {
     <>
       <div className="top h-top">
         <div
-          onClick={() => props.setView('project-name')}
+          onClick={() => router.replace(`/`)}
           className="top-home cursor-pointer"
         >
           <i className="fas fa-home"></i>
