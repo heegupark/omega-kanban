@@ -1,31 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import IMainProps from './interfaces/imainprops';
+import IRouterData from './interfaces/irouterdata';
 import { useRouter } from 'next/router';
-import { v4 as uuidv4 } from 'uuid';
 
 const randomWords = require('random-words' as string);
 
 function ProjectName() {
   const router = useRouter();
-  const [projectName, setProjectName] = React.useState<string>('');
+  const [projectName, setProjectName] = useState<string>('');
+  const [isBtnClick, setIsBtnClick] = useState(false);
+  const [message, setMessage] = useState('asdasd');
+  const [error, setError] = useState(false);
+
+  const addRouter = (project: String) => {
+    fetch(`/api/add-router`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        project,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: IRouterData) => {
+        if (data.success) {
+          setIsBtnClick(false);
+          router.replace(`/${data.data._id}/${data.data.project}`);
+        } else {
+          setTimeout(() => {
+            setError(false);
+            setMessage('');
+          });
+          setError(true);
+          setMessage('failed to create a project');
+        }
+        setIsBtnClick(false);
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while adding a route:${err.message}`
+        );
+      });
+  };
 
   const handleStartBtnClick = () => {
-    const _id = uuidv4();
+    setIsBtnClick(true);
     if (projectName.length === 0) {
-      const randomProjectName = randomWords();
-      // props.setProjectName(randomProjectName);
-      router.replace(`/${_id}/${randomProjectName}`);
+      addRouter(randomWords());
     } else {
-      // props.setProjectName(projectName);
-      router.replace(`/${_id}/${projectName}`);
+      addRouter(projectName);
     }
-    // props.setView('board');
   };
 
   return (
-    <div className={`home flex-center bg-head-0`}>
+    <div className="home flex-center bg-head-0 flex-column">
       <form
         className="project-name"
         noValidate
@@ -36,10 +66,15 @@ function ProjectName() {
           className="project-name-text"
           id="standard-basic"
           label="project name"
+          error={error}
+          disabled={isBtnClick}
           value={projectName}
+          helperText={message}
           onChange={(e) => setProjectName(e.target.value)}
         />
-        <Button onClick={() => handleStartBtnClick()}>Start</Button>
+        <Button disabled={isBtnClick} onClick={() => handleStartBtnClick()}>
+          Start
+        </Button>
       </form>
     </div>
   );

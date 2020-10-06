@@ -1,6 +1,10 @@
 {
+  "/[_id]/[project]": "pages/[_id]/[project].html",
+  "/[_id]": "pages/[_id].html",
   "/_app": "pages/_app.js",
+  "/api/add-router": "pages/api/add-router.js",
+  "/": "pages/index.html",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/[_id]/[project]": "pages/[_id]/[project].js"
+  "/404": "pages/404.html"
 }
