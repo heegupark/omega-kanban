@@ -10,6 +10,11 @@ export interface ICard extends Document {
 
 const cardSchema: Schema = new mongoose.Schema(
   {
+    columnId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Column',
+    },
     cardTitle: {
       type: String,
       required: true,

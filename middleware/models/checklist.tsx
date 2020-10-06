@@ -7,6 +7,11 @@ export interface IChecklist extends Document {
 
 const checklistSchema: Schema = new mongoose.Schema(
   {
+    cardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Card',
+    },
     checklist: {
       type: String,
       required: true,

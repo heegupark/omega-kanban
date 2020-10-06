@@ -7,6 +7,11 @@ export interface IActivity extends Document {
 
 const activitySchema: Schema = new mongoose.Schema(
   {
+    cardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Card',
+    },
     activity: {
       type: String,
       required: true,
