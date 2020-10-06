@@ -97,38 +97,19 @@ module.exports =
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: external "mongoose"
-var external_mongoose_ = __webpack_require__("FiKB");
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
-
-// CONCATENATED MODULE: ./middleware/models/router.tsx
-
-const routerSchema = new external_mongoose_default.a.Schema({
-  project: {
-    type: String,
-    required: true,
-    trim: true
-  }
-}, {
-  timestamps: true
-});
-const Router = external_mongoose_default.a.models.Router || external_mongoose_default.a.model('Router', routerSchema);
-/* harmony default export */ var router = (Router);
-// CONCATENATED MODULE: ./pages/api/add-router.tsx
+/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c/o/");
 
 
 __webpack_require__("UDab");
 
-/* harmony default export */ var add_router = __webpack_exports__["default"] = (async (request, response) => {
+/* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
     project
   } = request.body;
 
   try {
-    const newProject = new router({
+    const newProject = new _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
       project
     });
     await newProject.save();
@@ -183,6 +164,27 @@ mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connect(process.env.MONGODB_URL,
   useCreateIndex: true,
   useFindAndModify: false
 });
+
+/***/ }),
+
+/***/ "c/o/":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+
+const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  project: {
+    type: String,
+    required: true,
+    trim: true
+  }
+}, {
+  timestamps: true
+});
+const Router = mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.models.Router || mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('Router', routerSchema);
+/* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ })
 

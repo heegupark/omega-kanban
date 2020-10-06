@@ -10,7 +10,7 @@ function ProjectName() {
   const router = useRouter();
   const [projectName, setProjectName] = useState<string>('');
   const [isBtnClick, setIsBtnClick] = useState(false);
-  const [message, setMessage] = useState('asdasd');
+  const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
 
   const addRouter = (project: String) => {
@@ -32,7 +32,7 @@ function ProjectName() {
           setTimeout(() => {
             setError(false);
             setMessage('');
-          });
+          }, 500);
           setError(true);
           setMessage('failed to create a project');
         }
