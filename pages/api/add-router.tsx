@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Router from '../../middleware/models/router';
+import Column from '../../middleware/models/column';
 require('../../middleware/db/mongoose');
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -8,7 +9,34 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     const newProject = new Router({ project });
     await newProject.save();
     try {
-      return response.status(200).json({ success: true, data: newProject });
+      try {
+        const planColumn = new Column({
+          projectId: newProject._id,
+          title: 'Plan',
+          colorIndex: 0,
+        });
+        await planColumn.save();
+
+        const progressColumn = new Column({
+          projectId: newProject._id,
+          title: 'Progress',
+          colorIndex: 1,
+        });
+        await progressColumn.save();
+
+        const completeColumn = new Column({
+          projectId: newProject._id,
+          title: 'Complete',
+          colorIndex: 2,
+        });
+        await completeColumn.save();
+        return response.status(200).json({ success: true, data: newProject });
+      } catch (e) {
+        return response.status(500).json({
+          success: false,
+          message: 'failed to create basic columns',
+        });
+      }
     } catch (e) {
       return response.status(500).json({
         success: false,

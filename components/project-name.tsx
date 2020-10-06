@@ -10,7 +10,8 @@ function ProjectName() {
   const router = useRouter();
   const [projectName, setProjectName] = useState<string>('');
   const [isBtnClick, setIsBtnClick] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('Creating a new board...');
+  const [errMessage, setErrMessage] = useState('');
   const [error, setError] = useState(false);
 
   const addRouter = (project: String) => {
@@ -26,19 +27,21 @@ function ProjectName() {
       .then((res) => res.json())
       .then((data: IRouterData) => {
         if (data.success) {
-          setIsBtnClick(false);
+          setMessage('Successfully created a board');
           router.replace(`/${data.data._id}/${data.data.project}`);
         } else {
+          setIsBtnClick(false);
           setTimeout(() => {
             setError(false);
-            setMessage('');
+            setErrMessage('');
           }, 500);
           setError(true);
-          setMessage('failed to create a project');
+          setErrMessage('failed to create a project');
         }
-        setIsBtnClick(false);
       })
       .catch((err) => {
+        setIsBtnClick(false);
+        setErrMessage('failed to add a route');
         console.error(
           `Something wrong happened while adding a route:${err.message}`
         );
@@ -56,26 +59,30 @@ function ProjectName() {
 
   return (
     <div className="home flex-center bg-head-0 flex-column">
-      <form
-        className="project-name"
-        noValidate
-        autoComplete="off"
-        onSubmit={() => handleStartBtnClick()}
-      >
-        <TextField
-          className="project-name-text"
-          id="standard-basic"
-          label="project name"
-          error={error}
-          disabled={isBtnClick}
-          value={projectName}
-          helperText={message}
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-        <Button disabled={isBtnClick} onClick={() => handleStartBtnClick()}>
-          Start
-        </Button>
-      </form>
+      {isBtnClick ? (
+        <div>{message}</div>
+      ) : (
+        <form
+          className="project-name"
+          noValidate
+          autoComplete="off"
+          onSubmit={() => handleStartBtnClick()}
+        >
+          <TextField
+            className="project-name-text"
+            id="standard-basic"
+            label="project name"
+            error={error}
+            disabled={isBtnClick}
+            value={projectName}
+            helperText={errMessage}
+            onChange={(e) => setProjectName(e.target.value)}
+          />
+          <Button disabled={isBtnClick} onClick={() => handleStartBtnClick()}>
+            Start
+          </Button>
+        </form>
+      )}
     </div>
   );
 }
