@@ -74,6 +74,33 @@ function Board(props: IMainProps) {
     setColorIndex(state.columnOrder.length - 1);
   }, []);
 
+  useEffect(() => {
+    getColumns(props._id);
+  }, []);
+  const getColumns = (_id: String) => {
+    fetch(`/api/get-columns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: any) => {
+        if (data.success) {
+          console.log(data.data);
+        } else {
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while getting a route:${err.message}`
+        );
+      });
+  };
+
   const addSection = (sectionTitle: string, card: ICard | undefined) => {
     const newSection: ISection = {
       id: uuidv4(),
@@ -510,7 +537,11 @@ function Board(props: IMainProps) {
 
   return (
     <>
-      <Top setProjectName={changeProjectName} projectName={props.projectName} />
+      <Top
+        _id={props._id}
+        setProjectName={changeProjectName}
+        projectName={props.projectName}
+      />
       <div className="board">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable

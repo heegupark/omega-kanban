@@ -10,6 +10,7 @@ interface iProjectProps {
 export default function Main(props: iProjectProps) {
   const [projectName, setProjectName] = React.useState(props.projectName);
   const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
+
   useEffect(() => {
     if (localStorage.getItem('omegakanbanaccept')) {
       setIsAcceptDisclaimer(true);
@@ -18,7 +19,11 @@ export default function Main(props: iProjectProps) {
 
   return (
     <>
-      <Board setProjectName={setProjectName} projectName={projectName} />
+      <Board
+        _id={props._id}
+        setProjectName={setProjectName}
+        projectName={projectName}
+      />
       {!isAcceptDisclaimer && (
         <Disclaimer setIsAcceptDisclaimer={setIsAcceptDisclaimer} />
       )}
