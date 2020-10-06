@@ -51,7 +51,7 @@ function ChecklistItem(props: IChecklistItemProps) {
   const handleChecklistSubmit = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       props.updateChecklist(
-        props.currentColumn.id,
+        props.currentColumn._id,
         props.currentCard.id,
         props.checklist.id,
         checklist
@@ -60,7 +60,7 @@ function ChecklistItem(props: IChecklistItemProps) {
   };
   const handleCompleteChecklist = () => {
     props.completeChecklist(
-      props.currentColumn.id,
+      props.currentColumn._id,
       props.currentCard.id,
       props.checklist.id,
       !props.checklist.isChecked
@@ -69,7 +69,7 @@ function ChecklistItem(props: IChecklistItemProps) {
 
   const handleDeleteColClick = () => {
     props.deleteChecklist(
-      props.currentColumn.id,
+      props.currentColumn._id,
       props.currentCard.id,
       props.checklist.id
     );

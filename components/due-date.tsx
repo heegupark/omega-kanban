@@ -16,7 +16,7 @@ function DueDate(props: IDueDateProps) {
     setIsDueDateChange(false);
     setSelectedDate(date as Date);
     props.setDueDate(
-      props.currentColumn.id,
+      props.currentColumn._id,
       props.currentCard.id,
       date as Date
     );

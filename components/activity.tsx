@@ -6,8 +6,12 @@ function Activity(props: ICardModalProps) {
   const [activity, setActivity] = useState('');
   const handleActivitySubmit = () => {
     if (activity.trim().length > 0) {
-      props.addActivity(props.currentColumn.id, props.currentCard.id, activity);
-      props.updateDate(props.currentColumn.id, props.currentCard.id);
+      props.addActivity(
+        props.currentColumn._id,
+        props.currentCard.id,
+        activity
+      );
+      props.updateDate(props.currentColumn._id, props.currentCard.id);
       setActivity('');
     }
   };

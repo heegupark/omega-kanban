@@ -6,7 +6,7 @@ import IColumnProps from './interfaces/icolumnprops';
 
 function Column(props: IColumnProps) {
   return (
-    <Draggable draggableId={props.column.id} index={props.index}>
+    <Draggable draggableId={props.column._id} index={props.index}>
       {(provided: any) => (
         <div
           className="column"

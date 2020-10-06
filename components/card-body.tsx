@@ -26,7 +26,7 @@ function CardBody(props: IColumnProps) {
 
   const handleCardTitleSubmit = () => {
     if (cardTitle.length > 0) {
-      props.addCard(props.column.id, cardTitle);
+      props.addCard(props.column._id, cardTitle);
       setCardTitle('');
     }
     setIsAdding(false);
@@ -34,7 +34,7 @@ function CardBody(props: IColumnProps) {
 
   return (
     <>
-      {props.column.id === 'archive' ? (
+      {props.column._id === 'archive' ? (
         <div>
           {props.column.cards.map((card) => {
             return (
@@ -50,7 +50,7 @@ function CardBody(props: IColumnProps) {
           })}
         </div>
       ) : (
-        <Droppable droppableId={props.column.id}>
+        <Droppable droppableId={props.column._id}>
           {(provided: any, snapshot: any) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {props.column.cards.map((card, index: number) => {

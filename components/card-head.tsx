@@ -54,13 +54,13 @@ function CardHead(props: ICardHeadProps) {
 
   const handleCardBoxTitleSubmit = () => {
     if (cardBoxTitle.trim().length > 0) {
-      props.updateSectionTitle(props.column.id, cardBoxTitle);
+      props.updateSectionTitle(props.column._id, cardBoxTitle);
     }
     setIsCardBoxTileChanging(false);
   };
 
   const handleDeleteColClick = () => {
-    props.deleteColumn(props.column.id);
+    props.deleteColumn(props.column._id);
     handleClose();
   };
 
@@ -92,7 +92,7 @@ function CardHead(props: ICardHeadProps) {
   }
   return (
     <>
-      {props.column.id === 'archive' ? (
+      {props.column._id === 'archive' ? (
         <div className={`subtitle-box h-top bg-grey-2`}>
           <div className="icon-box">{iconElement}</div>
           <div className="section-title w-60per h-top">

@@ -1,7 +1,7 @@
 import ICard from './icard';
 
 export default interface ISection {
-  id: string;
+  _id: string;
   title: string;
   cards: Array<ICard>;
   colorIndex: number;

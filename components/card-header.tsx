@@ -15,7 +15,7 @@ function CardHeader(props: CardHeaderProps) {
   );
 
   const handleCardComplete = () => {
-    props.completeCard(props.currentColumn.id, props.currentCard.id);
+    props.completeCard(props.currentColumn._id, props.currentCard.id);
     setIsCardCompleted(true);
   };
 

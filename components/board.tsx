@@ -15,49 +15,62 @@ import IChecklist from './interfaces/ichecklist';
 
 function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
+  // const [state, setState] = useState<IColumns>({
+  //   columns: {
+  //     'column-0': {
+  //       id: 'column-0',
+  //       title: 'Plan',
+  //       cards: [
+  //         {
+  //           id: uuidv4(),
+  //           cardTitle: 'Create HTML skeleton',
+  //           note: '',
+  //           isCardCompleted: false,
+  //           isArchived: false,
+  //           checklists: [],
+  //           activities: [],
+  //           dueDate: new Date(2020, 9, 11),
+  //           createdAt: new Date(2020, 8, 11),
+  //           updatedAt: new Date(2020, 8, 11),
+  //         },
+  //       ],
+  //       colorIndex: 0,
+  //       createdAt: new Date(2020, 8, 1),
+  //       updatedAt: new Date(2020, 8, 11),
+  //     },
+  //     'column-1': {
+  //       id: 'column-1',
+  //       title: 'Progress',
+  //       cards: [],
+  //       colorIndex: 1,
+  //       createdAt: new Date(2020, 8, 2),
+  //       updatedAt: new Date(2020, 8, 2),
+  //     },
+  //     'column-2': {
+  //       id: 'column-2',
+  //       title: 'Complete',
+  //       cards: [],
+  //       colorIndex: 2,
+  //       createdAt: new Date(2020, 8, 3),
+  //       updatedAt: new Date(2020, 8, 3),
+  //     },
+  //   },
+  //   columnOrder: ['column-0', 'column-1', 'column-2'],
+  //   archive: {
+  //     id: 'archive',
+  //     title: 'Archive',
+  //     cards: [],
+  //     colorIndex: 0,
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   },
+  // });
+
   const [state, setState] = useState<IColumns>({
-    columns: {
-      'column-0': {
-        id: 'column-0',
-        title: 'Plan',
-        cards: [
-          {
-            id: uuidv4(),
-            cardTitle: 'Create HTML skeleton',
-            note: '',
-            isCardCompleted: false,
-            isArchived: false,
-            checklists: [],
-            activities: [],
-            dueDate: new Date(2020, 9, 11),
-            createdAt: new Date(2020, 8, 11),
-            updatedAt: new Date(2020, 8, 11),
-          },
-        ],
-        colorIndex: 0,
-        createdAt: new Date(2020, 8, 1),
-        updatedAt: new Date(2020, 8, 11),
-      },
-      'column-1': {
-        id: 'column-1',
-        title: 'Progress',
-        cards: [],
-        colorIndex: 1,
-        createdAt: new Date(2020, 8, 2),
-        updatedAt: new Date(2020, 8, 2),
-      },
-      'column-2': {
-        id: 'column-2',
-        title: 'Complete',
-        cards: [],
-        colorIndex: 2,
-        createdAt: new Date(2020, 8, 3),
-        updatedAt: new Date(2020, 8, 3),
-      },
-    },
-    columnOrder: ['column-0', 'column-1', 'column-2'],
+    columns: {},
+    columnOrder: [],
     archive: {
-      id: 'archive',
+      _id: 'archive',
       title: 'Archive',
       cards: [],
       colorIndex: 0,
@@ -69,7 +82,7 @@ function Board(props: IMainProps) {
   const [colorIndex, setColorIndex] = useState(0);
   const [currentCard, setCurrentCard] = useState<ICard>();
   const [currentColumn, setCurrentColumn] = useState<ISection>();
-
+  const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
   useEffect(() => {
     setColorIndex(state.columnOrder.length - 1);
   }, []);
@@ -77,6 +90,7 @@ function Board(props: IMainProps) {
   useEffect(() => {
     getColumns(props._id);
   }, []);
+
   const getColumns = (_id: String) => {
     fetch(`/api/get-columns`, {
       method: 'POST',
@@ -91,6 +105,15 @@ function Board(props: IMainProps) {
       .then((data: any) => {
         if (data.success) {
           console.log(data.data);
+          data.data.map((column: ISection) => {
+            state.columns[column._id] = column;
+            state.columnOrder.push(column._id);
+            setState({
+              ...state,
+            });
+          });
+          console.log(state);
+          setIsLoadingCompleted(true);
         } else {
         }
       })
@@ -103,7 +126,7 @@ function Board(props: IMainProps) {
 
   const addSection = (sectionTitle: string, card: ICard | undefined) => {
     const newSection: ISection = {
-      id: uuidv4(),
+      _id: uuidv4(),
       title: sectionTitle,
       cards: [],
       colorIndex: colorIndex + 1,
@@ -115,8 +138,8 @@ function Board(props: IMainProps) {
     }
     handleSnackbar(`'${sectionTitle}' is created`, 'success');
     setColorIndex(colorIndex + 1);
-    state.columns[newSection.id] = newSection;
-    state.columnOrder.push(newSection.id);
+    state.columns[newSection._id] = newSection;
+    state.columnOrder.push(newSection._id);
     setState({
       ...state,
     });
@@ -279,7 +302,7 @@ function Board(props: IMainProps) {
         ...state,
         columns: {
           ...state.columns,
-          [column.id]: {
+          [column._id]: {
             ...column,
             cards,
           },
@@ -310,8 +333,8 @@ function Board(props: IMainProps) {
       ...state,
       columns: {
         ...state.columns,
-        [newSourceColumn.id]: newSourceColumn,
-        [newDestinationColumn.id]: newDestinationColumn,
+        [newSourceColumn._id]: newSourceColumn,
+        [newDestinationColumn._id]: newDestinationColumn,
       },
     };
     handleSnackbar(
@@ -537,114 +560,120 @@ function Board(props: IMainProps) {
 
   return (
     <>
-      <Top
-        _id={props._id}
-        setProjectName={changeProjectName}
-        projectName={props.projectName}
-      />
-      <div className="board">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable
-            direction="horizontal"
-            droppableId="all-droppables"
-            type="column"
-          >
-            {(provided: any, snapshot: any) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={getItemStyle(
-                  snapshot.isDragging,
-                  provided.droppableProps.style
-                )}
-              >
-                {state.columnOrder.map((columnId: string, index: number) => {
-                  return (
-                    <Column
-                      key={columnId}
-                      column={state.columns[columnId]}
-                      index={index}
-                      addCard={addCard}
-                      setOpen={setOpen}
-                      setCardForOpen={setCardForOpen}
-                      updateSectionTitle={updateSectionTitle}
-                      deleteColumn={deleteColumn}
-                      // onDragEnd={onDragEnd}
-                      convertDate={convertDate}
-                      open={true}
-                      projectName={props.projectName}
-                      handleModalClose={handleModalClose}
-                      addChecklist={addChecklist}
-                      updateChecklist={updateChecklist}
-                      addActivity={addActivity}
-                      updateDate={updateDate}
-                      updateCardTitle={updateCardTitle}
-                      updateCardNote={updateCardNote}
-                      completeChecklist={completeChecklist}
-                      deleteChecklist={deleteChecklist}
-                      setDueDate={setDueDate}
-                      completeCard={completeCard}
-                      deleteCard={deleteCard}
-                      archiveCard={archiveCard}
-                    />
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        {state.archive.cards.length > 0 && (
-          <Archive
-            index={0}
-            // onDragEnd={onDragEnd}
-            column={state.archive}
-            setCardForOpen={setCardForOpen}
-            convertDate={convertDate}
-            setOpen={setOpen}
-            open={true}
+      {isLoadingCompleted && (
+        <>
+          <Top
+            _id={props._id}
+            setProjectName={changeProjectName}
             projectName={props.projectName}
-            handleModalClose={handleModalClose}
-            updateSectionTitle={updateSectionTitle}
-            deleteColumn={deleteColumn}
-            addChecklist={addChecklist}
-            updateChecklist={updateChecklist}
-            addActivity={addActivity}
-            updateDate={updateDate}
-            updateCardTitle={updateCardTitle}
-            updateCardNote={updateCardNote}
-            completeChecklist={completeChecklist}
-            deleteChecklist={deleteChecklist}
-            setDueDate={setDueDate}
-            completeCard={completeCard}
-            deleteCard={deleteCard}
-            archiveCard={archiveCard}
-            addCard={addCard}
           />
-        )}
-        <AddSection colorIndex={colorIndex} addSection={addSection} />
-      </div>
-      {open && (
-        <CardModal
-          open={true}
-          projectName={props.projectName}
-          currentColumn={currentColumn}
-          handleModalClose={handleModalClose}
-          currentCard={currentCard}
-          addChecklist={addChecklist}
-          updateChecklist={updateChecklist}
-          addActivity={addActivity}
-          updateDate={updateDate}
-          updateCardTitle={updateCardTitle}
-          updateCardNote={updateCardNote}
-          completeChecklist={completeChecklist}
-          deleteChecklist={deleteChecklist}
-          setDueDate={setDueDate}
-          convertDate={convertDate}
-          completeCard={completeCard}
-          deleteCard={deleteCard}
-          archiveCard={archiveCard}
-        />
+          <div className="board">
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable
+                direction="horizontal"
+                droppableId="all-droppables"
+                type="column"
+              >
+                {(provided: any, snapshot: any) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={getItemStyle(
+                      snapshot.isDragging,
+                      provided.droppableProps.style
+                    )}
+                  >
+                    {state.columnOrder.map(
+                      (columnId: string, index: number) => {
+                        return (
+                          <Column
+                            key={columnId}
+                            column={state.columns[columnId]}
+                            index={index}
+                            addCard={addCard}
+                            setOpen={setOpen}
+                            setCardForOpen={setCardForOpen}
+                            updateSectionTitle={updateSectionTitle}
+                            deleteColumn={deleteColumn}
+                            // onDragEnd={onDragEnd}
+                            convertDate={convertDate}
+                            open={true}
+                            projectName={props.projectName}
+                            handleModalClose={handleModalClose}
+                            addChecklist={addChecklist}
+                            updateChecklist={updateChecklist}
+                            addActivity={addActivity}
+                            updateDate={updateDate}
+                            updateCardTitle={updateCardTitle}
+                            updateCardNote={updateCardNote}
+                            completeChecklist={completeChecklist}
+                            deleteChecklist={deleteChecklist}
+                            setDueDate={setDueDate}
+                            completeCard={completeCard}
+                            deleteCard={deleteCard}
+                            archiveCard={archiveCard}
+                          />
+                        );
+                      }
+                    )}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+            {state.archive.cards.length > 0 && (
+              <Archive
+                index={0}
+                // onDragEnd={onDragEnd}
+                column={state.archive}
+                setCardForOpen={setCardForOpen}
+                convertDate={convertDate}
+                setOpen={setOpen}
+                open={true}
+                projectName={props.projectName}
+                handleModalClose={handleModalClose}
+                updateSectionTitle={updateSectionTitle}
+                deleteColumn={deleteColumn}
+                addChecklist={addChecklist}
+                updateChecklist={updateChecklist}
+                addActivity={addActivity}
+                updateDate={updateDate}
+                updateCardTitle={updateCardTitle}
+                updateCardNote={updateCardNote}
+                completeChecklist={completeChecklist}
+                deleteChecklist={deleteChecklist}
+                setDueDate={setDueDate}
+                completeCard={completeCard}
+                deleteCard={deleteCard}
+                archiveCard={archiveCard}
+                addCard={addCard}
+              />
+            )}
+            <AddSection colorIndex={colorIndex} addSection={addSection} />
+          </div>
+          {open && (
+            <CardModal
+              open={true}
+              projectName={props.projectName}
+              currentColumn={currentColumn}
+              handleModalClose={handleModalClose}
+              currentCard={currentCard}
+              addChecklist={addChecklist}
+              updateChecklist={updateChecklist}
+              addActivity={addActivity}
+              updateDate={updateDate}
+              updateCardTitle={updateCardTitle}
+              updateCardNote={updateCardNote}
+              completeChecklist={completeChecklist}
+              deleteChecklist={deleteChecklist}
+              setDueDate={setDueDate}
+              convertDate={convertDate}
+              completeCard={completeCard}
+              deleteCard={deleteCard}
+              archiveCard={archiveCard}
+            />
+          )}
+        </>
       )}
     </>
   );
