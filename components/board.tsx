@@ -12,6 +12,7 @@ import IColumns from './interfaces/icolumns';
 import ICard from './interfaces/icard';
 import ISection from './interfaces/isection';
 import IChecklist from './interfaces/ichecklist';
+import ISectionData from './interfaces/isectiondata';
 
 function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
@@ -83,9 +84,9 @@ function Board(props: IMainProps) {
   const [currentCard, setCurrentCard] = useState<ICard>();
   const [currentColumn, setCurrentColumn] = useState<ISection>();
   const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
-  useEffect(() => {
-    setColorIndex(state.columnOrder.length - 1);
-  }, []);
+  // useEffect(() => {
+  //   setColorIndex(state.columnOrder.length - 1);
+  // }, []);
 
   useEffect(() => {
     getColumns(props._id);
@@ -104,7 +105,6 @@ function Board(props: IMainProps) {
       .then((res) => res.json())
       .then((data: any) => {
         if (data.success) {
-          console.log(data.data);
           data.data.map((column: ISection) => {
             state.columns[column._id] = column;
             state.columnOrder.push(column._id);
@@ -112,7 +112,7 @@ function Board(props: IMainProps) {
               ...state,
             });
           });
-          console.log(state);
+          setColorIndex(data.data.length - 1);
           setIsLoadingCompleted(true);
         } else {
         }
@@ -125,24 +125,48 @@ function Board(props: IMainProps) {
   };
 
   const addSection = (sectionTitle: string, card: ICard | undefined) => {
-    const newSection: ISection = {
-      _id: uuidv4(),
-      title: sectionTitle,
-      cards: [],
-      colorIndex: colorIndex + 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    if (card) {
-      newSection.cards.push(card);
-    }
-    handleSnackbar(`'${sectionTitle}' is created`, 'success');
-    setColorIndex(colorIndex + 1);
-    state.columns[newSection._id] = newSection;
-    state.columnOrder.push(newSection._id);
-    setState({
-      ...state,
-    });
+    // const newSection: ISection = {
+    //   _id: uuidv4(),
+    //   title: sectionTitle,
+    //   cards: [],
+    //   colorIndex: colorIndex + 1,
+    //   createdAt: new Date(),
+    //   updatedAt: new Date(),
+    // };
+    // if (card) {
+    //   newSection.cards.push(card);
+    // }
+
+    fetch('/api/add-column', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        projectId: props._id,
+        title: sectionTitle,
+        colorIndex: colorIndex + 1,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: ISectionData) => {
+        if (data.success) {
+          state.columns[data.data._id] = data.data;
+          state.columnOrder.push(data.data._id);
+          setColorIndex(colorIndex + 1);
+          setState({
+            ...state,
+          });
+          handleSnackbar(`'${sectionTitle}' is created`, 'success');
+        } else {
+          handleSnackbar(`Failed to add a column`, 'error');
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while adding a column:${err.message}`
+        );
+      });
   };
 
   const addCard = (columnId: string, cardTitle: string) => {
