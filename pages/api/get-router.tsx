@@ -3,9 +3,9 @@ import Router from '../../middleware/models/router';
 require('../../middleware/db/mongoose');
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
-  const { _id } = request.body;
+  const { _id, project } = request.body;
   try {
-    const router = await Router.findOne({ _id });
+    const router = await Router.findOne({ _id, project });
     if (!router) {
       return response.status(404).json({
         success: false,

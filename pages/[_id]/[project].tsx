@@ -13,10 +13,10 @@ export default function Index() {
   const { _id, project } = router.query;
 
   useEffect(() => {
-    if (_id) getRouter(_id as string);
+    if (_id) getRouter(_id as string, project as string);
   }, [_id]);
 
-  const getRouter = (_id: String) => {
+  const getRouter = (_id: string, project: string) => {
     fetch(`/api/get-router`, {
       method: 'POST',
       headers: {
@@ -24,6 +24,7 @@ export default function Index() {
       },
       body: JSON.stringify({
         _id,
+        project,
       }),
     })
       .then((res) => res.json())

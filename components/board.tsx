@@ -105,6 +105,7 @@ function Board(props: IMainProps) {
       .then((res) => res.json())
       .then((data: any) => {
         if (data.success) {
+          state.columnOrder = [];
           data.data.map((column: ISection) => {
             state.columns[column._id] = column;
             state.columnOrder.push(column._id);
@@ -210,6 +211,7 @@ function Board(props: IMainProps) {
       ...state,
     });
   };
+
   const updateSectionTitle = (columnId: string, sectionTitle: string) => {
     state.columns[columnId].title = sectionTitle;
     state.columns[columnId].updatedAt = new Date();
@@ -248,14 +250,35 @@ function Board(props: IMainProps) {
     });
   };
 
-  const deleteColumn = (id: string) => {
-    const title = state.columns[id].title;
-    delete state.columns[id];
-    state.columnOrder.splice(state.columnOrder.indexOf(id), 1);
-    handleSnackbar(`'${title}' is deleted`, 'error');
-    setState({
-      ...state,
-    });
+  const deleteColumn = (_id: string) => {
+    const title = state.columns[_id].title;
+    fetch(`/api/delete-column`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; message: string }) => {
+        if (data.success) {
+          delete state.columns[_id];
+          state.columnOrder.splice(state.columnOrder.indexOf(_id), 1);
+          setState({
+            ...state,
+          });
+          handleSnackbar(`'${title}' is deleted`, 'error');
+        } else {
+          handleSnackbar(`Failed to delete a column`, 'warning');
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while getting a route:${err.message}`
+        );
+      });
   };
 
   const deleteCard = (columnId: string, cardId: string) => {

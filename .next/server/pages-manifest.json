@@ -4,6 +4,6 @@
   "/_document": "pages/_document.js",
   "/[_id]/[project]": "pages/[_id]/[project].js",
   "/api/get-columns": "pages/api/get-columns.js",
-  "/api/get-router": "pages/api/get-router.js",
-  "/api/add-column": "pages/api/add-column.js"
+  "/api/delete-column": "pages/api/delete-column.js",
+  "/api/get-router": "pages/api/get-router.js"
 }
