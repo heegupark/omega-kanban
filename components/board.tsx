@@ -212,12 +212,36 @@ function Board(props: IMainProps) {
     });
   };
 
-  const updateSectionTitle = (columnId: string, sectionTitle: string) => {
-    state.columns[columnId].title = sectionTitle;
-    state.columns[columnId].updatedAt = new Date();
-    setState({
-      ...state,
-    });
+  const updateColumnTitle = (_id: string, title: string) => {
+    fetch(`/api/update-column-title`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id,
+        title,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean }) => {
+        if (data.success) {
+          state.columns[_id].title = title;
+          state.columns[_id].updatedAt = new Date();
+          setState({
+            ...state,
+          });
+          handleSnackbar(`Column title is updated`, 'info');
+        } else {
+          handleSnackbar(`Failed to update a column title`, 'error');
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while getting a route:${err.message}`
+        );
+        handleSnackbar(`Failed to update a column title`, 'error');
+      });
   };
 
   const updateCardTitle = (
@@ -640,7 +664,7 @@ function Board(props: IMainProps) {
                             addCard={addCard}
                             setOpen={setOpen}
                             setCardForOpen={setCardForOpen}
-                            updateSectionTitle={updateSectionTitle}
+                            updateColumnTitle={updateColumnTitle}
                             deleteColumn={deleteColumn}
                             // onDragEnd={onDragEnd}
                             convertDate={convertDate}
@@ -679,7 +703,7 @@ function Board(props: IMainProps) {
                 open={true}
                 projectName={props.projectName}
                 handleModalClose={handleModalClose}
-                updateSectionTitle={updateSectionTitle}
+                updateColumnTitle={updateColumnTitle}
                 deleteColumn={deleteColumn}
                 addChecklist={addChecklist}
                 updateChecklist={updateChecklist}

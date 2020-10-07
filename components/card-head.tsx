@@ -54,7 +54,7 @@ function CardHead(props: ICardHeadProps) {
 
   const handleCardBoxTitleSubmit = () => {
     if (cardBoxTitle.trim().length > 0) {
-      props.updateSectionTitle(props.column._id, cardBoxTitle);
+      props.updateColumnTitle(props.column._id, cardBoxTitle);
     }
     setIsCardBoxTileChanging(false);
   };
