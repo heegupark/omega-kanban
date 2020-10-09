@@ -11,6 +11,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import ICardModalProps from './interfaces/icardmodalprops';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function CardModal(props: any) {
+function CardModal(props: ICardModalProps) {
   const classes = useStyles();
   const [category, setCategory] = useState('delete');
   const [open, setOpen] = useState(false);
@@ -40,13 +41,13 @@ function CardModal(props: any) {
   };
 
   const handleDeleteBtn = () => {
-    props.deleteCard(props.currentColumn.id, props.currentCard.id);
+    props.deleteCard(props.currentColumn._id, props.currentCard._id);
     handleClose();
     props.handleModalClose();
   };
 
   const handleArchiveBtn = () => {
-    props.archiveCard(props.currentColumn.id, props.currentCard.id);
+    props.archiveCard(props.currentColumn._id, props.currentCard._id);
     handleClose();
     props.handleModalClose();
   };
@@ -146,7 +147,7 @@ function CardModal(props: any) {
               <div className="card-detail-right bg-grey-1">
                 <DueDate {...props} />
                 <CardInfo {...props} />
-                {!props.currentCard.isArchived && (
+                {!props.currentCard?.isArchived && (
                   <div className="flex-center">
                     <button
                       onClick={() => handleOpen()}

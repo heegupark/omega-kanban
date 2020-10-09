@@ -7,7 +7,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   try {
     const newCard = new Card({ columnId, cardTitle });
     await newCard.save();
-    return response.status(200).json({ success: true, data: newCard });
+    return response.status(200).json({
+      success: true,
+      data: { ...newCard._doc, checklists: [], activities: [] },
+    });
   } catch (e) {
     return response
       .status(500)

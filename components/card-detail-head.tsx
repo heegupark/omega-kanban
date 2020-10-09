@@ -1,17 +1,27 @@
 import React, { useState, KeyboardEvent } from 'react';
+import INewCard from './interfaces/inewcard';
+import ICommonProps from './interfaces/icommonprops';
 
-function CardDetailHead(props: any) {
+interface ICardDetailHeadProps extends ICommonProps {
+  updateCard: (columnId: string, card: INewCard) => void;
+}
+
+function CardDetailHead(props: ICardDetailHeadProps) {
   const [cardDetailTitle, setCardDetailTitle] = useState(
     props.currentCard.cardTitle
   );
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      props.updateCardTitle(
-        props.currentColumn._id,
-        props.currentCard._id,
-        cardDetailTitle
-      );
+      const newCard = {
+        _id: props.currentCard._id,
+        cardTitle: cardDetailTitle,
+        note: undefined,
+        isCardCompleted: undefined,
+        isArchived: undefined,
+        dueDate: null,
+      };
+      props.updateCard(props.currentColumn._id, newCard);
     }
   };
   return (

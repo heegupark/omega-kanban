@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import INewCard from './interfaces/inewcard';
 import ICommonProps from './interfaces/icommonprops';
 
 interface CardHeaderProps extends ICommonProps {
-  completeCard: (columnId: string, cardId: string) => void;
+  updateCard: (columnId: string, card: INewCard) => void;
   convertDate: (date: Date) => string;
   handleOpen: () => void;
   setCategory: (category: string) => void;
@@ -15,7 +16,16 @@ function CardHeader(props: CardHeaderProps) {
   );
 
   const handleCardComplete = () => {
-    props.completeCard(props.currentColumn._id, props.currentCard._id);
+    //props.completeCard(props.currentColumn._id, props.currentCard._id);
+    const newCard = {
+      _id: props.currentCard._id,
+      cardTitle: undefined,
+      note: undefined,
+      isCardCompleted: true,
+      isArchived: undefined,
+      dueDate: null,
+    };
+    props.updateCard(props.currentColumn._id, newCard);
     setIsCardCompleted(true);
   };
 

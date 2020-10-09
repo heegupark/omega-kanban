@@ -1,13 +1,11 @@
-import IColumnItem from './icolumnitem';
-import ICard from './icard';
+import INewCard from './inewcard';
+import ICommonProps from './icommonprops';
 
-export default interface ICardModalProps {
+export default interface ICardModalProps extends ICommonProps {
   open: boolean;
-  column: IColumnItem;
+  // column: IColumnItem;
   projectName: string;
-  currentColumn: IColumnItem;
   handleModalClose: () => void;
-  currentCard: ICard;
   addChecklist: (columnId: string, cardId: string, checklist: string) => void;
   updateChecklist: (
     columnId: string,
@@ -17,12 +15,7 @@ export default interface ICardModalProps {
   ) => void;
   addActivity: (columnId: string, cardId: string, activity: string) => void;
   updateDate: (columnId: string, cardId: string) => void;
-  updateCardTitle: (
-    columnId: string,
-    cardId: string,
-    cardTitle: string
-  ) => void;
-  updateCardNote: (columnId: string, cardId: string, note: string) => void;
+  updateCard: (columnId: string, card: INewCard) => void;
   completeChecklist: (
     columnId: string,
     cardId: string,
@@ -34,9 +27,7 @@ export default interface ICardModalProps {
     cardId: string,
     checklistId: string
   ) => void;
-  setDueDate: (columnId: string, cardId: string, date: Date) => void;
   convertDate: (date: Date) => string;
-  completeCard: (columnId: string, cardId: string) => void;
   deleteCard: (columnId: string, cardId: string) => void;
   archiveCard: (columnId: string, cardId: string) => void;
   addCard: (columnId: string, cardTitle: string) => void;

@@ -9,7 +9,6 @@ import CardModal from './card-modal';
 import { VariantType, useSnackbar } from 'notistack';
 import IMainProps from './interfaces/imainprops';
 import IColumns from './interfaces/icolumns';
-import IColumn from './interfaces/icolumn';
 import ICard from './interfaces/icard';
 import IColumnItem from './interfaces/icolumnitem';
 import IChecklist from './interfaces/ichecklist';
@@ -83,8 +82,10 @@ function Board(props: IMainProps) {
   });
 
   const [colorIndex, setColorIndex] = useState(0);
-  const [currentCard, setCurrentCard] = useState<ICard>();
-  const [currentColumn, setCurrentColumn] = useState<IColumnItem>();
+  const [currentCard, setCurrentCard] = useState<ICard>({} as ICard);
+  const [currentColumn, setCurrentColumn] = useState<IColumnItem>(
+    {} as IColumnItem
+  );
   const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
   // useEffect(() => {
   //   setColorIndex(state.columnOrder.length - 1);
@@ -173,6 +174,77 @@ function Board(props: IMainProps) {
       });
   };
 
+  const updateCard = (
+    columnId: string,
+    card: {
+      _id: string;
+      cardTitle: string | undefined;
+      note: string | undefined;
+      isCardCompleted: boolean | undefined;
+      isArchived: boolean | undefined;
+      dueDate: Date | null;
+    }
+  ) => {
+    fetch(`/api/update-card`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(card),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: ICard }) => {
+        if (data.success) {
+          state.columns[columnId].cards.map((item: ICard) => {
+            if (item._id === card._id) {
+              if (card.cardTitle) {
+                item.cardTitle = card.cardTitle;
+                addActivity(
+                  columnId,
+                  card._id,
+                  `Card title is changed to ${card.cardTitle}`
+                );
+              }
+              if (card.note) {
+                item.note = card.note;
+                addActivity(columnId, card._id, `Card note is changed`);
+              }
+              if (card.isCardCompleted) {
+                item.isCardCompleted = card.isCardCompleted;
+                addActivity(columnId, card._id, `Card is completed`);
+              }
+              if (card.isArchived) {
+                item.isArchived = card.isArchived;
+                addActivity(columnId, card._id, `Card is archived`);
+              }
+              if (card.dueDate) {
+                item.dueDate = card.dueDate;
+                addActivity(
+                  columnId,
+                  card._id,
+                  `A due date is set to ${convertDate(card.dueDate)}`
+                );
+              }
+            }
+          });
+          updateDate(columnId, card._id);
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(
+            'Something wrong happened while updating a card',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while updating a card:${err.message}`
+        );
+      });
+  };
+
   const addCard = (columnId: string, cardTitle: string) => {
     fetch(`/api/add-card`, {
       method: 'POST',
@@ -193,7 +265,7 @@ function Board(props: IMainProps) {
             data.data._id,
             `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
           );
-          // updateDate(columnId, '');
+          updateDate(columnId, '');
           setState({
             ...state,
           });
@@ -209,23 +281,6 @@ function Board(props: IMainProps) {
           `Something wrong happened while adding a card:${err.message}`
         );
       });
-  };
-
-  const completeCard = (columnId: string, cardId: string) => {
-    let completeCard: ICard = {} as ICard;
-    state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card._id === cardId) {
-        card.isCardCompleted = true;
-        completeCard = card;
-        state.columns[columnId].cards.splice(index, 1);
-      }
-    });
-    state.columns[columnId].cards.push(completeCard);
-    updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `Card is completed`);
-    setState({
-      ...state,
-    });
   };
 
   const updateColumnTitle = (_id: string, title: string) => {
@@ -258,36 +313,6 @@ function Board(props: IMainProps) {
         );
         handleSnackbar(`Failed to update a column title`, 'error');
       });
-  };
-
-  const updateCardTitle = (
-    columnId: string,
-    cardId: string,
-    cardTitle: string
-  ) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.cardTitle = cardTitle;
-      }
-    });
-    updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `Card title is changed to ${cardTitle}`);
-    setState({
-      ...state,
-    });
-  };
-
-  const updateCardNote = (columnId: string, cardId: string, note: string) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.note = note;
-      }
-    });
-    updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `Card note is changed to ||${note}`);
-    setState({
-      ...state,
-    });
   };
 
   const deleteColumn = (_id: string) => {
@@ -609,23 +634,11 @@ function Board(props: IMainProps) {
   };
 
   const convertDate = (date: Date) => {
-    const month = date.toString().split(' ')[1];
-    const day = date.toString().split(' ')[2];
-    const year = date.toString().split(' ')[3];
+    const formattedDate = new Date(date);
+    const month = formattedDate.toString().split(' ')[1];
+    const day = formattedDate.toString().split(' ')[2];
+    const year = formattedDate.toString().split(' ')[3];
     return `${month} ${day}, ${year}`;
-  };
-
-  const setDueDate = (columnId: string, cardId: string, date: Date) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.dueDate = new Date(date);
-      }
-    });
-    updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `A due date is set to ${convertDate(date)}`);
-    setState({
-      ...state,
-    });
   };
 
   const addActivity = (columnId: string, cardId: string, activity: string) => {
@@ -732,12 +745,9 @@ function Board(props: IMainProps) {
                             updateChecklist={updateChecklist}
                             addActivity={addActivity}
                             updateDate={updateDate}
-                            updateCardTitle={updateCardTitle}
-                            updateCardNote={updateCardNote}
+                            updateCard={updateCard}
                             completeChecklist={completeChecklist}
                             deleteChecklist={deleteChecklist}
-                            setDueDate={setDueDate}
-                            completeCard={completeCard}
                             deleteCard={deleteCard}
                             archiveCard={archiveCard}
                           />
@@ -766,12 +776,9 @@ function Board(props: IMainProps) {
                 updateChecklist={updateChecklist}
                 addActivity={addActivity}
                 updateDate={updateDate}
-                updateCardTitle={updateCardTitle}
-                updateCardNote={updateCardNote}
+                updateCard={updateCard}
                 completeChecklist={completeChecklist}
                 deleteChecklist={deleteChecklist}
-                setDueDate={setDueDate}
-                completeCard={completeCard}
                 deleteCard={deleteCard}
                 archiveCard={archiveCard}
                 addCard={addCard}
@@ -782,21 +789,20 @@ function Board(props: IMainProps) {
           {open && (
             <CardModal
               open={true}
+              // column={}
+              addCard={addCard}
               projectName={props.projectName}
+              currentCard={currentCard}
               currentColumn={currentColumn}
               handleModalClose={handleModalClose}
-              currentCard={currentCard}
               addChecklist={addChecklist}
               updateChecklist={updateChecklist}
               addActivity={addActivity}
               updateDate={updateDate}
-              updateCardTitle={updateCardTitle}
-              updateCardNote={updateCardNote}
+              updateCard={updateCard}
               completeChecklist={completeChecklist}
               deleteChecklist={deleteChecklist}
-              setDueDate={setDueDate}
               convertDate={convertDate}
-              completeCard={completeCard}
               deleteCard={deleteCard}
               archiveCard={archiveCard}
             />

@@ -25,11 +25,13 @@ function Card(props: ICardProps) {
   };
 
   const checklistStatus = () => {
-    const length = props.card.checklists.length;
-    const completed = props.card.checklists.filter(
-      (checklist: IChecklist) => checklist.isChecked
-    );
-    return `${completed.length} / ${length}`;
+    const length = props.card.checklists ? props.card.checklists.length : 0;
+    const completed =
+      props.card.checklists &&
+      props.card.checklists.filter(
+        (checklist: IChecklist) => checklist.isChecked
+      );
+    return `${completed ? completed.length : 0} / ${length}`;
   };
 
   return (

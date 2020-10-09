@@ -1,9 +1,7 @@
-import ICard from './icard';
-import IColumnItem from './icolumnitem';
+import ICommonProps from './icommonprops';
+import INewCard from './inewcard';
 
-export default interface IDueDateProps {
-  currentCard: ICard;
-  currentColumn: IColumnItem;
-  setDueDate: (columnId: string, cardId: string, date: Date) => void;
+export default interface IDueDateProps extends ICommonProps {
+  updateCard: (columnId: string, card: INewCard) => void;
   convertDate: (date: Date) => string;
 }

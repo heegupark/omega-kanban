@@ -15,11 +15,15 @@ function DueDate(props: IDueDateProps) {
   const handleDateChange = (date: Date | null) => {
     setIsDueDateChange(false);
     setSelectedDate(date as Date);
-    props.setDueDate(
-      props.currentColumn._id,
-      props.currentCard._id,
-      date as Date
-    );
+    const newCard = {
+      _id: props.currentCard._id,
+      cardTitle: undefined,
+      note: undefined,
+      isCardCompleted: undefined,
+      isArchived: undefined,
+      dueDate: date,
+    };
+    props.updateCard(props.currentColumn._id, newCard);
   };
 
   return (

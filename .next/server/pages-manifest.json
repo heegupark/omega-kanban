@@ -13,6 +13,7 @@
   "/api/get-columns": "pages/api/get-columns.js",
   "/api/get-router": "pages/api/get-router.js",
   "/api/update-card-title": "pages/api/update-card-title.js",
+  "/api/update-card": "pages/api/update-card.js",
   "/api/update-checklist": "pages/api/update-checklist.js",
   "/api/update-column-title": "pages/api/update-column-title.js",
   "/": "pages/index.html",

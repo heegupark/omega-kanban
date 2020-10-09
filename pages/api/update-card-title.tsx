@@ -3,9 +3,9 @@ import Card from '../../middleware/models/card';
 require('../../middleware/db/mongoose');
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
-  const { _id, title } = request.body;
+  const { _id, cardTitle } = request.body;
   try {
-    await Card.updateOne({ _id }, { $set: { title } });
+    await Card.updateOne({ _id }, { $set: { cardTitle } });
     return response.status(200).json({ success: true });
   } catch (e) {
     return response

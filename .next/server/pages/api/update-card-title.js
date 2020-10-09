@@ -200,7 +200,7 @@ __webpack_require__("UDab");
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
     _id,
-    title
+    cardTitle
   } = request.body;
 
   try {
@@ -208,7 +208,7 @@ __webpack_require__("UDab");
       _id
     }, {
       $set: {
-        title
+        cardTitle
       }
     });
     return response.status(200).json({

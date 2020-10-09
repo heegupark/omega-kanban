@@ -1,5 +1,6 @@
 import ISection from './icolumnitem';
 import IChecklistProps from './ichecklistprops';
+import INewCard from './inewcard';
 
 export default interface IColumnProps extends IChecklistProps {
   index: number;
@@ -12,15 +13,8 @@ export default interface IColumnProps extends IChecklistProps {
   addChecklist: (columnId: string, cardId: string, checklist: string) => void;
   addActivity: (columnId: string, cardId: string, activity: string) => void;
   updateDate: (columnId: string, cardId: string) => void;
-  updateCardTitle: (
-    columnId: string,
-    cardId: string,
-    cardTitle: string
-  ) => void;
-  updateCardNote: (columnId: string, cardId: string, note: string) => void;
-  setDueDate: (columnId: string, cardId: string, date: Date) => void;
+  updateCard: (columnId: string, card: INewCard) => void;
   convertDate: (date: Date) => string;
-  completeCard: (columnId: string, cardId: string) => void;
   deleteCard: (columnId: string, cardId: string) => void;
   archiveCard: (columnId: string, cardId: string) => void;
   addCard: (columnId: string, cardTitle: string) => void;
