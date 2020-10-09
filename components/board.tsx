@@ -14,6 +14,7 @@ import ICard from './interfaces/icard';
 import IColumnItem from './interfaces/icolumnitem';
 import IChecklist from './interfaces/ichecklist';
 import ISectionData from './interfaces/isectiondata';
+import { IActivity } from '../middleware/models/activity';
 
 function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
@@ -173,18 +174,6 @@ function Board(props: IMainProps) {
   };
 
   const addCard = (columnId: string, cardTitle: string) => {
-    // const newCard = {
-    //   id: uuidv4(),
-    //   cardTitle,
-    //   note: '',
-    //   isCardCompleted: false,
-    //   isArchived: false,
-    //   checklists: [],
-    //   activities: [],
-    //   dueDate: undefined,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // };
     fetch(`/api/add-card`, {
       method: 'POST',
       headers: {
@@ -198,25 +187,28 @@ function Board(props: IMainProps) {
       .then((res) => res.json())
       .then((data: { success: boolean; data: ICard }) => {
         if (data.success) {
-          console.log(data);
           state.columns[columnId].cards.push(data.data);
+          addActivity(
+            columnId,
+            data.data._id,
+            `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
+          );
+          // updateDate(columnId, '');
           setState({
             ...state,
           });
         } else {
+          handleSnackbar(
+            'Something wrong happened while adding a card',
+            'warning'
+          );
         }
       })
       .catch((err) => {
         console.error(
-          `Something wrong happened while getting a route:${err.message}`
+          `Something wrong happened while adding a card:${err.message}`
         );
       });
-    // addActivity(
-    //   columnId,
-    //   newCard.id,
-    //   `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
-    // );
-    // updateDate(columnId, '');
   };
 
   const completeCard = (columnId: string, cardId: string) => {
@@ -493,21 +485,45 @@ function Board(props: IMainProps) {
     cardId: string,
     checklist: string
   ) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.checklists.push({
-          id: uuidv4(),
-          checklist,
-          isChecked: false,
-          date: new Date(),
-        });
-      }
-    });
-    addActivity(columnId, cardId, `${checklist} is added to the checklist`);
-    updateDate(columnId, cardId);
-    setState({
-      ...state,
-    });
+    fetch(`/api/add-checklist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cardId,
+        checklist,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: IChecklist }) => {
+        if (data.success) {
+          state.columns[columnId].cards.map((card: ICard) => {
+            if (card._id === cardId) {
+              card.checklists.push(data.data);
+            }
+          });
+          addActivity(
+            columnId,
+            cardId,
+            `${checklist} is added to the checklist`
+          );
+          // updateDate(columnId, cardId);
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(
+            'Something wrong happened while adding a checklist',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while adding a checklist:${err.message}`
+        );
+      });
   };
 
   const updateDate = (columnId: string, cardId: string) => {
@@ -533,7 +549,7 @@ function Board(props: IMainProps) {
     state.columns[columnId].cards.map((card: ICard) => {
       if (card._id === cardId) {
         card.checklists.map((checklist: IChecklist) => {
-          if (checklist.id === checklistId) {
+          if (checklist._id === checklistId) {
             checklist.checklist = checklistContent;
           }
         });
@@ -559,7 +575,7 @@ function Board(props: IMainProps) {
     state.columns[columnId].cards.map((card: ICard) => {
       if (card._id === cardId) {
         card.checklists.map((checklist: IChecklist) => {
-          if (checklist.id === checklistId) {
+          if (checklist._id === checklistId) {
             checklist.isChecked = isChecked;
           }
         });
@@ -581,7 +597,7 @@ function Board(props: IMainProps) {
     state.columns[columnId].cards.map((card: ICard) => {
       if (card._id === cardId) {
         card.checklists = card.checklists.filter(
-          (checklist: IChecklist) => checklist.id !== checklistId
+          (checklist: IChecklist) => checklist._id !== checklistId
         );
       }
     });
@@ -613,35 +629,52 @@ function Board(props: IMainProps) {
   };
 
   const addActivity = (columnId: string, cardId: string, activity: string) => {
-    if (columnId === 'archive') {
-      state.archive.cards.map((card: ICard) => {
-        if (card._id === cardId) {
-          card.activities.unshift({
-            id: uuidv4(),
-            activity,
-            createdAt: new Date(),
+    fetch(`/api/add-activity`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cardId,
+        activity,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: IActivity }) => {
+        if (data.success) {
+          if (columnId === 'archive') {
+            state.archive.cards.map((card: ICard) => {
+              if (card._id === cardId) {
+                card.activities.unshift(data.data);
+              }
+            });
+          } else {
+            state.columns[columnId].cards.map((card: ICard) => {
+              if (card._id === cardId) {
+                card.activities.unshift(data.data);
+              }
+            });
+          }
+          if (activity.toLowerCase().includes('archive')) {
+            handleSnackbar(activity, 'warning');
+          } else {
+            handleSnackbar(activity, 'info');
+          }
+          setState({
+            ...state,
           });
+        } else {
+          handleSnackbar(
+            'Something wrong happened while adding an activity',
+            'warning'
+          );
         }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while getting an activity:${err.message}`
+        );
       });
-    } else {
-      state.columns[columnId].cards.map((card: ICard) => {
-        if (card._id === cardId) {
-          card.activities.unshift({
-            id: uuidv4(),
-            activity,
-            createdAt: new Date(),
-          });
-        }
-      });
-    }
-    if (activity.toLowerCase().includes('archive')) {
-      handleSnackbar(activity, 'warning');
-    } else {
-      handleSnackbar(activity, 'info');
-    }
-    setState({
-      ...state,
-    });
   };
 
   const changeProjectName = (projectName: string) => {

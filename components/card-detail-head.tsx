@@ -8,8 +8,8 @@ function CardDetailHead(props: any) {
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       props.updateCardTitle(
-        props.currentColumn.id,
-        props.currentCard.id,
+        props.currentColumn._id,
+        props.currentCard._id,
         cardDetailTitle
       );
     }
@@ -17,7 +17,7 @@ function CardDetailHead(props: any) {
   return (
     <div id="transition-modal-title">
       <input
-        id={props.currentCard.id}
+        id={props.currentCard._id}
         disabled={props.currentCard.isArchived}
         className="card-deatil-title border-none"
         type="text"

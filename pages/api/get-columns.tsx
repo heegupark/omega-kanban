@@ -4,6 +4,10 @@ require('../../middleware/db/mongoose');
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
+//http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
+//http://localhost:8080/5f7fd77b50bd1d8dcf2f75c0/ask
+//http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
+
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   const { _id } = request.body;
   try {
@@ -16,34 +20,36 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       {
         $lookup: {
           from: 'cards',
-          let: { columnId: '$columnId' },
+          let: { id: '$_id' },
           pipeline: [
+            { $match: { $expr: { $eq: ['$columnId', '$$id'] } } },
             {
-              $match: {
-                'column._id': '$columnId',
+              $lookup: {
+                from: 'checklists',
+                let: { id: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$cardId', '$$id'] } } },
+                  { $sort: { createdAt: 1 } },
+                ],
+                as: 'checklists',
               },
             },
-            // {
-            //   $lookup: {
-            //     from: 'checklists',
-            //     localField: 'cardId',
-            //     foreignField: 'cards._id',
-            //     as: 'checklists',
-            //   },
-            // },
-            // {
-            //   $lookup: {
-            //     from: 'activities',
-            //     localField: 'cardId',
-            //     foreignField: 'card._id',
-            //     as: 'activities',
-            //   },
-            // },
+            {
+              $lookup: {
+                from: 'activities',
+                let: { id: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$cardId', '$$id'] } } },
+                  { $sort: { createdAt: -1 } },
+                ],
+                as: 'activities',
+              },
+            },
           ],
           as: 'cards',
         },
       },
-    ]).exec();
+    ]);
     if (!columns) {
       return response.status(404).json({
         success: false,

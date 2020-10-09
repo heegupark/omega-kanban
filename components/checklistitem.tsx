@@ -53,7 +53,7 @@ function ChecklistItem(props: IChecklistItemProps) {
       props.updateChecklist(
         props.currentColumn._id,
         props.currentCard._id,
-        props.checklist.id,
+        props.checklist._id,
         checklist
       );
     }
@@ -62,7 +62,7 @@ function ChecklistItem(props: IChecklistItemProps) {
     props.completeChecklist(
       props.currentColumn._id,
       props.currentCard._id,
-      props.checklist.id,
+      props.checklist._id,
       !props.checklist.isChecked
     );
   };
@@ -71,7 +71,7 @@ function ChecklistItem(props: IChecklistItemProps) {
     props.deleteChecklist(
       props.currentColumn._id,
       props.currentCard._id,
-      props.checklist.id
+      props.checklist._id
     );
   };
 

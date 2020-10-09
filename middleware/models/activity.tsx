@@ -2,8 +2,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IActivity extends Document {
   cardId: mongoose.Schema.Types.ObjectId;
-  checklist: String;
-  isChecked: Boolean;
+  activity: string;
+  createdAt: Date;
 }
 
 const activitySchema: Schema = new mongoose.Schema(

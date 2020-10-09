@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IChecklist extends Document {
   cardId: mongoose.Schema.Types.ObjectId;
-  checklist: String;
+  checklist: string;
   isChecked: Boolean;
 }
 

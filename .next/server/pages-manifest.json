@@ -2,5 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/api/add-activity": "pages/api/add-activity.js",
+  "/api/get-columns": "pages/api/get-columns.js",
+  "/api/get-router": "pages/api/get-router.js",
   "/[_id]/[project]": "pages/[_id]/[project].js"
 }

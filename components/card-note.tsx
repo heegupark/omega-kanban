@@ -12,7 +12,11 @@ function CardNote(props: CardNoteProps) {
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
-      props.updateCardNote(props.currentColumn._id, props.currentCard.id, note);
+      props.updateCardNote(
+        props.currentColumn._id,
+        props.currentCard._id,
+        note
+      );
       setIsNoting(false);
     }
   };

@@ -20,7 +20,7 @@ function Card(props: ICardProps) {
   });
 
   const expandCard = () => {
-    props.setCardForOpen(props.column._id, props.card.id);
+    props.setCardForOpen(props.column._id, props.card._id);
     props.setOpen(true);
   };
 

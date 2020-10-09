@@ -8,10 +8,10 @@ function Activity(props: ICardModalProps) {
     if (activity.trim().length > 0) {
       props.addActivity(
         props.currentColumn._id,
-        props.currentCard.id,
+        props.currentCard._id,
         activity
       );
-      props.updateDate(props.currentColumn._id, props.currentCard.id);
+      props.updateDate(props.currentColumn._id, props.currentCard._id);
       setActivity('');
     }
   };
@@ -99,7 +99,7 @@ function Activity(props: ICardModalProps) {
               break;
           }
           return (
-            <div key={activity.id} className="activity-row display-flex">
+            <div key={activity._id} className="activity-row display-flex">
               <div className="activity-icon">{iconElement}</div>
               <div className="text-grey activity-content">
                 <div className="my-5px text-bolder">

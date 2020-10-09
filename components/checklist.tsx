@@ -9,8 +9,8 @@ function Checklist(props: any) {
     if (e.key === 'Enter') {
       if (checklist.trim().length > 0) {
         props.addChecklist(
-          props.currentColumn.id,
-          props.currentCard.id,
+          props.currentColumn._id,
+          props.currentCard._id,
           checklist
         );
       }
@@ -25,7 +25,7 @@ function Checklist(props: any) {
         {props.currentCard &&
           props.currentCard.checklists.map((checklist: any) => {
             return (
-              <div key={checklist.id}>
+              <div key={checklist._id}>
                 <ChecklistItem {...props} checklist={checklist} />
               </div>
             );

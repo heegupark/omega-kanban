@@ -25,24 +25,24 @@ const cardSchema: Schema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    checklists: [
-      {
-        checklist: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: false,
-          ref: 'Checklist',
-        },
-      },
-    ],
-    activities: [
-      {
-        activity: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: false,
-          ref: 'Activity',
-        },
-      },
-    ],
+    // checklists: [
+    //   {
+    //     checklist: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       required: false,
+    //       ref: 'Checklist',
+    //     },
+    //   },
+    // ],
+    // activities: [
+    //   {
+    //     activity: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       required: false,
+    //       ref: 'Activity',
+    //     },
+    //   },
+    // ],
     isCardCompleted: {
       type: Boolean,
       required: true,

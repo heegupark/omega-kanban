@@ -214,7 +214,7 @@ body {
   width: 700px;
   min-height: 200px;
   height: 90%;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .card-detail-header {
@@ -304,8 +304,9 @@ body {
 
 .activity-log {
   margin: 15px 0px;
-  min-height: 50px;
+  height: 225px;
   width: 100%;
+  overflow-y: scroll;
 }
 
 .font-12px {
