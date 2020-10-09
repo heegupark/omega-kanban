@@ -2,8 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/[_id]/[project]": "pages/[_id]/[project].js",
-  "/api/update-column-title": "pages/api/update-column-title.js",
-  "/api/get-columns": "pages/api/get-columns.js",
-  "/api/get-router": "pages/api/get-router.js"
+  "/[_id]/[project]": "pages/[_id]/[project].js"
 }

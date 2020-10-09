@@ -1,8 +1,8 @@
 import IColumn from './icolumn';
-import ISection from './isection';
+import IColumnItem from './icolumnitem';
 
 export default interface IColumns {
   columns: IColumn;
   columnOrder: Array<string>;
-  archive: ISection;
+  archive: IColumnItem;
 }

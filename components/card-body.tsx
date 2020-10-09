@@ -38,7 +38,7 @@ function CardBody(props: IColumnProps) {
         <div>
           {props.column.cards.map((card) => {
             return (
-              <div key={card.id}>
+              <div key={card._id}>
                 <Card
                   provided={undefined}
                   isDragging={false}
@@ -55,7 +55,11 @@ function CardBody(props: IColumnProps) {
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {props.column.cards.map((card, index: number) => {
                 return (
-                  <Draggable key={card.id} draggableId={card.id} index={index}>
+                  <Draggable
+                    key={card._id}
+                    draggableId={card._id}
+                    index={index}
+                  >
                     {(provided: any, snapshot: any) => (
                       <Card
                         card={card}

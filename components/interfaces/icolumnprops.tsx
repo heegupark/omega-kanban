@@ -1,4 +1,4 @@
-import ISection from './isection';
+import ISection from './icolumnitem';
 import IChecklistProps from './ichecklistprops';
 
 export default interface IColumnProps extends IChecklistProps {

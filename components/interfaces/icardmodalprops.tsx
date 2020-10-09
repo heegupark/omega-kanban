@@ -1,11 +1,11 @@
-import ISection from './isection';
+import IColumnItem from './icolumnitem';
 import ICard from './icard';
 
 export default interface ICardModalProps {
   open: boolean;
-  column: ISection;
+  column: IColumnItem;
   projectName: string;
-  currentColumn: ISection;
+  currentColumn: IColumnItem;
   handleModalClose: () => void;
   currentCard: ICard;
   addChecklist: (columnId: string, cardId: string, checklist: string) => void;

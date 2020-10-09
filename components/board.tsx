@@ -9,8 +9,9 @@ import CardModal from './card-modal';
 import { VariantType, useSnackbar } from 'notistack';
 import IMainProps from './interfaces/imainprops';
 import IColumns from './interfaces/icolumns';
+import IColumn from './interfaces/icolumn';
 import ICard from './interfaces/icard';
-import ISection from './interfaces/isection';
+import IColumnItem from './interfaces/icolumnitem';
 import IChecklist from './interfaces/ichecklist';
 import ISectionData from './interfaces/isectiondata';
 
@@ -82,7 +83,7 @@ function Board(props: IMainProps) {
 
   const [colorIndex, setColorIndex] = useState(0);
   const [currentCard, setCurrentCard] = useState<ICard>();
-  const [currentColumn, setCurrentColumn] = useState<ISection>();
+  const [currentColumn, setCurrentColumn] = useState<IColumnItem>();
   const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
   // useEffect(() => {
   //   setColorIndex(state.columnOrder.length - 1);
@@ -103,10 +104,11 @@ function Board(props: IMainProps) {
       }),
     })
       .then((res) => res.json())
-      .then((data: any) => {
+      .then((data: { success: boolean; data: any }) => {
         if (data.success) {
+          console.log(data.data);
           state.columnOrder = [];
-          data.data.map((column: ISection) => {
+          data.data.map((column: IColumnItem) => {
             state.columns[column._id] = column;
             state.columnOrder.push(column._id);
             setState({
@@ -171,34 +173,56 @@ function Board(props: IMainProps) {
   };
 
   const addCard = (columnId: string, cardTitle: string) => {
-    const newCard = {
-      id: uuidv4(),
-      cardTitle,
-      note: '',
-      isCardCompleted: false,
-      isArchived: false,
-      checklists: [],
-      activities: [],
-      dueDate: undefined,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    addActivity(
-      columnId,
-      newCard.id,
-      `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
-    );
-    updateDate(columnId, '');
-    state.columns[columnId].cards.push(newCard);
-    setState({
-      ...state,
-    });
+    // const newCard = {
+    //   id: uuidv4(),
+    //   cardTitle,
+    //   note: '',
+    //   isCardCompleted: false,
+    //   isArchived: false,
+    //   checklists: [],
+    //   activities: [],
+    //   dueDate: undefined,
+    //   createdAt: new Date(),
+    //   updatedAt: new Date(),
+    // };
+    fetch(`/api/add-card`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        columnId,
+        cardTitle,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: ICard }) => {
+        if (data.success) {
+          console.log(data);
+          state.columns[columnId].cards.push(data.data);
+          setState({
+            ...state,
+          });
+        } else {
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while getting a route:${err.message}`
+        );
+      });
+    // addActivity(
+    //   columnId,
+    //   newCard.id,
+    //   `A card with title '${cardTitle}' is created in '${state.columns[columnId].title}'`
+    // );
+    // updateDate(columnId, '');
   };
 
   const completeCard = (columnId: string, cardId: string) => {
     let completeCard: ICard = {} as ICard;
     state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.isCardCompleted = true;
         completeCard = card;
         state.columns[columnId].cards.splice(index, 1);
@@ -250,7 +274,7 @@ function Board(props: IMainProps) {
     cardTitle: string
   ) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.cardTitle = cardTitle;
       }
     });
@@ -263,7 +287,7 @@ function Board(props: IMainProps) {
 
   const updateCardNote = (columnId: string, cardId: string, note: string) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.note = note;
       }
     });
@@ -307,7 +331,7 @@ function Board(props: IMainProps) {
 
   const deleteCard = (columnId: string, cardId: string) => {
     state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         state.columns[columnId].cards.splice(index, 1);
       }
     });
@@ -321,7 +345,7 @@ function Board(props: IMainProps) {
   const archiveCard = (columnId: string, cardId: string) => {
     let tempCard: ICard = {} as ICard;
     state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.isArchived = true;
         tempCard = card;
         state.columns[columnId].cards.splice(index, 1);
@@ -447,13 +471,13 @@ function Board(props: IMainProps) {
   const setCardForOpen = (columnId: string, cardId: string) => {
     if (columnId === 'archive') {
       const card = state.archive.cards.filter(
-        (card: ICard) => card.id === cardId
+        (card: ICard) => card._id === cardId
       );
       setCurrentCard(card[0]);
       setCurrentColumn(state.archive);
     } else {
       const card = state.columns[columnId].cards.filter(
-        (card: ICard) => card.id === cardId
+        (card: ICard) => card._id === cardId
       );
       setCurrentCard(card[0]);
       setCurrentColumn(state.columns[columnId]);
@@ -470,7 +494,7 @@ function Board(props: IMainProps) {
     checklist: string
   ) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.checklists.push({
           id: uuidv4(),
           checklist,
@@ -489,7 +513,7 @@ function Board(props: IMainProps) {
   const updateDate = (columnId: string, cardId: string) => {
     if (cardId) {
       state.columns[columnId].cards.map((card: ICard) => {
-        if (card.id === cardId) {
+        if (card._id === cardId) {
           card.updatedAt = new Date();
         }
       });
@@ -507,7 +531,7 @@ function Board(props: IMainProps) {
     checklistContent: string
   ) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.checklists.map((checklist: IChecklist) => {
           if (checklist.id === checklistId) {
             checklist.checklist = checklistContent;
@@ -533,7 +557,7 @@ function Board(props: IMainProps) {
     isChecked: boolean
   ) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.checklists.map((checklist: IChecklist) => {
           if (checklist.id === checklistId) {
             checklist.isChecked = isChecked;
@@ -555,7 +579,7 @@ function Board(props: IMainProps) {
     checklistId: string
   ) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.checklists = card.checklists.filter(
           (checklist: IChecklist) => checklist.id !== checklistId
         );
@@ -577,7 +601,7 @@ function Board(props: IMainProps) {
 
   const setDueDate = (columnId: string, cardId: string, date: Date) => {
     state.columns[columnId].cards.map((card: ICard) => {
-      if (card.id === cardId) {
+      if (card._id === cardId) {
         card.dueDate = new Date(date);
       }
     });
@@ -591,7 +615,7 @@ function Board(props: IMainProps) {
   const addActivity = (columnId: string, cardId: string, activity: string) => {
     if (columnId === 'archive') {
       state.archive.cards.map((card: ICard) => {
-        if (card.id === cardId) {
+        if (card._id === cardId) {
           card.activities.unshift({
             id: uuidv4(),
             activity,
@@ -601,7 +625,7 @@ function Board(props: IMainProps) {
       });
     } else {
       state.columns[columnId].cards.map((card: ICard) => {
-        if (card.id === cardId) {
+        if (card._id === cardId) {
           card.activities.unshift({
             id: uuidv4(),
             activity,

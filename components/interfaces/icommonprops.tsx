@@ -1,7 +1,7 @@
-import ISection from './isection';
+import IColumnItem from './icolumnitem';
 import ICard from './icard';
 
 export default interface ICommonProps {
   currentCard: ICard;
-  currentColumn: ISection;
+  currentColumn: IColumnItem;
 }

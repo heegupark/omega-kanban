@@ -1,9 +1,9 @@
 import ICard from './icard';
-import ISection from './isection';
+import IColumnItem from './icolumnitem';
 
 export default interface IDueDateProps {
   currentCard: ICard;
-  currentColumn: ISection;
+  currentColumn: IColumnItem;
   setDueDate: (columnId: string, cardId: string, date: Date) => void;
   convertDate: (date: Date) => string;
 }

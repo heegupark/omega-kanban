@@ -2,7 +2,7 @@ import IChecklist from './ichecklist';
 import IActivity from './iactivity';
 
 export default interface ICard {
-  id: string;
+  _id: string;
   cardTitle: string;
   note: string;
   isCardCompleted: boolean;

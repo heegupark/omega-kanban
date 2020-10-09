@@ -1,4 +1,4 @@
-import React, { useState, useEffect, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 import Zoom from '@material-ui/core/Zoom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu, { MenuProps } from '@material-ui/core/Menu';
@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IChecklistProps from './interfaces/ichecklistprops';
 import IChecklist from './interfaces/ichecklist';
 import ICard from './interfaces/icard';
-import ISection from './interfaces/isection';
+import IColumnItem from './interfaces/icolumnitem';
 
 const StyledMenu = withStyles({
   paper: {
@@ -31,7 +31,7 @@ const StyledMenu = withStyles({
 
 interface IChecklistItemProps extends IChecklistProps {
   checklist: IChecklist;
-  currentColumn: ISection;
+  currentColumn: IColumnItem;
   currentCard: ICard;
 }
 
@@ -52,7 +52,7 @@ function ChecklistItem(props: IChecklistItemProps) {
     if (e.key === 'Enter') {
       props.updateChecklist(
         props.currentColumn._id,
-        props.currentCard.id,
+        props.currentCard._id,
         props.checklist.id,
         checklist
       );
@@ -61,7 +61,7 @@ function ChecklistItem(props: IChecklistItemProps) {
   const handleCompleteChecklist = () => {
     props.completeChecklist(
       props.currentColumn._id,
-      props.currentCard.id,
+      props.currentCard._id,
       props.checklist.id,
       !props.checklist.isChecked
     );
@@ -70,7 +70,7 @@ function ChecklistItem(props: IChecklistItemProps) {
   const handleDeleteColClick = () => {
     props.deleteChecklist(
       props.currentColumn._id,
-      props.currentCard.id,
+      props.currentCard._id,
       props.checklist.id
     );
   };

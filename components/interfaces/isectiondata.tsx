@@ -1,4 +1,4 @@
-import ISection from './isection';
+import ISection from './icolumnitem';
 
 export default interface ISectionData {
   success: boolean;
