@@ -39,7 +39,7 @@ function CardInfo(props: CardInfoProps) {
         </div>
         <div>
           <div className="my-5px">Task ID</div>
-          <div className="font-12px my-5px">{props.currentCard.id}</div>
+          <div className="font-12px my-5px">{props.currentCard._id}</div>
         </div>
       </div>
     </div>

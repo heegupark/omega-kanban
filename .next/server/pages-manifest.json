@@ -1,9 +1,22 @@
 {
+  "/[_id]/[project]": "pages/[_id]/[project].html",
+  "/[_id]": "pages/[_id].html",
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
   "/api/add-activity": "pages/api/add-activity.js",
+  "/api/add-card": "pages/api/add-card.js",
+  "/api/add-checklist": "pages/api/add-checklist.js",
+  "/api/add-column": "pages/api/add-column.js",
+  "/api/add-router": "pages/api/add-router.js",
+  "/api/delete-card": "pages/api/delete-card.js",
+  "/api/delete-checklist": "pages/api/delete-checklist.js",
+  "/api/delete-column": "pages/api/delete-column.js",
   "/api/get-columns": "pages/api/get-columns.js",
   "/api/get-router": "pages/api/get-router.js",
-  "/[_id]/[project]": "pages/[_id]/[project].js"
+  "/api/update-card-title": "pages/api/update-card-title.js",
+  "/api/update-checklist": "pages/api/update-checklist.js",
+  "/api/update-column-title": "pages/api/update-column-title.js",
+  "/": "pages/index.html",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
 }
