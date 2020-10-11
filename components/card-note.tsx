@@ -14,6 +14,7 @@ function CardNote(props: ICardNoteProps) {
     if (e.key === 'Enter') {
       const newCard = {
         _id: props.currentCard._id,
+        columnId: undefined,
         cardTitle: undefined,
         note: note,
         isCardCompleted: undefined,

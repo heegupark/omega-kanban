@@ -31,10 +31,9 @@ function CardBody(props: IColumnProps) {
     }
     setIsAdding(false);
   };
-
   return (
     <>
-      {props.column._id === 'archive' ? (
+      {props.column._id === props.archiveColumnId ? (
         <div>
           {props.column.cards.map((card) => {
             return (

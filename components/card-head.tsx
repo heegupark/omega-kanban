@@ -92,7 +92,7 @@ function CardHead(props: ICardHeadProps) {
   }
   return (
     <>
-      {props.column._id === 'archive' ? (
+      {props.column._id === props.archiveColumnId ? (
         <div className={`subtitle-box h-top bg-grey-2`}>
           <div className="icon-box">{iconElement}</div>
           <div className="section-title w-60per h-top">

@@ -47,6 +47,16 @@ function CardModal(props: ICardModalProps) {
   };
 
   const handleArchiveBtn = () => {
+    const newCard = {
+      _id: props.currentCard._id,
+      columnId: 'archive',
+      cardTitle: undefined,
+      note: undefined,
+      isCardCompleted: undefined,
+      isArchived: true,
+      dueDate: null,
+    };
+    // props.updateCard(props.currentColumn._id, newCard);
     props.archiveCard(props.currentColumn._id, props.currentCard._id);
     handleClose();
     props.handleModalClose();

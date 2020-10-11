@@ -136,6 +136,13 @@ __webpack_require__("UDab");
           colorIndex: 2
         });
         await completeColumn.save();
+        const archiveColumn = new _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]({
+          projectId: newProject._id,
+          title: 'Archive',
+          colorIndex: 0,
+          category: 'archive'
+        });
+        await archiveColumn.save();
         return response.status(200).json({
           success: true,
           data: newProject
@@ -188,18 +195,14 @@ const columnSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     required: true,
     trim: true
   },
-  // cards: [
-  //   {
-  //     card: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Card',
-  //     },
-  //   },
-  // ],
   colorIndex: {
     type: Number,
     required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    default: 'normal'
   }
 }, {
   timestamps: true

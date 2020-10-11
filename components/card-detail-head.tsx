@@ -15,6 +15,7 @@ function CardDetailHead(props: ICardDetailHeadProps) {
     if (e.key === 'Enter') {
       const newCard = {
         _id: props.currentCard._id,
+        columnId: undefined,
         cardTitle: cardDetailTitle,
         note: undefined,
         isCardCompleted: undefined,

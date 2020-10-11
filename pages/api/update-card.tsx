@@ -7,6 +7,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   const updates = Object.keys(request.body);
   const allowedUpdates = [
     '_id',
+    'columnId',
     'cardTitle',
     'note',
     'isCardCompleted',

@@ -88,12 +88,12 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("mx1b");
@@ -119,18 +119,14 @@ const columnSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     required: true,
     trim: true
   },
-  // cards: [
-  //   {
-  //     card: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Card',
-  //     },
-  //   },
-  // ],
   colorIndex: {
     type: Number,
     required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    default: 'normal'
   }
 }, {
   timestamps: true

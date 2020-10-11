@@ -30,6 +30,15 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           colorIndex: 2,
         });
         await completeColumn.save();
+
+        const archiveColumn = new Column({
+          projectId: newProject._id,
+          title: 'Archive',
+          colorIndex: 0,
+          category: 'archive',
+        });
+        await archiveColumn.save();
+
         return response.status(200).json({ success: true, data: newProject });
       } catch (e) {
         return response.status(500).json({

@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import Top from './top';
 import Column from './column';
-import AddSection from './add-section';
+import AddColumn from './add-column';
 import Archive from './archive';
 import CardModal from './card-modal';
 import { VariantType, useSnackbar } from 'notistack';
@@ -12,8 +12,9 @@ import IColumns from './interfaces/icolumns';
 import ICard from './interfaces/icard';
 import IColumnItem from './interfaces/icolumnitem';
 import IChecklist from './interfaces/ichecklist';
-import ISectionData from './interfaces/isectiondata';
+import IColumnData from './interfaces/icolumndata';
 import { IActivity } from '../middleware/models/activity';
+import { IColumn } from '../middleware/models/column';
 
 function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
@@ -87,6 +88,7 @@ function Board(props: IMainProps) {
     {} as IColumnItem
   );
   const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
+  const [archiveColumnId, setArchiveColumnId] = useState('');
   // useEffect(() => {
   //   setColorIndex(state.columnOrder.length - 1);
   // }, []);
@@ -106,22 +108,40 @@ function Board(props: IMainProps) {
       }),
     })
       .then((res) => res.json())
-      .then((data: { success: boolean; data: any }) => {
-        if (data.success) {
-          console.log(data.data);
-          state.columnOrder = [];
-          data.data.map((column: IColumnItem) => {
-            state.columns[column._id] = column;
-            state.columnOrder.push(column._id);
-            setState({
-              ...state,
+      .then(
+        (data: {
+          success: boolean;
+          columns: [IColumnItem];
+          archive: [IColumnItem];
+        }) => {
+          if (data.success) {
+            console.log(data.columns);
+            console.log(data.archive);
+            state.columnOrder = [];
+            // state.archive = {
+            //   _id: 'archive',
+            //   title: 'Archive',
+            //   cards: [],
+            //   colorIndex: 0,
+            //   createdAt: new Date(),
+            //   updatedAt: new Date(),
+            // };
+            state.archive = data.archive[0];
+            setArchiveColumnId(data.archive[0]._id);
+            console.log(state.archive._id);
+            data.columns.map((column: IColumnItem) => {
+              state.columns[column._id] = column;
+              state.columnOrder.push(column._id);
+              setState({
+                ...state,
+              });
             });
-          });
-          setColorIndex(data.data.length - 1);
-          setIsLoadingCompleted(true);
-        } else {
+            setColorIndex(data.columns.length - 1);
+            setIsLoadingCompleted(true);
+          } else {
+          }
         }
-      })
+      )
       .catch((err) => {
         console.error(
           `Something wrong happened while getting a route:${err.message}`
@@ -129,7 +149,7 @@ function Board(props: IMainProps) {
       });
   };
 
-  const addSection = (sectionTitle: string, card: ICard | undefined) => {
+  const addColumn = (sectionTitle: string, card: ICard | undefined) => {
     // const newSection: ISection = {
     //   _id: uuidv4(),
     //   title: sectionTitle,
@@ -154,9 +174,9 @@ function Board(props: IMainProps) {
       }),
     })
       .then((res) => res.json())
-      .then((data: ISectionData) => {
+      .then((data: IColumnData) => {
         if (data.success) {
-          state.columns[data.data._id] = data.data;
+          state.columns[data.data._id] = { ...data.data, cards: [] };
           state.columnOrder.push(data.data._id);
           setColorIndex(colorIndex + 1);
           setState({
@@ -178,6 +198,7 @@ function Board(props: IMainProps) {
     columnId: string,
     card: {
       _id: string;
+      columnId: string | undefined;
       cardTitle: string | undefined;
       note: string | undefined;
       isCardCompleted: boolean | undefined;
@@ -195,7 +216,7 @@ function Board(props: IMainProps) {
       .then((res) => res.json())
       .then((data: { success: boolean; data: ICard }) => {
         if (data.success) {
-          state.columns[columnId].cards.map((item: ICard) => {
+          state.columns[columnId].cards.map((item: ICard, index: number) => {
             if (item._id === card._id) {
               if (card.cardTitle) {
                 item.cardTitle = card.cardTitle;
@@ -214,8 +235,21 @@ function Board(props: IMainProps) {
                 addActivity(columnId, card._id, `Card is completed`);
               }
               if (card.isArchived) {
-                item.isArchived = card.isArchived;
-                addActivity(columnId, card._id, `Card is archived`);
+                let tempCard: ICard = {} as ICard;
+                console.log(tempCard);
+                state.columns[columnId].cards.map(
+                  (card: ICard, index: number) => {
+                    if (item._id === card._id) {
+                      item.isArchived = true;
+                      item.columnId = 'archive';
+                      tempCard = card;
+                      state.columns[columnId].cards.splice(index, 1);
+                    }
+                  }
+                );
+                updateDate(columnId, card._id);
+                state.archive.cards.push(tempCard);
+                addActivity('archive', card._id, `Card is archived`);
               }
               if (card.dueDate) {
                 item.dueDate = card.dueDate;
@@ -360,20 +394,42 @@ function Board(props: IMainProps) {
   };
 
   const archiveCard = (columnId: string, cardId: string) => {
-    let tempCard: ICard = {} as ICard;
-    state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card._id === cardId) {
-        card.isArchived = true;
-        tempCard = card;
-        state.columns[columnId].cards.splice(index, 1);
-      }
-    });
-    updateDate(columnId, cardId);
-    state.archive.cards.push(tempCard);
-    addActivity('archive', cardId, `Card is archived`);
-    setState({
-      ...state,
-    });
+    fetch(`/api/archive-card`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _id: cardId, projectId: props._id }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: ICard }) => {
+        if (data.success) {
+          let tempCard: ICard = {} as ICard;
+          state.columns[columnId].cards.map((card: ICard, index: number) => {
+            if (card._id === cardId) {
+              card.isArchived = true;
+              tempCard = card;
+              state.columns[columnId].cards.splice(index, 1);
+            }
+          });
+          updateDate(columnId, cardId);
+          state.archive.cards.push(tempCard);
+          addActivity(archiveColumnId, cardId, `Card is archived`);
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(
+            'Something wrong happened while archiving a card',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while archiving a card:${err.message}`
+        );
+      });
   };
 
   const onDragEnd = (result: any) => {
@@ -486,7 +542,7 @@ function Board(props: IMainProps) {
 
   const [open, setOpen] = React.useState(false);
   const setCardForOpen = (columnId: string, cardId: string) => {
-    if (columnId === 'archive') {
+    if (columnId === archiveColumnId) {
       const card = state.archive.cards.filter(
         (card: ICard) => card._id === cardId
       );
@@ -655,7 +711,7 @@ function Board(props: IMainProps) {
       .then((res) => res.json())
       .then((data: { success: boolean; data: IActivity }) => {
         if (data.success) {
-          if (columnId === 'archive') {
+          if (columnId === archiveColumnId) {
             state.archive.cards.map((card: ICard) => {
               if (card._id === cardId) {
                 card.activities.unshift(data.data);
@@ -750,6 +806,7 @@ function Board(props: IMainProps) {
                             deleteChecklist={deleteChecklist}
                             deleteCard={deleteCard}
                             archiveCard={archiveCard}
+                            archiveColumnId={archiveColumnId}
                           />
                         );
                       }
@@ -764,6 +821,7 @@ function Board(props: IMainProps) {
                 index={0}
                 // onDragEnd={onDragEnd}
                 column={state.archive}
+                archiveColumnId={archiveColumnId}
                 setCardForOpen={setCardForOpen}
                 convertDate={convertDate}
                 setOpen={setOpen}
@@ -780,11 +838,11 @@ function Board(props: IMainProps) {
                 completeChecklist={completeChecklist}
                 deleteChecklist={deleteChecklist}
                 deleteCard={deleteCard}
-                archiveCard={archiveCard}
                 addCard={addCard}
+                archiveCard={archiveCard}
               />
             )}
-            <AddSection colorIndex={colorIndex} addSection={addSection} />
+            <AddColumn colorIndex={colorIndex} addColumn={addColumn} />
           </div>
           {open && (
             <CardModal

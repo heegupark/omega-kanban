@@ -3,6 +3,7 @@ import IActivity from './iactivity';
 
 export default interface ICard {
   _id: string;
+  columnId: string;
   cardTitle: string;
   note: string;
   isCardCompleted: boolean;

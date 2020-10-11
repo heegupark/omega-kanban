@@ -121,7 +121,7 @@ __webpack_require__("UDab");
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const _id = request.body._id;
   const updates = Object.keys(request.body);
-  const allowedUpdates = ['_id', 'cardTitle', 'note', 'isCardCompleted', 'isArchived', 'dueDate'];
+  const allowedUpdates = ['_id', 'columnId', 'cardTitle', 'note', 'isCardCompleted', 'isArchived', 'dueDate'];
   const isValidOperation = updates.every(update => {
     return allowedUpdates.includes(update);
   });

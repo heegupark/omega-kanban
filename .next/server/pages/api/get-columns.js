@@ -88,12 +88,12 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("ScHJ");
@@ -119,18 +119,14 @@ const columnSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     required: true,
     trim: true
   },
-  // cards: [
-  //   {
-  //     card: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Card',
-  //     },
-  //   },
-  // ],
   colorIndex: {
     type: Number,
     required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    default: 'normal'
   }
 }, {
   timestamps: true
@@ -160,10 +156,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__("UDab");
 
 
-const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId; //http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
-//http://localhost:8080/5f7fd77b50bd1d8dcf2f75c0/ask
-//http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
-
+const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
     _id
@@ -175,6 +168,10 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
         projectId: ObjectId(_id)
       }
     }, {
+      $match: {
+        category: 'normal'
+      }
+    }, {
       $lookup: {
         from: 'cards',
         let: {
@@ -184,6 +181,12 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
           $match: {
             $expr: {
               $eq: ['$columnId', '$$id']
+            }
+          }
+        }, {
+          $match: {
+            $expr: {
+              $eq: ['$isArchived', false]
             }
           }
         }, {
@@ -236,9 +239,78 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
       });
     }
 
+    const archive = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].aggregate([{
+      $match: {
+        projectId: ObjectId(_id)
+      }
+    }, {
+      $match: {
+        category: 'archive'
+      }
+    }, {
+      $lookup: {
+        from: 'cards',
+        let: {
+          id: '$_id'
+        },
+        pipeline: [{
+          $match: {
+            $expr: {
+              $eq: ['$columnId', '$$id']
+            }
+          }
+        }, {
+          $match: {
+            $expr: {
+              $eq: ['$isArchived', true]
+            }
+          }
+        }, {
+          $lookup: {
+            from: 'checklists',
+            let: {
+              id: '$_id'
+            },
+            pipeline: [{
+              $match: {
+                $expr: {
+                  $eq: ['$cardId', '$$id']
+                }
+              }
+            }, {
+              $sort: {
+                createdAt: 1
+              }
+            }],
+            as: 'checklists'
+          }
+        }, {
+          $lookup: {
+            from: 'activities',
+            let: {
+              id: '$_id'
+            },
+            pipeline: [{
+              $match: {
+                $expr: {
+                  $eq: ['$cardId', '$$id']
+                }
+              }
+            }, {
+              $sort: {
+                createdAt: -1
+              }
+            }],
+            as: 'activities'
+          }
+        }],
+        as: 'cards'
+      }
+    }]);
     return response.status(200).json({
       success: true,
-      data: columns
+      columns,
+      archive
     });
   } catch (e) {
     return response.status(500).json({

@@ -17,6 +17,7 @@ function DueDate(props: IDueDateProps) {
     setSelectedDate(date as Date);
     const newCard = {
       _id: props.currentCard._id,
+      columnId: undefined,
       cardTitle: undefined,
       note: undefined,
       isCardCompleted: undefined,

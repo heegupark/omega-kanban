@@ -4,10 +4,6 @@ require('../../middleware/db/mongoose');
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
-//http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
-//http://localhost:8080/5f7fd77b50bd1d8dcf2f75c0/ask
-//http://localhost:8080/5f7fd60d50bd1d8dcf2f75ba/running
-
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   const { _id } = request.body;
   try {
@@ -18,11 +14,17 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         },
       },
       {
+        $match: {
+          category: 'normal',
+        },
+      },
+      {
         $lookup: {
           from: 'cards',
           let: { id: '$_id' },
           pipeline: [
             { $match: { $expr: { $eq: ['$columnId', '$$id'] } } },
+            { $match: { $expr: { $eq: ['$isArchived', false] } } },
             {
               $lookup: {
                 from: 'checklists',
@@ -56,7 +58,53 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         message: 'data not found',
       });
     }
-    return response.status(200).json({ success: true, data: columns });
+
+    const archive = await Column.aggregate([
+      {
+        $match: {
+          projectId: ObjectId(_id),
+        },
+      },
+      {
+        $match: {
+          category: 'archive',
+        },
+      },
+      {
+        $lookup: {
+          from: 'cards',
+          let: { id: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$columnId', '$$id'] } } },
+            { $match: { $expr: { $eq: ['$isArchived', true] } } },
+            {
+              $lookup: {
+                from: 'checklists',
+                let: { id: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$cardId', '$$id'] } } },
+                  { $sort: { createdAt: 1 } },
+                ],
+                as: 'checklists',
+              },
+            },
+            {
+              $lookup: {
+                from: 'activities',
+                let: { id: '$_id' },
+                pipeline: [
+                  { $match: { $expr: { $eq: ['$cardId', '$$id'] } } },
+                  { $sort: { createdAt: -1 } },
+                ],
+                as: 'activities',
+              },
+            },
+          ],
+          as: 'cards',
+        },
+      },
+    ]);
+    return response.status(200).json({ success: true, columns, archive });
   } catch (e) {
     return response
       .status(500)

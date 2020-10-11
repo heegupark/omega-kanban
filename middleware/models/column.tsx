@@ -18,18 +18,14 @@ const columnSchema: Schema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    // cards: [
-    //   {
-    //     card: {
-    //       type: mongoose.Schema.Types.ObjectId,
-    //       required: false,
-    //       ref: 'Card',
-    //     },
-    //   },
-    // ],
     colorIndex: {
       type: Number,
       required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+      default: 'normal',
     },
   },
   {

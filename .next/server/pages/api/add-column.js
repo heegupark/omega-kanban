@@ -119,18 +119,14 @@ const columnSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     required: true,
     trim: true
   },
-  // cards: [
-  //   {
-  //     card: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Card',
-  //     },
-  //   },
-  // ],
   colorIndex: {
     type: Number,
     required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    default: 'normal'
   }
 }, {
   timestamps: true
