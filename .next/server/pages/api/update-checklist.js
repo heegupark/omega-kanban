@@ -121,7 +121,7 @@ __webpack_require__("UDab");
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
     _id,
-    checklistContent
+    checklist
   } = request.body;
 
   try {
@@ -129,7 +129,7 @@ __webpack_require__("UDab");
       _id
     }, {
       $set: {
-        checklistContent
+        checklist
       }
     });
     return response.status(200).json({

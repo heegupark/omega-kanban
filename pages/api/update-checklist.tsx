@@ -3,9 +3,9 @@ import Checklist from '../../middleware/models/checklist';
 require('../../middleware/db/mongoose');
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
-  const { _id, checklistContent } = request.body;
+  const { _id, checklist } = request.body;
   try {
-    await Checklist.updateOne({ _id }, { $set: { checklistContent } });
+    await Checklist.updateOne({ _id }, { $set: { checklist } });
     return response.status(200).json({ success: true });
   } catch (e) {
     return response

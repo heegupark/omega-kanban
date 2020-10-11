@@ -115,8 +115,6 @@ function Board(props: IMainProps) {
           archive: [IColumnItem];
         }) => {
           if (data.success) {
-            console.log(data.columns);
-            console.log(data.archive);
             state.columnOrder = [];
             // state.archive = {
             //   _id: 'archive',
@@ -128,7 +126,6 @@ function Board(props: IMainProps) {
             // };
             state.archive = data.archive[0];
             setArchiveColumnId(data.archive[0]._id);
-            console.log(state.archive._id);
             data.columns.map((column: IColumnItem) => {
               state.columns[column._id] = column;
               state.columnOrder.push(column._id);
@@ -648,24 +645,46 @@ function Board(props: IMainProps) {
     checklistId: string,
     checklistContent: string
   ) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.checklists.map((checklist: IChecklist) => {
-          if (checklist._id === checklistId) {
-            checklist.checklist = checklistContent;
-          }
-        });
-      }
-    });
-    updateDate(columnId, cardId);
-    addActivity(
-      columnId,
-      cardId,
-      `A checklist is updated to ${checklistContent}`
-    );
-    setState({
-      ...state,
-    });
+    fetch(`/api/update-checklist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _id: checklistId, checklist: checklistContent }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; data: ICard }) => {
+        if (data.success) {
+          state.columns[columnId].cards.map((card: ICard) => {
+            if (card._id === cardId) {
+              card.checklists.map((checklist: IChecklist) => {
+                if (checklist._id === checklistId) {
+                  checklist.checklist = checklistContent;
+                }
+              });
+            }
+          });
+          updateDate(columnId, cardId);
+          addActivity(
+            columnId,
+            cardId,
+            `A checklist is updated to ${checklistContent}`
+          );
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(
+            'Something wrong happened while updating a checklist',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while updating a checklist:${err.message}`
+        );
+      });
   };
 
   const completeChecklist = (
