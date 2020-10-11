@@ -1,8 +1,10 @@
+require('../../middleware/db/mongoose');
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import Column from '../../middleware/models/column';
 import Card from '../../middleware/models/card';
-require('../../middleware/db/mongoose');
 import mongoose from 'mongoose';
+
 const ObjectId = mongoose.Types.ObjectId;
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -18,6 +20,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   } catch (e) {
     return response
       .status(500)
-      .json({ success: false, message: 'failed to update a card ' });
+      .json({ success: false, message: 'failed to archive a card' });
   }
 };

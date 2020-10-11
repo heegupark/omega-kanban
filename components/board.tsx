@@ -460,30 +460,52 @@ function Board(props: IMainProps) {
     }
 
     if (result.type === 'column') {
-      const columnOrder: Array<string> = reorderColumn(
-        state.columnOrder,
+      const columnOrder: Array<string> = reorder(
+        state.columnOrder as [],
         result.source.index,
         result.destination.index
-      );
-      handleSnackbar(
-        `'${
-          state.columns[state.columnOrder[result.source.index]].title
-        }' and '${
-          state.columns[state.columnOrder[result.destination.index]].title
-        }' are reordered`,
-        'success'
       );
       setState({
         ...state,
         columnOrder,
       });
+      fetch(`/api/reorder-column`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ _id: props._id, columnOrder }),
+      })
+        .then((res) => res.json())
+        .then((data: { success: boolean }) => {
+          if (data.success) {
+            handleSnackbar(
+              `'${
+                state.columns[state.columnOrder[result.source.index]].title
+              }' and '${
+                state.columns[state.columnOrder[result.destination.index]].title
+              }' are reordered`,
+              'success'
+            );
+          } else {
+            handleSnackbar(
+              'Something wrong happened while reordering columns',
+              'warning'
+            );
+          }
+        })
+        .catch((err) => {
+          console.error(
+            `Something wrong happened while reordering columns:${err.message}`
+          );
+        });
       return;
     }
 
     if (result.source.droppableId === result.destination.droppableId) {
       const column = state.columns[result.source.droppableId];
-      const cards = reorderCards(
-        column.cards,
+      const cards = reorder(
+        column.cards as [],
         result.source.index,
         result.destination.index
       );
@@ -499,7 +521,7 @@ function Board(props: IMainProps) {
         },
       };
       setState(newState);
-      handleSnackbar(`A card is reordered in'${column.title}'`, 'success');
+      handleSnackbar(`Cards are reordered in '${column.title}'`, 'success');
       return;
     }
 
@@ -540,27 +562,34 @@ function Board(props: IMainProps) {
     ...draggableStyle,
   });
 
-  const reorderCards = (
-    list: Array<ICard>,
-    startIndex: number,
-    endIndex: number
-  ) => {
+  const reorder = (list: [], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   };
 
-  const reorderColumn = (
-    list: Array<string>,
-    startIndex: number,
-    endIndex: number
-  ) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
+  // const reorderCards = (
+  //   list: Array<ICard>,
+  //   startIndex: number,
+  //   endIndex: number
+  // ) => {
+  //   const result = Array.from(list);
+  //   const [removed] = result.splice(startIndex, 1);
+  //   result.splice(endIndex, 0, removed);
+  //   return result;
+  // };
+
+  // const reorderColumn = (
+  //   list: Array<string>,
+  //   startIndex: number,
+  //   endIndex: number
+  // ) => {
+  //   const result = Array.from(list);
+  //   const [removed] = result.splice(startIndex, 1);
+  //   result.splice(endIndex, 0, removed);
+  //   return result;
+  // };
 
   const [open, setOpen] = React.useState(false);
   const setCardForOpen = (columnId: string, cardId: string) => {

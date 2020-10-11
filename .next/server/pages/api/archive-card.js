@@ -231,10 +231,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _middleware_models_card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("W9nD");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("FiKB");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
 __webpack_require__("UDab");
+
+
 
 
 const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
@@ -263,7 +262,7 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
   } catch (e) {
     return response.status(500).json({
       success: false,
-      message: 'failed to update a card '
+      message: 'failed to archive a card'
     });
   }
 });
