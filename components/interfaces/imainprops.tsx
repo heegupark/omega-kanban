@@ -1,5 +1,5 @@
 export default interface IMainProps {
   _id: string;
-  setProjectName: (projectName: string) => void;
+  changeProjectName: (project: string) => void;
   projectName: string;
 }

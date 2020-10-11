@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { v4 as uuidv4 } from 'uuid';
 import Top from './top';
 import Column from './column';
 import AddColumn from './add-column';
@@ -714,29 +713,6 @@ function Board(props: IMainProps) {
       });
   };
 
-  const completeChecklist = (
-    columnId: string,
-    cardId: string,
-    checklistId: string,
-    isChecked: boolean
-  ) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.checklists.map((checklist: IChecklist) => {
-          if (checklist._id === checklistId) {
-            checklist.isChecked = isChecked;
-          }
-        });
-      }
-    });
-    updateDate(columnId, cardId);
-    if (isChecked) addActivity(columnId, cardId, `A checklist is completed`);
-    else addActivity(columnId, cardId, `A checklist is changed to incomplete`);
-    setState({
-      ...state,
-    });
-  };
-
   const deleteChecklist = (
     columnId: string,
     cardId: string,
@@ -834,10 +810,10 @@ function Board(props: IMainProps) {
       });
   };
 
-  const changeProjectName = (projectName: string) => {
-    handleSnackbar(`Project name is changed to '${projectName}'`, 'info');
-    props.setProjectName(projectName);
-  };
+  // const changeProjectName = (projectName: string) => {
+  //   handleSnackbar(`Project name is changed to '${projectName}'`, 'info');
+  //   props.setProjectName(projectName);
+  // };
 
   const handleSnackbar = (message: string, variant: VariantType) => {
     enqueueSnackbar(message, { variant });
@@ -849,7 +825,7 @@ function Board(props: IMainProps) {
         <>
           <Top
             _id={props._id}
-            setProjectName={changeProjectName}
+            changeProjectName={props.changeProjectName}
             projectName={props.projectName}
           />
           <div className="board">
@@ -890,7 +866,6 @@ function Board(props: IMainProps) {
                             addActivity={addActivity}
                             updateDate={updateDate}
                             updateCard={updateCard}
-                            // completeChecklist={completeChecklist}
                             deleteChecklist={deleteChecklist}
                             deleteCard={deleteCard}
                             archiveCard={archiveCard}
@@ -923,7 +898,6 @@ function Board(props: IMainProps) {
                 addActivity={addActivity}
                 updateDate={updateDate}
                 updateCard={updateCard}
-                // completeChecklist={completeChecklist}
                 deleteChecklist={deleteChecklist}
                 deleteCard={deleteCard}
                 addCard={addCard}
@@ -946,7 +920,6 @@ function Board(props: IMainProps) {
               addActivity={addActivity}
               updateDate={updateDate}
               updateCard={updateCard}
-              completeChecklist={completeChecklist}
               deleteChecklist={deleteChecklist}
               convertDate={convertDate}
               deleteCard={deleteCard}

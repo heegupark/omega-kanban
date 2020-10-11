@@ -16,12 +16,6 @@ export default interface ICardModalProps extends ICommonProps {
   addActivity: (columnId: string, cardId: string, activity: string) => void;
   updateDate: (columnId: string, cardId: string) => void;
   updateCard: (columnId: string, card: INewCard) => void;
-  completeChecklist: (
-    columnId: string,
-    cardId: string,
-    checklistId: string,
-    isChecked: boolean
-  ) => void;
   deleteChecklist: (
     columnId: string,
     cardId: string,

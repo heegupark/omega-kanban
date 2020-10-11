@@ -9,10 +9,11 @@ export default function Top(props: IMainProps) {
 
   const handleKeyDownForProjectName = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      props.setProjectName(projectName);
+      props.changeProjectName(projectName);
       setIsProjectNameChanging(false);
     }
   };
+
   return (
     <>
       <div className="top h-top">
