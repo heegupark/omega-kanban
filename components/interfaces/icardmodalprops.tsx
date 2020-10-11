@@ -1,5 +1,6 @@
 import INewCard from './inewcard';
 import ICommonProps from './icommonprops';
+import IChecklist from './ichecklist';
 
 export default interface ICardModalProps extends ICommonProps {
   open: boolean;
@@ -10,8 +11,7 @@ export default interface ICardModalProps extends ICommonProps {
   updateChecklist: (
     columnId: string,
     cardId: string,
-    checklistId: string,
-    checklistContent: string
+    checklist: IChecklist
   ) => void;
   addActivity: (columnId: string, cardId: string, activity: string) => void;
   updateDate: (columnId: string, cardId: string) => void;

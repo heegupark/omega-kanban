@@ -31,6 +31,7 @@ function CardBody(props: IColumnProps) {
     }
     setIsAdding(false);
   };
+
   return (
     <>
       {props.column._id === props.archiveColumnId ? (

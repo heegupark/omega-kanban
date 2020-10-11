@@ -36,7 +36,9 @@ interface IChecklistItemProps extends IChecklistProps {
 }
 
 function ChecklistItem(props: IChecklistItemProps) {
-  const [checklist, setChecklist] = useState<string>(props.checklist.checklist);
+  const [checklist, setChecklist] = useState<string>(
+    props.checklist.checklist as string
+  );
   const [showAngle, setShowAngle] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -50,20 +52,28 @@ function ChecklistItem(props: IChecklistItemProps) {
 
   const handleChecklistSubmit = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
+      const newChecklist = {
+        _id: props.checklist._id,
+        checklist,
+        isChecked: undefined,
+      };
       props.updateChecklist(
         props.currentColumn._id,
         props.currentCard._id,
-        props.checklist._id,
-        checklist
+        newChecklist
       );
     }
   };
   const handleCompleteChecklist = () => {
-    props.completeChecklist(
+    const newChecklist = {
+      _id: props.checklist._id,
+      checklist: undefined,
+      isChecked: !props.checklist.isChecked,
+    };
+    props.updateChecklist(
       props.currentColumn._id,
       props.currentCard._id,
-      props.checklist._id,
-      !props.checklist.isChecked
+      newChecklist
     );
   };
 

@@ -3,7 +3,7 @@ import Card from '../../middleware/models/card';
 require('../../middleware/db/mongoose');
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
-  const _id = request.body._id;
+  const { _id } = request.body;
   const updates = Object.keys(request.body);
   const allowedUpdates = [
     '_id',
@@ -14,6 +14,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     'isArchived',
     'dueDate',
   ];
+
   const isValidOperation = updates.every((update) => {
     return allowedUpdates.includes(update);
   });

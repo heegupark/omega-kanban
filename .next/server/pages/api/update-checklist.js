@@ -120,18 +120,33 @@ __webpack_require__("UDab");
 
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
-    _id,
-    checklist
+    _id
   } = request.body;
+  const updates = Object.keys(request.body);
+  const allowedUpdates = ['_id', 'checklist', 'isChecked'];
+  const isValidOperation = updates.every(update => {
+    return allowedUpdates.includes(update);
+  });
+
+  if (!isValidOperation) {
+    return response.status(400).send({
+      error: 'Invalid checklist updates!'
+    });
+  }
 
   try {
-    await _middleware_models_checklist__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].updateOne({
+    const newChecklist = await _middleware_models_checklist__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].findOne({
       _id
-    }, {
-      $set: {
-        checklist
-      }
     });
+
+    if (!newChecklist) {
+      return response.status(404).send({
+        error: 'Failed to find a checklist'
+      });
+    }
+
+    updates.forEach(update => newChecklist[update] = request.body[update]);
+    await newChecklist.save();
     return response.status(200).json({
       success: true
     });

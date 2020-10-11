@@ -642,34 +642,61 @@ function Board(props: IMainProps) {
   const updateChecklist = (
     columnId: string,
     cardId: string,
-    checklistId: string,
-    checklistContent: string
+    checklist: {
+      _id: string;
+      checklist: string | undefined;
+      isChecked: boolean | undefined;
+    }
   ) => {
     fetch(`/api/update-checklist`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ _id: checklistId, checklist: checklistContent }),
+      body: JSON.stringify(checklist),
     })
       .then((res) => res.json())
       .then((data: { success: boolean; data: ICard }) => {
         if (data.success) {
           state.columns[columnId].cards.map((card: ICard) => {
             if (card._id === cardId) {
-              card.checklists.map((checklist: IChecklist) => {
-                if (checklist._id === checklistId) {
-                  checklist.checklist = checklistContent;
+              if (checklist.checklist) {
+                card.checklists.map((item: IChecklist) => {
+                  if (item._id === checklist._id) {
+                    item.checklist = checklist.checklist as string;
+                  }
+                });
+                updateDate(columnId, cardId);
+                addActivity(
+                  columnId,
+                  cardId,
+                  `A checklist is updated to ${checklist.checklist}`
+                );
+              }
+              if (checklist.isChecked !== undefined) {
+                if (checklist.isChecked) {
+                  card.checklists.map((item: IChecklist) => {
+                    if (item._id === checklist._id) {
+                      item.isChecked = true;
+                    }
+                  });
+                  updateDate(columnId, cardId);
+                  addActivity(columnId, cardId, `A checklist is completed`);
                 }
-              });
+                console.log(checklist.isChecked);
+                if (!checklist.isChecked) {
+                  card.checklists.map((item: IChecklist) => {
+                    if (item._id === checklist._id) {
+                      item.isChecked = false;
+                    }
+                  });
+                  updateDate(columnId, cardId);
+                  addActivity(columnId, cardId, `A checklist is incompleted`);
+                }
+              }
             }
           });
-          updateDate(columnId, cardId);
-          addActivity(
-            columnId,
-            cardId,
-            `A checklist is updated to ${checklistContent}`
-          );
+
           setState({
             ...state,
           });
@@ -863,7 +890,7 @@ function Board(props: IMainProps) {
                             addActivity={addActivity}
                             updateDate={updateDate}
                             updateCard={updateCard}
-                            completeChecklist={completeChecklist}
+                            // completeChecklist={completeChecklist}
                             deleteChecklist={deleteChecklist}
                             deleteCard={deleteCard}
                             archiveCard={archiveCard}
@@ -896,7 +923,7 @@ function Board(props: IMainProps) {
                 addActivity={addActivity}
                 updateDate={updateDate}
                 updateCard={updateCard}
-                completeChecklist={completeChecklist}
+                // completeChecklist={completeChecklist}
                 deleteChecklist={deleteChecklist}
                 deleteCard={deleteCard}
                 addCard={addCard}
