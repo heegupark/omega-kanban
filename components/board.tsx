@@ -696,18 +696,39 @@ function Board(props: IMainProps) {
     cardId: string,
     checklistId: string
   ) => {
-    state.columns[columnId].cards.map((card: ICard) => {
-      if (card._id === cardId) {
-        card.checklists = card.checklists.filter(
-          (checklist: IChecklist) => checklist._id !== checklistId
+    fetch(`/api/delete-checklist`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id: checklistId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; message: string }) => {
+        if (data.success) {
+          state.columns[columnId].cards.map((card: ICard) => {
+            if (card._id === cardId) {
+              card.checklists = card.checklists.filter(
+                (checklist: IChecklist) => checklist._id !== checklistId
+              );
+            }
+          });
+          updateDate(columnId, cardId);
+          addActivity(columnId, cardId, `A checklist is deleted`);
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(`Failed to delete a checklist`, 'warning');
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while deleting a checklist:${err.message}`
         );
-      }
-    });
-    updateDate(columnId, cardId);
-    addActivity(columnId, cardId, `A checklist is deleted`);
-    setState({
-      ...state,
-    });
+      });
   };
 
   const convertDate = (date: Date) => {
