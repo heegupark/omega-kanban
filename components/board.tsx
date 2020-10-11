@@ -111,10 +111,11 @@ function Board(props: IMainProps) {
         (data: {
           success: boolean;
           columns: [IColumnItem];
+          columnOrder: [];
           archive: [IColumnItem];
         }) => {
           if (data.success) {
-            state.columnOrder = [];
+            // state.columnOrder = [];
             // state.archive = {
             //   _id: 'archive',
             //   title: 'Archive',
@@ -123,16 +124,19 @@ function Board(props: IMainProps) {
             //   createdAt: new Date(),
             //   updatedAt: new Date(),
             // };
+            state.columnOrder = [...data.columnOrder];
+            console.log(data.columnOrder);
             state.archive = data.archive[0];
             setArchiveColumnId(data.archive[0]._id);
             data.columns.map((column: IColumnItem) => {
               state.columns[column._id] = column;
-              state.columnOrder.push(column._id);
-              setState({
-                ...state,
-              });
+              // state.columnOrder.push(column._id);
             });
-            setColorIndex(data.columns.length - 1);
+            console.log(state.columnOrder);
+            setState({
+              ...state,
+            });
+            setColorIndex(data.columns.length);
             setIsLoadingCompleted(true);
           } else {
           }
@@ -345,22 +349,23 @@ function Board(props: IMainProps) {
       });
   };
 
-  const deleteColumn = (_id: string) => {
-    const title = state.columns[_id].title;
+  const deleteColumn = (columnId: string) => {
+    const title = state.columns[columnId].title;
     fetch(`/api/delete-column`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        _id,
+        projectId: props._id,
+        columnId,
       }),
     })
       .then((res) => res.json())
       .then((data: { success: boolean; message: string }) => {
         if (data.success) {
-          delete state.columns[_id];
-          state.columnOrder.splice(state.columnOrder.indexOf(_id), 1);
+          delete state.columns[columnId];
+          state.columnOrder.splice(state.columnOrder.indexOf(columnId), 1);
           setState({
             ...state,
           });

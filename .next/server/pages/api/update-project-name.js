@@ -174,7 +174,12 @@ const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     type: String,
     required: true,
     trim: true
-  }
+  },
+  columnOrder: [{
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  }]
 }, {
   timestamps: true
 });

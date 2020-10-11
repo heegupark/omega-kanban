@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import Router from '../../middleware/models/router';
 import Column from '../../middleware/models/column';
 require('../../middleware/db/mongoose');
 
@@ -11,6 +12,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       colorIndex,
     });
     await newColumn.save();
+    const project = await Router.findOne({ _id: projectId });
+    project.columnOrder.push(newColumn._id);
+    await project.save();
     try {
       return response.status(200).json({ success: true, data: newColumn });
     } catch (e) {

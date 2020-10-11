@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Column from '../../middleware/models/column';
+import Router from '../../middleware/models/router';
 require('../../middleware/db/mongoose');
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
@@ -7,6 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   const { _id } = request.body;
   try {
+    const project = await Router.findOne({ _id });
     const columns = await Column.aggregate([
       {
         $match: {
@@ -104,7 +106,15 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         },
       },
     ]);
-    return response.status(200).json({ success: true, columns, archive });
+
+    return response
+      .status(200)
+      .json({
+        success: true,
+        columns,
+        columnOrder: project.columnOrder,
+        archive,
+      });
   } catch (e) {
     return response
       .status(500)

@@ -160,24 +160,127 @@ mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connect(process.env.MONGODB_URL,
 
 /***/ }),
 
+/***/ "W9nD":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+
+const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  columnId: {
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  },
+  cardTitle: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  note: {
+    type: String,
+    default: ''
+  },
+  // checklists: [
+  //   {
+  //     checklist: {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       required: false,
+  //       ref: 'Checklist',
+  //     },
+  //   },
+  // ],
+  // activities: [
+  //   {
+  //     activity: {
+  //       type: mongoose.Schema.Types.ObjectId,
+  //       required: false,
+  //       ref: 'Activity',
+  //     },
+  //   },
+  // ],
+  isCardCompleted: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  isArchived: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  dueDate: {
+    type: Date,
+    default: undefined
+  }
+}, {
+  timestamps: true
+});
+const Card = mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.models.Card || mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('Card', cardSchema);
+/* harmony default export */ __webpack_exports__["a"] = (Card);
+
+/***/ }),
+
+/***/ "c/o/":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+
+const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  project: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  columnOrder: [{
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  }]
+}, {
+  timestamps: true
+});
+const Router = mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.models.Router || mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('Router', routerSchema);
+/* harmony default export */ __webpack_exports__["a"] = (Router);
+
+/***/ }),
+
 /***/ "mx1b":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9SwA");
+/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c/o/");
+/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("9SwA");
+/* harmony import */ var _middleware_models_card__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("W9nD");
+
+
 
 
 __webpack_require__("UDab");
 
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
-    _id
+    projectId,
+    columnId
   } = request.body;
 
   try {
-    await _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].deleteOne({
-      _id
+    const project = await _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].findOne({
+      _id: projectId
+    });
+    project.columnOrder = project.columnOrder.filter(item => {
+      return item.toString() !== columnId;
+    });
+    await project.save();
+    await _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].deleteOne({
+      columnId
+    });
+    await _middleware_models_card__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].deleteMany({
+      columnId
     });
     return response.status(201).json({
       success: true,

@@ -113,8 +113,7 @@ __webpack_require__("UDab");
   try {
     const newProject = new _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
       project
-    });
-    await newProject.save();
+    }); // await newProject.save();
 
     try {
       try {
@@ -143,6 +142,10 @@ __webpack_require__("UDab");
           category: 'archive'
         });
         await archiveColumn.save();
+        newProject.columnOrder.push(planColumn);
+        newProject.columnOrder.push(progressColumn);
+        newProject.columnOrder.push(completeColumn);
+        await newProject.save();
         return response.status(200).json({
           success: true,
           data: newProject
@@ -248,7 +251,12 @@ const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema(
     type: String,
     required: true,
     trim: true
-  }
+  },
+  columnOrder: [{
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  }]
 }, {
   timestamps: true
 });

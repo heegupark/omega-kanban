@@ -160,12 +160,40 @@ mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connect(process.env.MONGODB_URL,
 
 /***/ }),
 
+/***/ "c/o/":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+
+const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  project: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  columnOrder: [{
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  }]
+}, {
+  timestamps: true
+});
+const Router = mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.models.Router || mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('Router', routerSchema);
+/* harmony default export */ __webpack_exports__["a"] = (Router);
+
+/***/ }),
+
 /***/ "wWzK":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9SwA");
+/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c/o/");
+/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("9SwA");
+
 
 
 __webpack_require__("UDab");
@@ -178,12 +206,17 @@ __webpack_require__("UDab");
   } = request.body;
 
   try {
-    const newColumn = new _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
+    const newColumn = new _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]({
       projectId,
       title,
       colorIndex
     });
     await newColumn.save();
+    const project = await _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].findOne({
+      _id: projectId
+    });
+    project.columnOrder.push(newColumn._id);
+    await project.save();
 
     try {
       return response.status(200).json({

@@ -7,7 +7,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   const { project } = request.body;
   try {
     const newProject = new Router({ project });
-    await newProject.save();
+    // await newProject.save();
     try {
       try {
         const planColumn = new Column({
@@ -38,6 +38,12 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           category: 'archive',
         });
         await archiveColumn.save();
+
+        newProject.columnOrder.push(planColumn);
+        newProject.columnOrder.push(progressColumn);
+        newProject.columnOrder.push(completeColumn);
+
+        await newProject.save();
 
         return response.status(200).json({ success: true, data: newProject });
       } catch (e) {

@@ -149,20 +149,25 @@ module.exports = require("mongoose");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9SwA");
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("FiKB");
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("c/o/");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 __webpack_require__("UDab");
 
 
-const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
+const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
     _id
   } = request.body;
 
   try {
+    const project = await _middleware_models_router__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].findOne({
+      _id
+    });
     const columns = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].aggregate([{
       $match: {
         projectId: ObjectId(_id)
@@ -310,6 +315,7 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_1___default.a.Types.ObjectId;
     return response.status(200).json({
       success: true,
       columns,
+      columnOrder: project.columnOrder,
       archive
     });
   } catch (e) {
@@ -336,6 +342,32 @@ mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.connect(process.env.MONGODB_URL,
   useCreateIndex: true,
   useFindAndModify: false
 });
+
+/***/ }),
+
+/***/ "c/o/":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("FiKB");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
+
+const routerSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
+  project: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  columnOrder: [{
+    type: mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Column'
+  }]
+}, {
+  timestamps: true
+});
+const Router = mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.models.Router || mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.model('Router', routerSchema);
+/* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ })
 

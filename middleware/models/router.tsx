@@ -11,6 +11,13 @@ const routerSchema: Schema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    columnOrder: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Column',
+      },
+    ],
   },
   {
     timestamps: true,
