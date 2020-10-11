@@ -375,22 +375,43 @@ function Board(props: IMainProps) {
       })
       .catch((err) => {
         console.error(
-          `Something wrong happened while getting a route:${err.message}`
+          `Something wrong happened while deleting a column:${err.message}`
         );
       });
   };
 
   const deleteCard = (columnId: string, cardId: string) => {
-    state.columns[columnId].cards.map((card: ICard, index: number) => {
-      if (card._id === cardId) {
-        state.columns[columnId].cards.splice(index, 1);
-      }
-    });
-    updateDate(columnId, cardId);
-    handleSnackbar('A card is deleted', 'error');
-    setState({
-      ...state,
-    });
+    fetch(`/api/delete-card`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        _id: cardId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean; message: string }) => {
+        if (data.success) {
+          state.columns[columnId].cards.map((card: ICard, index: number) => {
+            if (card._id === cardId) {
+              state.columns[columnId].cards.splice(index, 1);
+            }
+          });
+          updateDate(columnId, cardId);
+          handleSnackbar('A card is deleted', 'error');
+          setState({
+            ...state,
+          });
+        } else {
+          handleSnackbar(`Failed to delete a card`, 'warning');
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while deleting a card:${err.message}`
+        );
+      });
   };
 
   const archiveCard = (columnId: string, cardId: string) => {
