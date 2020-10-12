@@ -110,7 +110,6 @@ function ChecklistItem(props: IChecklistItemProps) {
         </div>
       ) : (
         <div
-          // id={props.checklist.id}
           onMouseOver={() => setShowAngle(true)}
           onMouseLeave={() => setShowAngle(false)}
           className="display-flex checklist-row"

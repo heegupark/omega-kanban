@@ -4,7 +4,6 @@ import IChecklist from './ichecklist';
 
 export default interface ICardModalProps extends ICommonProps {
   open: boolean;
-  // column: IColumnItem;
   projectName: string;
   handleModalClose: () => void;
   addChecklist: (columnId: string, cardId: string, checklist: string) => void;

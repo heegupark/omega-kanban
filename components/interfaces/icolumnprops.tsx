@@ -19,7 +19,6 @@ export default interface IColumnProps extends IChecklistProps {
   deleteCard: (columnId: string, cardId: string) => void;
   archiveCard: (columnId: string, cardId: string) => void;
   addCard: (columnId: string, cardTitle: string) => void;
-  // onDragEnd: (result: any) => void;
   updateColumnTitle: (_id: string, title: string) => void;
   deleteColumn: (id: string) => void;
   archiveColumnId: string;

@@ -56,7 +56,6 @@ function CardModal(props: ICardModalProps) {
       isArchived: true,
       dueDate: null,
     };
-    // props.updateCard(props.currentColumn._id, newCard);
     props.archiveCard(props.currentColumn._id, props.currentCard._id);
     handleClose();
     props.handleModalClose();

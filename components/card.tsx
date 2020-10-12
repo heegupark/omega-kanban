@@ -15,7 +15,6 @@ function Card(props: ICardProps) {
       'rgba(0, 0, 0, 0.02) 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px, rgba(0, 0, 0, 0.05) 0px 2px 8px 0px',
     background: isDragging ? 'rgb(241,251,255)' : 'white',
     ...draggableStyle,
-    // minHeight: '150px',
     height: isDragging ? '145px' : '100%',
   });
 

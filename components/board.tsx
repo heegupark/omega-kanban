@@ -13,60 +13,9 @@ import IColumnItem from './interfaces/icolumnitem';
 import IChecklist from './interfaces/ichecklist';
 import IColumnData from './interfaces/icolumndata';
 import { IActivity } from '../middleware/models/activity';
-import { IColumn } from '../middleware/models/column';
 
 function Board(props: IMainProps) {
   const { enqueueSnackbar } = useSnackbar();
-  // const [state, setState] = useState<IColumns>({
-  //   columns: {
-  //     'column-0': {
-  //       id: 'column-0',
-  //       title: 'Plan',
-  //       cards: [
-  //         {
-  //           id: uuidv4(),
-  //           cardTitle: 'Create HTML skeleton',
-  //           note: '',
-  //           isCardCompleted: false,
-  //           isArchived: false,
-  //           checklists: [],
-  //           activities: [],
-  //           dueDate: new Date(2020, 9, 11),
-  //           createdAt: new Date(2020, 8, 11),
-  //           updatedAt: new Date(2020, 8, 11),
-  //         },
-  //       ],
-  //       colorIndex: 0,
-  //       createdAt: new Date(2020, 8, 1),
-  //       updatedAt: new Date(2020, 8, 11),
-  //     },
-  //     'column-1': {
-  //       id: 'column-1',
-  //       title: 'Progress',
-  //       cards: [],
-  //       colorIndex: 1,
-  //       createdAt: new Date(2020, 8, 2),
-  //       updatedAt: new Date(2020, 8, 2),
-  //     },
-  //     'column-2': {
-  //       id: 'column-2',
-  //       title: 'Complete',
-  //       cards: [],
-  //       colorIndex: 2,
-  //       createdAt: new Date(2020, 8, 3),
-  //       updatedAt: new Date(2020, 8, 3),
-  //     },
-  //   },
-  //   columnOrder: ['column-0', 'column-1', 'column-2'],
-  //   archive: {
-  //     id: 'archive',
-  //     title: 'Archive',
-  //     cards: [],
-  //     colorIndex: 0,
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //   },
-  // });
 
   const [state, setState] = useState<IColumns>({
     columns: {},
@@ -88,9 +37,6 @@ function Board(props: IMainProps) {
   );
   const [isLoadingCompleted, setIsLoadingCompleted] = useState(false);
   const [archiveColumnId, setArchiveColumnId] = useState('');
-  // useEffect(() => {
-  //   setColorIndex(state.columnOrder.length - 1);
-  // }, []);
 
   useEffect(() => {
     getColumns(props._id);
@@ -590,28 +536,6 @@ function Board(props: IMainProps) {
     return result;
   };
 
-  // const reorderCards = (
-  //   list: Array<ICard>,
-  //   startIndex: number,
-  //   endIndex: number
-  // ) => {
-  //   const result = Array.from(list);
-  //   const [removed] = result.splice(startIndex, 1);
-  //   result.splice(endIndex, 0, removed);
-  //   return result;
-  // };
-
-  // const reorderColumn = (
-  //   list: Array<string>,
-  //   startIndex: number,
-  //   endIndex: number
-  // ) => {
-  //   const result = Array.from(list);
-  //   const [removed] = result.splice(startIndex, 1);
-  //   result.splice(endIndex, 0, removed);
-  //   return result;
-  // };
-
   const [open, setOpen] = React.useState(false);
   const setCardForOpen = (columnId: string, cardId: string) => {
     if (columnId === archiveColumnId) {
@@ -661,7 +585,7 @@ function Board(props: IMainProps) {
             cardId,
             `${checklist} is added to the checklist`
           );
-          // updateDate(columnId, cardId);
+          updateDate(columnId, cardId);
           setState({
             ...state,
           });
@@ -906,7 +830,6 @@ function Board(props: IMainProps) {
                             setCardForOpen={setCardForOpen}
                             updateColumnTitle={updateColumnTitle}
                             deleteColumn={deleteColumn}
-                            // onDragEnd={onDragEnd}
                             convertDate={convertDate}
                             open={true}
                             projectName={props.projectName}
@@ -932,7 +855,6 @@ function Board(props: IMainProps) {
             {state.archive.cards.length > 0 && (
               <Archive
                 index={0}
-                // onDragEnd={onDragEnd}
                 column={state.archive}
                 archiveColumnId={archiveColumnId}
                 setCardForOpen={setCardForOpen}
@@ -959,7 +881,6 @@ function Board(props: IMainProps) {
           {open && (
             <CardModal
               open={true}
-              // column={}
               addCard={addCard}
               projectName={props.projectName}
               currentCard={currentCard}

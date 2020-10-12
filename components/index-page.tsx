@@ -18,7 +18,7 @@ export default function IndexPage() {
         <meta property="og:url" content="https://kanban.heegu.net/" />
         <meta
           property="og:image"
-          content="../static/images/kanban-ss-001.gif"
+          content="../static/images/kanban-ss-002.gif"
         />
         <meta property="og:description" content="Fun Kanban board" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
