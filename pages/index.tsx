@@ -3,7 +3,6 @@ import ProjectName from '../components/project-name';
 import Disclaimer from '../components/disclaimer';
 
 export default function Main() {
-  const [projectName, setProjectName] = React.useState('' as any);
   const [isAcceptDisclaimer, setIsAcceptDisclaimer] = useState(false);
 
   useEffect(() => {
@@ -14,11 +13,7 @@ export default function Main() {
 
   return (
     <>
-      <ProjectName
-      // setView={setView}
-      // setProjectName={setProjectName}
-      // projectName={projectName}
-      />
+      <ProjectName />
       {!isAcceptDisclaimer && (
         <Disclaimer setIsAcceptDisclaimer={setIsAcceptDisclaimer} />
       )}
