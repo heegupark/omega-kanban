@@ -21,7 +21,7 @@
 
 ## Planned Features
 1. User can create a project name.(If the project name is empty, it will create a random string.)
-2. User can have its own routes.
+2. User can have its own links.
 3. User can create a column.
 4. User can create a card.
 5. User can move a column to reroder.
@@ -41,7 +41,7 @@
 ## Lessons Learned
 1. Experienced Next.js for server side rendering and its structure
 2. Experienced TypeScript for building a new application
-3. Experienced Next.js routing
+3. Experienced Next.js `next/link` to dynamically redirect to the link
 4. Experienced to deal with various functions of React Hooks
 5. Used MongoDB for storing data
 5. React and JavaScript Object Oriented Programming for better functionalities and to increase the re-usage of codes
