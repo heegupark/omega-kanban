@@ -3,6 +3,18 @@
 > - Maintained by: `Heegu Park`
 
 ## Features
+1. It creates url based on project name
+2. Iniitially, it creates fout columns - Plan, Progress, Complete, Archive(hidden)
+3. Adding a column creates a new column data in `column` document
+4. Updting a column updates the column data in `column` document
+5. Adding a card creates a new card data in `card` document
+6. Updting a card updates the card data in `card` document
+7. Deleting a card deletes the card data from `card` document
+8. Moving the column updates `columnOrder` in `route` document in database
+9. Moving the card updates `order` in `card` document in database
+10. Updating the project name updates the `project` in `route` document and redirect to new url based on new project name
+
+## Technologies
 1. Mainly used Typescript, React with Next.js for server-side rendering to create all HTML elements
 2. Primarily used React Hooks and Next.js
 3. Used AWS EC2 for web and API server
