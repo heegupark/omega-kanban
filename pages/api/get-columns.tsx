@@ -1,7 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import Column from '../../middleware/models/column';
-import Router from '../../middleware/models/router';
 require('../../middleware/db/mongoose');
+import { NextApiRequest, NextApiResponse } from 'next';
+import Router from '../../middleware/models/router';
+import Column from '../../middleware/models/column';
+import Card from '../../middleware/models/card';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -49,17 +50,12 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 as: 'activities',
               },
             },
+            { $sort: { order: 1 } },
           ],
           as: 'cards',
         },
       },
     ]);
-    if (!columns) {
-      return response.status(404).json({
-        success: false,
-        message: 'data not found',
-      });
-    }
 
     const archive = await Column.aggregate([
       {
@@ -107,14 +103,12 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       },
     ]);
 
-    return response
-      .status(200)
-      .json({
-        success: true,
-        columns,
-        columnOrder: project.columnOrder,
-        archive,
-      });
+    return response.status(200).json({
+      success: true,
+      columns,
+      columnOrder: project.columnOrder,
+      archive,
+    });
   } catch (e) {
     return response
       .status(500)

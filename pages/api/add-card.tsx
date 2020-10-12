@@ -5,7 +5,9 @@ require('../../middleware/db/mongoose');
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   const { columnId, cardTitle } = request.body;
   try {
-    const newCard = new Card({ columnId, cardTitle });
+    const cards = await Card.find({ columnId });
+    const count = cards.length;
+    const newCard = new Card({ columnId, cardTitle, order: count });
     await newCard.save();
     return response.status(200).json({
       success: true,

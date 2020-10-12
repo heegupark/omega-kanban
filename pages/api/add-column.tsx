@@ -12,17 +12,12 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       colorIndex,
     });
     await newColumn.save();
+
     const project = await Router.findOne({ _id: projectId });
     project.columnOrder.push(newColumn._id);
     await project.save();
-    try {
-      return response.status(200).json({ success: true, data: newColumn });
-    } catch (e) {
-      return response.status(500).json({
-        success: false,
-        message: 'failed to add a column',
-      });
-    }
+
+    return response.status(200).json({ success: true, data: newColumn });
   } catch (e) {
     return response
       .status(500)

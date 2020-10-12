@@ -148,14 +148,13 @@ module.exports = require("mongoose");
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9SwA");
-/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("c/o/");
+/* harmony import */ var _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c/o/");
+/* harmony import */ var _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("9SwA");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("FiKB");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
 __webpack_require__("UDab");
+
+
 
 
 const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
@@ -165,10 +164,10 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
   } = request.body;
 
   try {
-    const project = await _middleware_models_router__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].findOne({
+    const project = await _middleware_models_router__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].findOne({
       _id
     });
-    const columns = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].aggregate([{
+    const columns = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].aggregate([{
       $match: {
         projectId: ObjectId(_id)
       }
@@ -232,19 +231,15 @@ const ObjectId = mongoose__WEBPACK_IMPORTED_MODULE_2___default.a.Types.ObjectId;
             }],
             as: 'activities'
           }
+        }, {
+          $sort: {
+            order: 1
+          }
         }],
         as: 'cards'
       }
     }]);
-
-    if (!columns) {
-      return response.status(404).json({
-        success: false,
-        message: 'data not found'
-      });
-    }
-
-    const archive = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].aggregate([{
+    const archive = await _middleware_models_column__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].aggregate([{
       $match: {
         projectId: ObjectId(_id)
       }

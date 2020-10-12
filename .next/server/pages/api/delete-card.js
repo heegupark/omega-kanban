@@ -113,12 +113,18 @@ __webpack_require__("UDab");
 
 /* harmony default export */ __webpack_exports__["default"] = (async (request, response) => {
   const {
-    _id
+    columnId,
+    cardId
   } = request.body;
 
   try {
+    // const column = await Column.findOne({ _id: columnId });
+    // column.cardOrder = column.cardOrder.filter((item: object) => {
+    //   return item.toString() !== cardId;
+    // });
+    // await column.save();
     await _middleware_models_card__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].deleteOne({
-      _id
+      _id: cardId
     });
     return response.status(201).json({
       success: true,
@@ -180,24 +186,6 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
     type: String,
     default: ''
   },
-  // checklists: [
-  //   {
-  //     checklist: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Checklist',
-  //     },
-  //   },
-  // ],
-  // activities: [
-  //   {
-  //     activity: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Activity',
-  //     },
-  //   },
-  // ],
   isCardCompleted: {
     type: Boolean,
     required: true,
@@ -211,6 +199,10 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
   dueDate: {
     type: Date,
     default: undefined
+  },
+  order: {
+    type: Number,
+    required: true
   }
 }, {
   timestamps: true

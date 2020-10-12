@@ -147,24 +147,6 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
     type: String,
     default: ''
   },
-  // checklists: [
-  //   {
-  //     checklist: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Checklist',
-  //     },
-  //   },
-  // ],
-  // activities: [
-  //   {
-  //     activity: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Activity',
-  //     },
-  //   },
-  // ],
   isCardCompleted: {
     type: Boolean,
     required: true,
@@ -178,6 +160,10 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
   dueDate: {
     type: Date,
     default: undefined
+  },
+  order: {
+    type: Number,
+    required: true
   }
 }, {
   timestamps: true
@@ -210,9 +196,14 @@ __webpack_require__("UDab");
   } = request.body;
 
   try {
+    const cards = await _middleware_models_card__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"].find({
+      columnId
+    });
+    const count = cards.length;
     const newCard = new _middleware_models_card__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
       columnId,
-      cardTitle
+      cardTitle,
+      order: count
     });
     await newCard.save();
     return response.status(200).json({

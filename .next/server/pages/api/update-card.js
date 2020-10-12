@@ -88,12 +88,12 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("Gm1m");
@@ -199,24 +199,6 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
     type: String,
     default: ''
   },
-  // checklists: [
-  //   {
-  //     checklist: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Checklist',
-  //     },
-  //   },
-  // ],
-  // activities: [
-  //   {
-  //     activity: {
-  //       type: mongoose.Schema.Types.ObjectId,
-  //       required: false,
-  //       ref: 'Activity',
-  //     },
-  //   },
-  // ],
   isCardCompleted: {
     type: Boolean,
     required: true,
@@ -230,6 +212,10 @@ const cardSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0___default.a.Schema({
   dueDate: {
     type: Date,
     default: undefined
+  },
+  order: {
+    type: Number,
+    required: true
   }
 }, {
   timestamps: true

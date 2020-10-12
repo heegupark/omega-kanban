@@ -115,24 +115,12 @@ function Board(props: IMainProps) {
           archive: [IColumnItem];
         }) => {
           if (data.success) {
-            // state.columnOrder = [];
-            // state.archive = {
-            //   _id: 'archive',
-            //   title: 'Archive',
-            //   cards: [],
-            //   colorIndex: 0,
-            //   createdAt: new Date(),
-            //   updatedAt: new Date(),
-            // };
             state.columnOrder = [...data.columnOrder];
-            console.log(data.columnOrder);
             state.archive = data.archive[0];
             setArchiveColumnId(data.archive[0]._id);
             data.columns.map((column: IColumnItem) => {
               state.columns[column._id] = column;
-              // state.columnOrder.push(column._id);
             });
-            console.log(state.columnOrder);
             setState({
               ...state,
             });
@@ -150,18 +138,6 @@ function Board(props: IMainProps) {
   };
 
   const addColumn = (sectionTitle: string, card: ICard | undefined) => {
-    // const newSection: ISection = {
-    //   _id: uuidv4(),
-    //   title: sectionTitle,
-    //   cards: [],
-    //   colorIndex: colorIndex + 1,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // };
-    // if (card) {
-    //   newSection.cards.push(card);
-    // }
-
     fetch('/api/add-column', {
       method: 'POST',
       headers: {
@@ -388,7 +364,8 @@ function Board(props: IMainProps) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        _id: cardId,
+        columnId,
+        cardId,
       }),
     })
       .then((res) => res.json())
@@ -454,11 +431,76 @@ function Board(props: IMainProps) {
       });
   };
 
+  const reorderCards = (column: IColumnItem, cards: []) => {
+    fetch(`/api/reorder-card`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        columnId: column._id,
+        cards,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean }) => {
+        if (data.success) {
+          handleSnackbar(`Cards are reordered in '${column.title}'`, 'success');
+        } else {
+          handleSnackbar(
+            'Something wrong happened while reordering cards in a same column',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while reordering cards in a same column:${err.message}`
+        );
+      });
+  };
+
+  const reorderColumns = (
+    sourceIndex: number,
+    destIndex: number,
+    columnOrder: []
+  ) => {
+    fetch(`/api/reorder-column`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _id: props._id, columnOrder }),
+    })
+      .then((res) => res.json())
+      .then((data: { success: boolean }) => {
+        if (data.success) {
+          handleSnackbar(
+            `'${state.columns[state.columnOrder[sourceIndex]].title}' and '${
+              state.columns[state.columnOrder[destIndex]].title
+            }' are reordered`,
+            'success'
+          );
+        } else {
+          handleSnackbar(
+            'Something wrong happened while reordering columns',
+            'warning'
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(
+          `Something wrong happened while reordering columns:${err.message}`
+        );
+      });
+  };
+
   const onDragEnd = (result: any) => {
     if (!result.destination) {
       return;
     }
 
+    // Move column
     if (result.type === 'column') {
       const columnOrder: Array<string> = reorder(
         state.columnOrder as [],
@@ -469,39 +511,15 @@ function Board(props: IMainProps) {
         ...state,
         columnOrder,
       });
-      fetch(`/api/reorder-column`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ _id: props._id, columnOrder }),
-      })
-        .then((res) => res.json())
-        .then((data: { success: boolean }) => {
-          if (data.success) {
-            handleSnackbar(
-              `'${
-                state.columns[state.columnOrder[result.source.index]].title
-              }' and '${
-                state.columns[state.columnOrder[result.destination.index]].title
-              }' are reordered`,
-              'success'
-            );
-          } else {
-            handleSnackbar(
-              'Something wrong happened while reordering columns',
-              'warning'
-            );
-          }
-        })
-        .catch((err) => {
-          console.error(
-            `Something wrong happened while reordering columns:${err.message}`
-          );
-        });
+      reorderColumns(
+        result.source.index,
+        result.destination.index,
+        columnOrder as []
+      );
       return;
     }
 
+    // Reorder cards in a same column
     if (result.source.droppableId === result.destination.droppableId) {
       const column = state.columns[result.source.droppableId];
       const cards = reorder(
@@ -509,7 +527,6 @@ function Board(props: IMainProps) {
         result.source.index,
         result.destination.index
       );
-
       const newState = {
         ...state,
         columns: {
@@ -520,11 +537,13 @@ function Board(props: IMainProps) {
           },
         },
       };
+      reorderCards(column, cards as []);
       setState(newState);
-      handleSnackbar(`Cards are reordered in '${column.title}'`, 'success');
+
       return;
     }
 
+    // Move a card to a different column
     const sourceColumn = state.columns[result.source.droppableId];
     const destinationColumn = state.columns[result.destination.droppableId];
     const card = sourceColumn.cards[result.source.index];
@@ -534,12 +553,14 @@ function Board(props: IMainProps) {
       cards: [...sourceColumn.cards],
     };
     newSourceColumn.cards.splice(result.source.index, 1);
+    // reorderCards(sourceColumn, newSourceColumn.cards as []);
 
     const newDestinationColumn = {
       ...destinationColumn,
       cards: [...destinationColumn.cards],
     };
     newDestinationColumn.cards.splice(result.destination.index, 0, card);
+    reorderCards(destinationColumn, newDestinationColumn.cards as []);
 
     const newState = {
       ...state,
@@ -843,11 +864,6 @@ function Board(props: IMainProps) {
         );
       });
   };
-
-  // const changeProjectName = (projectName: string) => {
-  //   handleSnackbar(`Project name is changed to '${projectName}'`, 'info');
-  //   props.setProjectName(projectName);
-  // };
 
   const handleSnackbar = (message: string, variant: VariantType) => {
     enqueueSnackbar(message, { variant });

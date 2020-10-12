@@ -217,18 +217,10 @@ __webpack_require__("UDab");
     });
     project.columnOrder.push(newColumn._id);
     await project.save();
-
-    try {
-      return response.status(200).json({
-        success: true,
-        data: newColumn
-      });
-    } catch (e) {
-      return response.status(500).json({
-        success: false,
-        message: 'failed to add a column'
-      });
-    }
+    return response.status(200).json({
+      success: true,
+      data: newColumn
+    });
   } catch (e) {
     return response.status(500).json({
       success: false,

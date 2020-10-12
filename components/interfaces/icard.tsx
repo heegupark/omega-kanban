@@ -11,6 +11,7 @@ export default interface ICard {
   checklists: Array<IChecklist>;
   activities: Array<IActivity>;
   dueDate: Date | undefined;
+  order: number | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
