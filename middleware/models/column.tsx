@@ -5,7 +5,6 @@ export interface IColumn extends Document {
   title: string;
   colorIndex: Number;
 }
-
 const columnSchema: Schema = new mongoose.Schema(
   {
     projectId: {
@@ -32,7 +31,6 @@ const columnSchema: Schema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
 const Column =
   mongoose.models.Column || mongoose.model<IColumn>('Column', columnSchema);
 export default Column;
