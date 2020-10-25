@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import ChecklistItem from './checklistitem';
+import IChecklistProps from './interfaces/ichecklistprops';
+import IChecklist from './interfaces/ichecklist';
 
-function Checklist(props: any) {
+function Checklist(props: IChecklistProps) {
   const [checklist, setChecklist] = useState('');
   const [addChecklist, setAddChecklist] = useState(false);
 
-  const handleSubmitChecklist = (e: any) => {
+  const handleSubmitChecklist = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (checklist.trim().length > 0) {
         props.addChecklist(
@@ -23,7 +25,7 @@ function Checklist(props: any) {
       <div className="card-deatil-title">Checklist</div>
       <div>
         {props.currentCard &&
-          props.currentCard.checklists.map((checklist: any) => {
+          props.currentCard.checklists.map((checklist: IChecklist) => {
             return (
               <div key={checklist._id}>
                 <ChecklistItem {...props} checklist={checklist} />

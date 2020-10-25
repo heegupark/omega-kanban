@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
-declare var process: {
+declare let process: {
   env: {
     MONGODB_URL: string;
   };
 };
+
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

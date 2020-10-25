@@ -1,7 +1,6 @@
 import ISection from './icolumnitem';
 import IChecklistProps from './ichecklistprops';
 import INewCard from './inewcard';
-import IChecklist from './ichecklist';
 
 export default interface IColumnProps extends IChecklistProps {
   index: number;

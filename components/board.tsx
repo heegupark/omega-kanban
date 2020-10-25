@@ -832,6 +832,8 @@ function Board(props: IMainProps) {
                             deleteColumn={deleteColumn}
                             convertDate={convertDate}
                             open={true}
+                            currentColumn={currentColumn}
+                            currentCard={currentCard}
                             projectName={props.projectName}
                             handleModalClose={handleModalClose}
                             addChecklist={addChecklist}
@@ -861,6 +863,8 @@ function Board(props: IMainProps) {
                 convertDate={convertDate}
                 setOpen={setOpen}
                 open={true}
+                currentColumn={currentColumn}
+                currentCard={currentCard}
                 projectName={props.projectName}
                 handleModalClose={handleModalClose}
                 updateColumnTitle={updateColumnTitle}
