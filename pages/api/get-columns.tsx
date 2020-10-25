@@ -2,7 +2,6 @@ require('../../middleware/db/mongoose');
 import { NextApiRequest, NextApiResponse } from 'next';
 import Router from '../../middleware/models/router';
 import Column from '../../middleware/models/column';
-import Card from '../../middleware/models/card';
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 

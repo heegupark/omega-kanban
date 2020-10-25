@@ -16,25 +16,10 @@ const cardSchema: Schema = new mongoose.Schema(
       required: true,
       ref: 'Column',
     },
-    cardTitle: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    note: {
-      type: String,
-      default: '',
-    },
-    isCardCompleted: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    isArchived: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+    cardTitle: { type: String, required: true, trim: true },
+    note: { type: String, default: '' },
+    isCardCompleted: { type: Boolean, required: true, default: false },
+    isArchived: { type: Boolean, required: true, default: false },
     dueDate: {
       type: Date,
       default: undefined,
