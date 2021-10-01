@@ -1,1 +1,0 @@
-{"ast":null,"code":"import mongoose from 'mongoose';\nmongoose.connect(process.env.MONGODB_URL, {\n  useNewUrlParser: true,\n  useUnifiedTopology: true,\n  useCreateIndex: true,\n  useFindAndModify: false\n});","map":null,"metadata":{},"sourceType":"module"}
