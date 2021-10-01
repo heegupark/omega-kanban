@@ -468,7 +468,7 @@ function Board(props: IMainProps) {
     // Reorder cards in a same column
     if (result.source.droppableId === result.destination.droppableId) {
       const column = state.columns[result.source.droppableId];
-      const cards = reorder(
+      const pins = reorder(
         column.cards as [],
         result.source.index,
         result.destination.index

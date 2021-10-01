@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next -p 8080",
     "build": "next build",
-    "start": "next start -p 4030",
+    "start": "next start -p 3000",
     "dev:server": "nodemon src/index.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "npm run lint -- --fix"
