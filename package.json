@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "dev": "next -p 8080",
-    "build": "next build",
-    "start": "next start -p 3000",
+    "build": "next build && next export",
+    "start": "next start",
     "dev:server": "nodemon src/index.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "npm run lint -- --fix"
